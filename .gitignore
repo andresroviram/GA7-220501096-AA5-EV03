@@ -1,0 +1,31 @@
+# Dependencias de Node.js
+node_modules/
+dist/
+build/
+
+# Base de datos SQLite (generada en tiempo de ejecución)
+*.sqlite
+*.sqlite-journal
+*.sqlite-shm
+*.sqlite-wal
+
+# Variables de entorno (contienen secretos)
+.env
+.env.local
+.env.production
+
+# Logs
+*.log
+npm-debug.log*
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# IDEs y editores
+.vscode/settings.json
+.idea/
+*.swp
+
+# Cobertura de tests
+coverage/
