@@ -18,4 +18,28 @@ export class Alumno {
     /** FK a Grupo */
     @Column({ nullable: false })
     id_grupo: number;
+
+    @Column({ length: 100, nullable: true })
+    email: string;
+
+    @Column({ length: 20, nullable: true })
+    telefono: string;
+
+    @Column({ length: 200, nullable: true })
+    direccion: string;
+
+    /** Nombre del tutor/padre */
+    @Column({ length: 100, nullable: true })
+    tutor: string;
+
+    @Column({ length: 20, nullable: true })
+    tutor_telefono: string;
+
+    /** Promedio general del alumno */
+    @Column({ type: 'float', nullable: true })
+    promedio: number;
+
+    /** Estado: 'Activo' | 'Inactivo' | 'Suspendido' */
+    @Column({ type: 'varchar', length: 20, default: 'Activo' })
+    estado: string;
 }

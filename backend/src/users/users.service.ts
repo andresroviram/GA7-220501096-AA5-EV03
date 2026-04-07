@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { User, TipoUsuario } from './user.entity';
+import { Materia } from '../materias/materia.entity';
 import { CreateUsuarioDto, UpdateUsuarioDto } from './dto/usuario.dto';
 
 /**
@@ -17,6 +18,8 @@ export class UsersService {
     constructor(
         @InjectRepository(User)
         private readonly repo: Repository<User>,
+        @InjectRepository(Materia)
+        private readonly materiaRepo: Repository<Materia>,
     ) { }
 
     /** Busca usuario activo por correo (usado por AuthService y JwtStrategy) */
@@ -29,10 +32,35 @@ export class UsersService {
         return this.repo.findOne({ where: { id, isActive: true } }) as Promise<User | undefined>;
     }
 
-    /** Lista usuarios — opcionalmente filtrada por tipo */
-    findAll(tipo?: TipoUsuario): Promise<User[]> {
-        if (tipo) return this.repo.find({ where: { tipo_usuario: tipo } });
-        return this.repo.find();
+    /** Lista usuarios — opcionalmente filtrada por tipo.
+     * Cuando tipo='docente' enriquece con materias[] asignadas.
+     */
+    async findAll(tipo?: TipoUsuario): Promise<any[]> {
+        const users = tipo
+            ? await this.repo.find({ where: { tipo_usuario: tipo } })
+            : await this.repo.find();
+
+        // Cargar materias asignadas a cada docente
+        const materias = await this.materiaRepo.find();
+
+        return users.map((u) => {
+            const { password: _p, ...rest } = u;
+            const userMaterias = materias
+                .filter((m) => m.id_docente === u.id)
+                .map((m) => m.nombre);
+            return {
+                id: u.id,
+                nombre: `${u.nombre} ${u.apellido}`,
+                cedula: u.cedula ?? '',
+                departamento: u.departamento ?? '',
+                email: u.correo,
+                telefono: u.telefono ?? '',
+                estado: u.isActive ? 'Activo' : 'Inactivo',
+                fechaIngreso: u.fecha_ingreso ?? '',
+                tipo_usuario: u.tipo_usuario,
+                materias: userMaterias,
+            };
+        });
     }
 
     async findOne(id: number): Promise<User> {

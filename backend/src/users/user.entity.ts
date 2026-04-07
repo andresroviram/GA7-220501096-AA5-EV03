@@ -45,6 +45,18 @@ export class User {
     @Column({ default: true })
     isActive: boolean;
 
+    /** Cédula profesional (docentes) */
+    @Column({ length: 20, nullable: true })
+    cedula: string;
+
+    /** Departamento académico (docentes) */
+    @Column({ length: 50, nullable: true })
+    departamento: string;
+
+    /** Fecha de ingreso a la institución 'YYYY-MM-DD' (docentes) */
+    @Column({ type: 'varchar', nullable: true })
+    fecha_ingreso: string;
+
     @CreateDateColumn()
     createdAt: Date;
 }

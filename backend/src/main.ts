@@ -10,6 +10,14 @@ import { AppModule } from './app.module';
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
+    // Fuerza que todas las respuestas API sean no cacheables (evita 304)
+    app.use((_req, res, next) => {
+        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
+        next();
+    });
+
     // Habilitar CORS para frontend local (Vite :5173) y GitHub Pages
     const allowedOrigins = [
         'http://localhost:5173',

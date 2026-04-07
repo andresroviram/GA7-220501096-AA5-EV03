@@ -2,6 +2,9 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Materia } from './materia.entity';
+import { User } from '../users/user.entity';
+import { GrupoHorario } from '../horarios/grupo-horario.entity';
+import { Grupo } from '../grupos/grupo.entity';
 import { CreateMateriaDto, UpdateMateriaDto } from './dto/materia.dto';
 
 @Injectable()
@@ -9,13 +12,47 @@ export class MateriasService {
     constructor(
         @InjectRepository(Materia)
         private readonly repo: Repository<Materia>,
+        @InjectRepository(User)
+        private readonly userRepo: Repository<User>,
+        @InjectRepository(GrupoHorario)
+        private readonly bloqueRepo: Repository<GrupoHorario>,
+        @InjectRepository(Grupo)
+        private readonly grupoRepo: Repository<Grupo>,
     ) { }
 
-    findAll(departamento?: string, estado?: string): Promise<Materia[]> {
+    async findAll(departamento?: string, estado?: string): Promise<any[]> {
         const where: any = {};
         if (departamento) where.departamento = departamento;
         if (estado) where.estado = estado;
-        return this.repo.find({ where });
+        const materias = await this.repo.find({ where });
+
+        const docentes = await this.userRepo.find({ where: { tipo_usuario: 'docente' } });
+        const docenteMap = new Map(docentes.map((u) => [u.id, `${u.nombre} ${u.apellido}`]));
+
+        const bloques = await this.bloqueRepo.find();
+        const grupos = await this.grupoRepo.find();
+        const grupoMap = new Map(grupos.map((g) => [g.id_grupo, g.nombre]));
+
+        return materias.map((m) => {
+            const docenteNombre = m.id_docente ? docenteMap.get(m.id_docente) ?? '' : '';
+            const gruposDeMateria = [
+                ...new Set(
+                    bloques
+                        .filter((b) => b.materia === m.nombre)
+                        .map((b) => grupoMap.get(b.id_grupo) ?? '')
+                        .filter(Boolean),
+                ),
+            ];
+            return {
+                id: m.id_materia,
+                nombre: m.nombre,
+                departamento: m.departamento ?? '',
+                creditos: m.creditos,
+                docente: docenteNombre,
+                grupos: gruposDeMateria,
+                estado: m.estado,
+            };
+        });
     }
 
     async findOne(id: number): Promise<Materia> {

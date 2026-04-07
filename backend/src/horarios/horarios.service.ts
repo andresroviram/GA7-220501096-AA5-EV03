@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Horario } from './horario.entity';
 import { GrupoHorario } from './grupo-horario.entity';
+import { Grupo } from '../grupos/grupo.entity';
 import { CreateHorarioDto, UpdateHorarioDto, CreateGrupoHorarioDto, UpdateGrupoHorarioDto } from './dto/horario.dto';
 
 @Injectable()
@@ -12,6 +13,8 @@ export class HorariosService {
         private readonly horarioRepo: Repository<Horario>,
         @InjectRepository(GrupoHorario)
         private readonly grupoHorarioRepo: Repository<GrupoHorario>,
+        @InjectRepository(Grupo)
+        private readonly grupoRepo: Repository<Grupo>,
     ) { }
 
     /* ── Horarios base ── */
@@ -44,14 +47,27 @@ export class HorariosService {
             idGrupo ? { where: { id_grupo: idGrupo } } : {},
         );
 
-        // Enriquecer con datos del horario base
         const horarios = await this.horarioRepo.find();
         const horarioMap = new Map(horarios.map((h) => [h.id_horario, h]));
 
-        return bloques.map((b) => ({
-            ...b,
-            horario: horarioMap.get(b.id_horario) ?? null,
-        }));
+        const grupos = await this.grupoRepo.find();
+        const grupoMap = new Map(grupos.map((g) => [g.id_grupo, g.nombre]));
+
+        // Devuelve la forma plana que coincide con mockGrupos.horarios
+        return bloques.map((b) => {
+            const h = horarioMap.get(b.id_horario);
+            return {
+                id: b.id_grupo_horario,
+                grupo: grupoMap.get(b.id_grupo) ?? `Grupo #${b.id_grupo}`,
+                materia: b.materia ?? '',
+                docente: b.docente ?? '',
+                dia: h?.dia_semana ?? '',
+                horaInicio: h?.hora_inicio ?? '',
+                horaFin: h?.hora_fin ?? '',
+                aula: b.aula ?? '',
+                estado: b.estado,
+            };
+        });
     }
 
     async findOneBloque(id: number): Promise<GrupoHorario> {
@@ -136,24 +152,15 @@ export class HorariosService {
     /** Estadísticas para el widget del frontend */
     async getEstadisticas() {
         const bloques = await this.grupoHorarioRepo.find();
-        const grupos = [...new Set(bloques.map((b) => b.id_grupo))];
-        const aulas = [...new Set(bloques.filter((b) => b.aula).map((b) => b.aula!))];
+        const totalGrupos = [...new Set(bloques.map((b) => b.id_grupo))].length;
+        const aulasEnUso = [...new Set(bloques.filter((b) => b.aula).map((b) => b.aula!))].length;
         const conflictos = bloques.filter((b) => b.estado === 'Conflicto').length;
 
-        const porDia: Record<string, number> = {};
-        const horarios = await this.horarioRepo.find();
-        const horarioMap = new Map(horarios.map((h) => [h.id_horario, h]));
-        bloques.forEach((b) => {
-            const dia = horarioMap.get(b.id_horario)?.dia_semana ?? 'Desconocido';
-            porDia[dia] = (porDia[dia] ?? 0) + 1;
-        });
-
         return {
-            total: bloques.length,
-            grupos: grupos.length,
-            aulas: aulas.length,
+            totalGrupos,
+            totalHorarios: bloques.length,
             conflictos,
-            porDia,
+            aulasEnUso,
         };
     }
 }

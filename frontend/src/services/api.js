@@ -9,12 +9,16 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL ?? '/api',
 });
 
-/** Adjunta el JWT de localStorage en cada petición saliente */
+/** Adjunta el JWT de localStorage en cada petición saliente y
+ * fuerza revalidación para evitar respuestas 304 del navegador. */
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+  // Previene que el navegador use la caché y devuelva 304 en lugar de datos frescos
+  config.headers['Cache-Control'] = 'no-cache';
+  config.headers['Pragma'] = 'no-cache';
   return config;
 });
 
