@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import StatCard from '../../components/StatCard';
 import { stats } from '../../data/mockDashboard';
 import { IconGradCap, IconUsers, IconBook, IconCalendar, IconCheckSquare, IconBarChart } from '../../components/Icons';
@@ -57,12 +58,12 @@ function DashboardMobile() {
           { label: 'Estudiantes',    icon: <IconGradCap />,     to: '/estudiantes',    color: '#BF6B3D' },
           { label: 'Docentes',       icon: <IconUsers />,       to: '/docentes',       color: '#7B3DBF' },
         ].map((link) => (
-          <a key={link.to} href={link.to} className="m-quick-link" style={{ color: link.color }}>
+          <Link key={link.to} to={link.to} className="m-quick-link" style={{ color: link.color }}>
             <span className="m-quick-link-icon" style={{ background: `${link.color}18` }}>
               {link.icon}
             </span>
             <span className="m-quick-link-label">{link.label}</span>
-          </a>
+          </Link>
         ))}
       </div>
     </div>

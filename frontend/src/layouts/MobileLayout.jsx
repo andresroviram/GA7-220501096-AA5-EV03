@@ -100,12 +100,6 @@ function MobileLayout({ onLogout, darkMode, onToggleTheme }) {
             <span className="bottom-nav-label">{item.label}</span>
           </NavLink>
         ))}
-        {visibleItems.length > 5 && (
-          <button className="bottom-nav-item" onClick={() => setDrawerOpen(true)}>
-            <span className="bottom-nav-icon"><IconMenu /></span>
-            <span className="bottom-nav-label">Más</span>
-          </button>
-        )}
       </nav>
 
       {/* ── Drawer lateral (menú completo + perfil) ──────── */}
