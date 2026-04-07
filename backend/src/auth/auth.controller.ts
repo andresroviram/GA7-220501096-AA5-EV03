@@ -9,6 +9,8 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { CreateUsuarioDto } from '../users/dto/usuario.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 /**
  * AuthController — expone los endpoints HTTP del módulo de autenticación.
@@ -60,5 +62,33 @@ export class AuthController {
     @ApiResponse({ status: 400, description: 'Datos de entrada inválidos.' })
     async register(@Body() dto: CreateUsuarioDto) {
         return this.authService.register(dto);
+    }
+
+    /**
+     * POST /auth/forgot-password
+     * Genera un código de reset y lo devuelve en la respuesta (dev mode).
+     * En producción el token se enviaría únicamente por correo.
+     */
+    @Post('forgot-password')
+    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Solicitar recuperación de contraseña' })
+    @ApiBody({ type: ForgotPasswordDto })
+    @ApiResponse({ status: 200, description: 'Código generado (dev: incluido en respuesta).' })
+    async forgotPassword(@Body() dto: ForgotPasswordDto) {
+        return this.authService.forgotPassword(dto);
+    }
+
+    /**
+     * POST /auth/reset-password
+     * Valida el token y actualiza la contraseña.
+     */
+    @Post('reset-password')
+    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Restablecer contraseña con el código recibido' })
+    @ApiBody({ type: ResetPasswordDto })
+    @ApiResponse({ status: 200, description: 'Contraseña actualizada.' })
+    @ApiResponse({ status: 400, description: 'Token inválido o expirado.' })
+    async resetPassword(@Body() dto: ResetPasswordDto) {
+        return this.authService.resetPassword(dto);
     }
 }

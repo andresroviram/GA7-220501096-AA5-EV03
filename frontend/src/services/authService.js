@@ -106,6 +106,49 @@ const authService = {
     const response = await axios.post(`${AUTH_API_URL}/register`, data);
     return response.data;
   },
+
+  /**
+   * Solicita el código de recuperación de contraseña.
+   * En modo mock genera un código ficticio para no requerir backend.
+   * @param {string} correo
+   * @returns {{ message: string, resetToken?: string }}
+   */
+  async forgotPassword(correo) {
+    if (USE_MOCK) {
+      const knownEmails = [
+        'admin@escuela.edu',
+        'maria.garcia@escuela.edu',
+        'juan.rodriguez@escuela.edu',
+        'laura.martinez@escuela.edu',
+      ];
+      // Respuesta genérica (no revela si el correo existe)
+      const message = 'Si el correo está registrado, recibirás el código de recuperación.';
+      if (knownEmails.includes(correo.toLowerCase().trim())) {
+        return { message, resetToken: 'A1B2C3' }; // token fijo para dev/mock
+      }
+      return { message };
+    }
+    const response = await axios.post(`${AUTH_API_URL}/forgot-password`, { correo });
+    return response.data;
+  },
+
+  /**
+   * Restablece la contraseña usando el token recibido.
+   * @param {string} token   Código de 6 caracteres
+   * @param {string} newPassword
+   */
+  async resetPassword(token, newPassword) {
+    if (USE_MOCK) {
+      if (token !== 'A1B2C3') {
+        const err = new Error('El código es inválido o ha expirado.');
+        err.response = { status: 400, data: { message: 'El código es inválido o ha expirado.' } };
+        throw err;
+      }
+      return { message: 'Contraseña actualizada correctamente.' };
+    }
+    const response = await axios.post(`${AUTH_API_URL}/reset-password`, { token, newPassword });
+    return response.data;
+  },
 };
 
 export default authService;

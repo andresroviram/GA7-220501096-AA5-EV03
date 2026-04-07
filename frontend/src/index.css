@@ -437,6 +437,35 @@ body {
   margin-bottom: 0.5rem;
 }
 
+/* Hint visible solo en dev/mock: muestra el código generado */
+.forgot-dev-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #FFF8E1;
+  border: 1px dashed #F3C147;
+  border-radius: 8px;
+  padding: 0.5rem 0.875rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.82rem;
+}
+.forgot-dev-hint-label { color: #8a6d00; }
+.forgot-dev-hint-token {
+  font-size: 1rem;
+  letter-spacing: 0.15em;
+  color: #1A6B4A;
+  font-family: monospace;
+}
+
+/* Campo de código centrado y monospace */
+.forgot-token-input {
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  font-family: monospace;
+  font-size: 1.05rem;
+  text-align: center;
+}
+
 /* ─── Tarjeta de usuarios demo (solo visible en DEV) ──────────── */
 .demo-card {
   margin-top: 1.25rem;
@@ -2289,6 +2318,8 @@ body {
 [data-theme="dark"] .forgot-back-link:hover { color: #3DBF8A; background: #1A2A22; }
 [data-theme="dark"] .forgot-success-icon { background: #1A2A22; }
 [data-theme="dark"] .forgot-logo-text   { color: #3DBF8A; }
+[data-theme="dark"] .forgot-dev-hint    { background: #1A1800; border-color: #5A4A00; }
+[data-theme="dark"] .forgot-dev-hint-label { color: #B8A040; }
 
 [data-theme="dark"] .demo-card {
   background: #1C2130;

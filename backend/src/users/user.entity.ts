@@ -34,6 +34,13 @@ export class User {
     @Column({ length: 20, nullable: true })
     telefono: string;
 
+    /** Token de recuperación de contraseña (expira en 15 min) */
+    @Column({ length: 16, nullable: true })
+    resetToken: string | null;
+
+    @Column({ type: 'datetime', nullable: true })
+    resetTokenExpiry: Date | null;
+
     /** Permite desactivar la cuenta sin borrarla */
     @Column({ default: true })
     isActive: boolean;
