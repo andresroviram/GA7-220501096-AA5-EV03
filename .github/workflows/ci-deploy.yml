@@ -41,9 +41,9 @@ jobs:
               env:
                   # Base path = /<nombre-del-repo>/ para que los assets apunten bien en Pages
                   VITE_BASE_PATH: /${{ github.event.repository.name }}/
-                  # URL del backend en Railway — configura el secret en GitHub repo Settings
+                  # Backend en Railway — configurar en GitHub repo Settings → Secrets and variables → Actions
                   VITE_API_URL: ${{ secrets.VITE_API_URL }}
-                  VITE_USE_MOCK: ${{ secrets.VITE_API_URL != '' && 'false' || 'true' }}
+                  VITE_USE_MOCK: ${{ secrets.VITE_USE_MOCK }}
               run: npm run build
 
             # Solo sube el artefacto cuando sea push a main (no en PRs)
