@@ -31,17 +31,25 @@ const authService = {
         err.response = { status: 401 };
         throw err;
       }
+      const MOCK_PHONES = {
+        'admin@escuela.edu':          '+52 555-0100',
+        'maria.garcia@escuela.edu':   '+52 555-0102',
+        'juan.rodriguez@escuela.edu': '+52 555-0200',
+        'laura.martinez@escuela.edu': '+52 555-0106',
+      };
       const data = {
         access_token: 'mock-token-dev',
         correo: user.correo,
         nombre: user.nombre,
         tipo_usuario: user.tipo_usuario,
+        telefono: MOCK_PHONES[user.correo] || null,
       };
       localStorage.setItem('token', data.access_token);
       localStorage.setItem('user', JSON.stringify({
         correo: data.correo,
         nombre: data.nombre,
         tipo_usuario: data.tipo_usuario,
+        telefono: data.telefono,
       }));
       return data;
     }
@@ -54,6 +62,7 @@ const authService = {
         correo: response.data.correo,
         nombre: response.data.nombre,
         tipo_usuario: response.data.tipo_usuario,
+        telefono: response.data.telefono ?? null,
       }));
     }
 

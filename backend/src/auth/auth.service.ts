@@ -62,6 +62,7 @@ export class AuthService {
             correo: user.correo,
             nombre: `${user.nombre} ${user.apellido}`,
             tipo_usuario: user.tipo_usuario,
+            telefono: user.telefono ?? null,
         };
     }
 

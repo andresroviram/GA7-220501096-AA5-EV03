@@ -149,11 +149,12 @@ function Parametros() {
 /* ─── Sección Mi Perfil ── */
 function MiPerfil() {
   const user = authService.getCurrentUser();
+
   const [form, setForm] = useState({
-    nombre:   user?.nombre        || '',
-    email:    user?.email         || '',
-    telefono: user?.telefono      || '',
-    rol:      user?.tipo_usuario  || '',
+    nombre:   user?.nombre       || '',
+    email:    user?.correo       || '',
+    telefono: user?.telefono     || '',
+    rol:      user?.tipo_usuario || '',
   });
   const [saved, setSaved] = useState(false);
 
@@ -211,6 +212,12 @@ function Configuraciones() {
     <div className="module-page">
       <div className="config-submenu">
         <button
+          className={`config-submenu-item${activeTab === 'perfil' ? ' config-submenu-item--active' : ''}`}
+          onClick={() => setActiveTab('perfil')}
+        >
+          <IconUser /> Mi Perfil
+        </button>
+        <button
           className={`config-submenu-item${activeTab === 'roles' ? ' config-submenu-item--active' : ''}`}
           onClick={() => setActiveTab('roles')}
         >
@@ -221,12 +228,6 @@ function Configuraciones() {
           onClick={() => setActiveTab('params')}
         >
           <IconSettings /> Parámetros del Sistema
-        </button>
-        <button
-          className={`config-submenu-item${activeTab === 'perfil' ? ' config-submenu-item--active' : ''}`}
-          onClick={() => setActiveTab('perfil')}
-        >
-          <IconUser /> Mi Perfil
         </button>
       </div>
 

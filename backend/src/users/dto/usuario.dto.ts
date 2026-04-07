@@ -17,6 +17,9 @@ export class CreateUsuarioDto {
 
     @IsIn(['administrativo', 'docente', 'padre'])
     tipo_usuario: TipoUsuario;
+
+    @IsOptional() @IsString() @MaxLength(20)
+    telefono?: string;
 }
 
 export class UpdateUsuarioDto {
@@ -31,6 +34,9 @@ export class UpdateUsuarioDto {
 
     @IsOptional() @IsIn(['administrativo', 'docente', 'padre'])
     tipo_usuario?: TipoUsuario;
+
+    @IsOptional() @IsString() @MaxLength(20)
+    telefono?: string;
 
     @IsOptional()
     isActive?: boolean;

@@ -31,6 +31,9 @@ export class User {
     })
     tipo_usuario: TipoUsuario;
 
+    @Column({ length: 20, nullable: true })
+    telefono: string;
+
     /** Permite desactivar la cuenta sin borrarla */
     @Column({ default: true })
     isActive: boolean;

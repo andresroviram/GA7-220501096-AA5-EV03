@@ -12,10 +12,10 @@ import { Calificacion } from '../calificaciones/calificacion.entity';
 
 /** Usuarios demo — estos son los que se muestran en la tarjeta de login del frontend */
 const DEMO_USERS = [
-    { nombre: 'Carlos', apellido: 'Admin', correo: 'admin@escuela.edu', password: 'Admin123!', tipo_usuario: 'administrativo' as const },
-    { nombre: 'María', apellido: 'García', correo: 'maria.garcia@escuela.edu', password: 'Docente123!', tipo_usuario: 'docente' as const },
-    { nombre: 'Juan', apellido: 'Rodríguez', correo: 'juan.rodriguez@escuela.edu', password: 'Padre123!', tipo_usuario: 'padre' as const },
-    { nombre: 'Laura', apellido: 'Martínez', correo: 'laura.martinez@escuela.edu', password: 'Docente123!', tipo_usuario: 'docente' as const },
+    { nombre: 'Carlos', apellido: 'Admin', correo: 'admin@escuela.edu', telefono: '+52 555-0100', password: 'Admin123!', tipo_usuario: 'administrativo' as const },
+    { nombre: 'María', apellido: 'García', correo: 'maria.garcia@escuela.edu', telefono: '+52 555-0102', password: 'Docente123!', tipo_usuario: 'docente' as const },
+    { nombre: 'Juan', apellido: 'Rodríguez', correo: 'juan.rodriguez@escuela.edu', telefono: '+52 555-0200', password: 'Padre123!', tipo_usuario: 'padre' as const },
+    { nombre: 'Laura', apellido: 'Martínez', correo: 'laura.martinez@escuela.edu', telefono: '+52 555-0106', password: 'Docente123!', tipo_usuario: 'docente' as const },
 ];
 
 @Injectable()
