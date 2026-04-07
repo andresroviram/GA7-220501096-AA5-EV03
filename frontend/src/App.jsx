@@ -11,7 +11,9 @@ import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
 import ForgotPasswordForm from './components/ForgotPasswordForm';
 import MainLayout from './layouts/MainLayout';
+import MobileLayout from './layouts/MobileLayout';
 import { useTheme } from './hooks/useTheme';
+import { useIsMobile } from './hooks/useIsMobile';
 import Dashboard from './pages/Dashboard';
 import Docentes from './pages/Docentes';
 import Calificaciones from './pages/Calificaciones';
@@ -40,6 +42,8 @@ function AppRoutes() {
   const navigate = useNavigate();
   const [, forceUpdate] = useState(0);
   const { dark, toggle } = useTheme();
+  const isMobile = useIsMobile();
+  const Layout = isMobile ? MobileLayout : MainLayout;
 
   const handleLoginSuccess = () => {
     forceUpdate((n) => n + 1);
@@ -99,7 +103,7 @@ function AppRoutes() {
 
       {/* ── Rutas protegidas (requieren sesión activa) ────────────────────── */}
       <Route element={<PrivateRoute />}>
-        <Route element={<MainLayout onLogout={handleLogout} darkMode={dark} onToggleTheme={toggle} />}>
+        <Route element={<Layout onLogout={handleLogout} darkMode={dark} onToggleTheme={toggle} />}>
           <Route path="/dashboard"       element={<Dashboard />} />
           <Route path="/estudiantes"     element={<PermissionRoute route="estudiantes"><Estudiantes /></PermissionRoute>} />
           <Route path="/docentes"        element={<PermissionRoute route="docentes"><Docentes /></PermissionRoute>} />

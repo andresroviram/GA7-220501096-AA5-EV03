@@ -1,39 +1,18 @@
-import React from 'react';
-import StatCard from '../components/StatCard';
-import TopStudents from '../components/TopStudents';
-import GroupAverageChart from '../components/GroupAverageChart';
-import AcademicPerformanceChart from '../components/AcademicPerformanceChart';
-import GradeDistributionChart from '../components/GradeDistributionChart';
-import { stats } from '../data/mockDashboard';
-import { IconGradCap, IconUsers, IconBook, IconCalendar } from '../components/Icons';
+import { lazy, Suspense } from 'react';
+import { useIsMobile } from '../hooks/useIsMobile';
 
-const STAT_ICONS = [<IconGradCap />, <IconUsers />, <IconBook />, <IconCalendar />];
+const Desktop = lazy(() => import('./desktop/DashboardDesktop'));
+const Mobile  = lazy(() => import('./mobile/DashboardMobile'));
 
-function Dashboard() {
-  return (
-    <div className="dashboard">
-
-      {/* ── Fila de Stats ─────────────────────────────────── */}
-      <div className="stats-grid">
-        {stats.map((s) => (
-          <StatCard key={s.id} label={s.label} value={s.value} icon={STAT_ICONS[s.id - 1]} />
-        ))}
-      </div>
-
-      {/* ── Fila central: Top Alumnos + Promedio por Grupo ── */}
-      <div className="widgets-row">
-        <TopStudents />
-        <GroupAverageChart />
-      </div>
-
-      {/* ── Fila inferior: Rendimiento + Distribución ──────── */}
-      <div className="widgets-row">
-        <AcademicPerformanceChart />
-        <GradeDistributionChart />
-      </div>
-
-    </div>
-  );
+function PageLoading() {
+  return <div className="page-loading" />;
 }
 
-export default Dashboard;
+export default function Dashboard() {
+  const isMobile = useIsMobile();
+  return (
+    <Suspense fallback={<PageLoading />}>
+      {isMobile ? <Mobile /> : <Desktop />}
+    </Suspense>
+  );
+}
