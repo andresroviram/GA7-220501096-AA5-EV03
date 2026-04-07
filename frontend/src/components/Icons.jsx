@@ -94,8 +94,8 @@ export const IconSettings = svg(
 
 export const IconSchool = svg(
   <>
-    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-    <polyline points="9 22 9 12 15 12 15 22" />
+    <circle cx="12" cy="12" r="9" strokeWidth="4" />
+    <circle cx="12" cy="12" r="2.5" fill="currentColor" stroke="none" />
   </>
 );
 
@@ -319,5 +319,13 @@ export const IconCoffee = svg(
     <line x1="6" y1="1" x2="6" y2="4" />
     <line x1="10" y1="1" x2="10" y2="4" />
     <line x1="14" y1="1" x2="14" y2="4" />
+  </>
+);
+
+export const IconLogOut = svg(
+  <>
+    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+    <polyline points="16 17 21 12 16 7" />
+    <line x1="21" y1="12" x2="9" y2="12" />
   </>
 );

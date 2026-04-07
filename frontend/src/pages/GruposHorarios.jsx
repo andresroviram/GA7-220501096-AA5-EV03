@@ -9,14 +9,14 @@ import {
 import { materias as MATERIAS_LIST_RAW } from '../data/mockMaterias';
 import { docentes as DOCENTES_LIST_RAW } from '../data/mockDocentes';
 import * as gruposService from '../services/gruposService';
-
-const MATERIAS = MATERIAS_LIST_RAW.map((m) => m.nombre);
-const DOCENTES = DOCENTES_LIST_RAW.map((d) => d.nombre);
-
 import {
   IconEdit, IconTrash, IconPlus, IconSearch, IconClose,
   IconAlertTriangle as IconWarn, IconCheck,
+  IconBarChart, IconCalendar,
 } from '../components/Icons';
+
+const MATERIAS = MATERIAS_LIST_RAW.map((m) => m.nombre);
+const DOCENTES = DOCENTES_LIST_RAW.map((d) => d.nombre);
 
 /* ─── Modal Horario ── */
 function ModalHorario({ item, onSave, onCancel }) {
@@ -251,7 +251,7 @@ function GruposHorarios() {
       {/* Stats inferiores */}
       <div className="widgets-row">
         <div className="widget-card">
-          <h3 className="widget-title">Resumen del Sistema</h3>
+          <h3 className="widget-title"><IconBarChart /> Resumen del Sistema</h3>
           <div className="stats-list">
             <div className="stats-list-row">
               <span className="stats-list-label">Total de Horarios</span>
@@ -273,7 +273,7 @@ function GruposHorarios() {
         </div>
 
         <div className="widget-card">
-          <h3 className="widget-title">Horarios por Día</h3>
+          <h3 className="widget-title"><IconCalendar /> Horarios por Día</h3>
           <div className="dept-bar-list">
             {DIAS_LIST.map((dia) => {
               const total = lista.filter((h) => h.dia === dia).length;

@@ -4,20 +4,26 @@ import {
   IconGrid, IconGradCap, IconUsers, IconCalendar,
   IconBook, IconCheckSquare, IconBarChart, IconSettings, IconSchool,
 } from './Icons';
+import authService from '../services/authService';
+import { canAccess } from '../utils/permissions';
 
 
 const navItems = [
-  { to: '/dashboard',          label: 'Dashboard',         icon: <IconGrid /> },
-  { to: '/estudiantes',        label: 'Estudiantes',       icon: <IconGradCap /> },
-  { to: '/docentes',           label: 'Docentes',          icon: <IconUsers /> },
-  { to: '/grupos',             label: 'Grupos y horarios', icon: <IconCalendar /> },
-  { to: '/materias',           label: 'Materias',          icon: <IconBook /> },
-  { to: '/calificaciones',     label: 'Calificaciones',    icon: <IconCheckSquare /> },
-  { to: '/reportes',           label: 'Reportes',          icon: <IconBarChart /> },
-  { to: '/configuraciones',    label: 'Configuraciones',   icon: <IconSettings /> },
+  { to: '/dashboard',       route: 'dashboard',       label: 'Dashboard',         icon: <IconGrid /> },
+  { to: '/estudiantes',     route: 'estudiantes',     label: 'Estudiantes',       icon: <IconGradCap /> },
+  { to: '/docentes',        route: 'docentes',        label: 'Docentes',          icon: <IconUsers /> },
+  { to: '/grupos',          route: 'grupos',          label: 'Grupos y horarios', icon: <IconCalendar /> },
+  { to: '/materias',        route: 'materias',        label: 'Materias',          icon: <IconBook /> },
+  { to: '/calificaciones',  route: 'calificaciones',  label: 'Calificaciones',    icon: <IconCheckSquare /> },
+  { to: '/reportes',        route: 'reportes',        label: 'Reportes',          icon: <IconBarChart /> },
+  { to: '/configuraciones', route: 'configuraciones', label: 'Configuraciones',   icon: <IconSettings /> },
 ];
 
 function Sidebar({ collapsed = false }) {
+  const user        = authService.getCurrentUser();
+  const role        = user?.tipo_usuario ?? '';
+  const visibleItems = navItems.filter((item) => canAccess(role, item.route));
+
   return (
     <aside className={`sidebar${collapsed ? ' sidebar--collapsed' : ''}`}>
       {/* Logo / Marca */}
@@ -33,7 +39,7 @@ function Sidebar({ collapsed = false }) {
 
       {/* Navegación */}
       <nav className="sidebar-nav">
-        {navItems.map((item) => (
+        {visibleItems.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}

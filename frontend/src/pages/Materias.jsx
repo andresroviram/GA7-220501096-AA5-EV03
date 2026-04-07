@@ -12,7 +12,7 @@ const GRUPOS   = ['1A', '1B', '1C', '2A', '2B', '2C', '3A', '3B'];
 
 import {
   IconEdit, IconCoffee as IconToggle, IconPlus, IconSearch, IconClose,
-  IconCheck, IconXMark,
+  IconCheck, IconXMark, IconBook, IconBarChart,
 } from '../components/Icons';
 
 /* ─── Modal Materia ── */
@@ -235,7 +235,7 @@ function Materias() {
       {/* Widgets */}
       <div className="widgets-row">
         <div className="widget-card">
-          <h3 className="widget-title">Materias por Departamento</h3>
+          <h3 className="widget-title"><IconBook /> Materias por Departamento</h3>
           <div className="dept-bar-list">
             {materiasPorDepto.map((item) => (
               <div key={item.departamento} className="dept-bar-row">
@@ -249,7 +249,7 @@ function Materias() {
           </div>
         </div>
         <div className="widget-card">
-          <h3 className="widget-title">Estadísticas Generales</h3>
+          <h3 className="widget-title"><IconBarChart /> Estadísticas Generales</h3>
           <div className="stats-list">
             <div className="stats-list-row">
               <span className="stats-list-label">Total de Materias</span>

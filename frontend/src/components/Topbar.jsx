@@ -1,17 +1,26 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import authService from '../services/authService';
-import { IconMenu, IconSun, IconMoon, IconBell } from './Icons';
+import { IconMenu, IconSun, IconMoon, IconBell, IconUser, IconLogOut } from './Icons';
 
 /**
  * Topbar — barra superior del layout principal.
- * Muestra el título de la página activa, controles de notificaciones,
- * modo oscuro (visual) y la info del usuario logueado.
  */
 function Topbar({ title = 'Dashboard', onLogout, onToggleSidebar, darkMode = false, onToggleTheme }) {
   const user     = authService.getCurrentUser();
   const nombre   = user?.nombre   || 'Usuario';
   const rol      = user?.tipo_usuario || 'administrador';
   const rolLabel = { administrativo: 'Administrador', docente: 'Docente', padre: 'Padre / Tutor' }[rol] ?? 'Usuario';
+
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    function handleClick(e) {
+      if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
 
   return (
     <header className="topbar">
@@ -34,20 +43,38 @@ function Topbar({ title = 'Dashboard', onLogout, onToggleSidebar, darkMode = fal
         {/* Notificaciones */}
         <button className="topbar-icon-btn" aria-label="Notificaciones"><IconBell /></button>
 
-        {/* Usuario */}
-        <div className="topbar-user">
+        {/* Usuario + dropdown */}
+        <div className="topbar-user" ref={menuRef}>
           <div className="topbar-user-info">
             <span className="topbar-user-name">{nombre}</span>
             <span className="topbar-user-role">{rolLabel}</span>
           </div>
           <button
             className="topbar-avatar"
-            onClick={onLogout}
-            title="Cerrar sesión"
-            aria-label="Cerrar sesión"
+            onClick={() => setMenuOpen((o) => !o)}
+            aria-label="Menú de usuario"
+            aria-expanded={menuOpen}
           >
             {nombre.charAt(0).toUpperCase()}
           </button>
+
+          {menuOpen && (
+            <div className="topbar-user-dropdown" role="menu">
+              <button className="topbar-dropdown-item" role="menuitem" onClick={() => setMenuOpen(false)}>
+                <IconUser />
+                <span>Ver mi perfil</span>
+              </button>
+              <div className="topbar-dropdown-divider" />
+              <button
+                className="topbar-dropdown-item topbar-dropdown-item--danger"
+                role="menuitem"
+                onClick={() => { setMenuOpen(false); onLogout(); }}
+              >
+                <IconLogOut />
+                <span>Cerrar sesión</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </header>

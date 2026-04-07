@@ -146,10 +146,27 @@ function Parametros() {
 
 /* ─── Componente principal ── */
 function Configuraciones() {
+  const [activeTab, setActiveTab] = useState('roles');
+
   return (
     <div className="module-page">
-      <RolesPermisos />
-      <Parametros />
+      <div className="config-submenu">
+        <button
+          className={`config-submenu-item${activeTab === 'roles' ? ' config-submenu-item--active' : ''}`}
+          onClick={() => setActiveTab('roles')}
+        >
+          <IconShield /> Roles y Permisos
+        </button>
+        <button
+          className={`config-submenu-item${activeTab === 'params' ? ' config-submenu-item--active' : ''}`}
+          onClick={() => setActiveTab('params')}
+        >
+          <IconSettings /> Parámetros del Sistema
+        </button>
+      </div>
+
+      {activeTab === 'roles'  && <RolesPermisos />}
+      {activeTab === 'params' && <Parametros />}
     </div>
   );
 }
