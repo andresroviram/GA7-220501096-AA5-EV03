@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   IconGrid, IconGradCap, IconUsers, IconCalendar,
@@ -6,6 +6,7 @@ import {
 } from './Icons';
 import authService from '../services/authService';
 import { canAccess } from '../utils/permissions';
+import * as configService from '../services/configService';
 
 
 const navItems = [
@@ -24,6 +25,13 @@ function Sidebar({ collapsed = false }) {
   const role        = user?.tipo_usuario ?? '';
   const visibleItems = navItems.filter((item) => canAccess(role, item.route));
 
+  const [institucion, setInstitucion] = useState('Sistema Integral');
+  useEffect(() => {
+    configService.getParams()
+      .then((p) => { if (p?.institucion) setInstitucion(p.institucion); })
+      .catch(() => {});
+  }, []);
+
   const lastLoginRaw = localStorage.getItem('lastLogin');
   const lastLoginLabel = lastLoginRaw
     ? new Intl.DateTimeFormat('es', {
@@ -39,8 +47,8 @@ function Sidebar({ collapsed = false }) {
         <div className="sidebar-brand-icon"><IconSchool /></div>
         {!collapsed && (
           <div>
-            <p className="sidebar-brand-name">Sistema Integral</p>
-            <p className="sidebar-brand-sub">Académico</p>
+            <p className="sidebar-brand-name">{institucion}</p>
+            <p className="sidebar-brand-sub">Sistema Integral Académico</p>
           </div>
         )}
       </div>

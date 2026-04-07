@@ -6,11 +6,19 @@ import { IconMenu, IconSun, IconMoon, IconBell, IconUser, IconLogOut } from './I
 /**
  * Topbar — barra superior del layout principal.
  */
+function getCicloActual() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const semester = now.getMonth() < 6 ? 'I' : 'II';
+  return `${year}-${semester}`;
+}
+
 function Topbar({ title = 'Dashboard', onLogout, onToggleSidebar, darkMode = false, onToggleTheme }) {
   const user     = authService.getCurrentUser();
   const nombre   = user?.nombre   || 'Usuario';
   const rol      = user?.tipo_usuario || 'administrador';
   const rolLabel = { administrativo: 'Administrador', docente: 'Docente', padre: 'Padre / Tutor' }[rol] ?? 'Usuario';
+  const ciclo    = getCicloActual();
 
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef  = useRef(null);
@@ -32,6 +40,9 @@ function Topbar({ title = 'Dashboard', onLogout, onToggleSidebar, darkMode = fal
       </div>
 
       <div className="topbar-right">
+        {/* Ciclo académico actual */}
+        <span className="topbar-ciclo" title="Ciclo académico actual">{ciclo}</span>
+
         {/* Toggle modo claro / oscuro */}
         <button
           className="topbar-icon-btn"

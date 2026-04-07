@@ -1303,6 +1303,21 @@ body {
   gap: 0.75rem;
 }
 
+.topbar-ciclo {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  background: #E8F5F0;
+  color: #2A9D6F;
+  border: 1px solid #C5E8D8;
+  white-space: nowrap;
+  user-select: none;
+}
+
 .topbar-icon-btn {
   background: none;
   border: none;
@@ -2205,6 +2220,7 @@ body {
 [data-theme="dark"] .topbar-menu-btn         { color: #7A8599; }
 [data-theme="dark"] .topbar-menu-btn:hover   { background: #1F2535; }
 [data-theme="dark"] .topbar-title            { color: #D4DAE8; }
+[data-theme="dark"] .topbar-ciclo           { background: #0F2118; color: #6FCF97; border-color: #1A3D28; }
 [data-theme="dark"] .topbar-icon-btn         { color: #7A8599; }
 [data-theme="dark"] .topbar-icon-btn:hover   { background: #1F2535; }
 [data-theme="dark"] .topbar-user-name        { color: #D4DAE8; }
