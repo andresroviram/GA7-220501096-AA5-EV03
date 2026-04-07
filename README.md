@@ -1,5 +1,5 @@
 # Sistema Integral Académico
-**Evidencia:** GA7-220501096-AA5-EV01
+**Evidencia:** GA7-220501096-AA5-EV03
 
 Sistema de gestión académica desarrollado con **React** (frontend) y **NestJS** (backend).
 Incluye autenticación JWT, gestión de estudiantes, docentes, grupos, materias, calificaciones
@@ -72,7 +72,7 @@ npm install
 npm run start:dev
 ```
 
-El servidor arranca en **http://localhost:3000**  
+El servidor arranca en **http://localhost:3000**
 Swagger UI disponible en **http://localhost:3000/api**
 
 Al iniciar por primera vez el **SeedService** crea automáticamente la base de datos
