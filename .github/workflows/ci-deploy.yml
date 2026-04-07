@@ -3,8 +3,12 @@ name: CI / Deploy Frontend
 on:
     push:
         branches: [main]
+        paths:
+            - 'frontend/**'
     pull_request:
         branches: [main]
+        paths:
+            - 'frontend/**'
 
 # Permisos necesarios para el despliegue oficial en GitHub Pages
 permissions:
