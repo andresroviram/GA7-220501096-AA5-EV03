@@ -7,6 +7,8 @@ y reportes, con soporte de modo claro/oscuro y sidebar colapsable.
 
 > **Demo en vivo:** [https://andresroviram.github.io/GA7-220501096-AA5-EV03/](https://andresroviram.github.io/GA7-220501096-AA5-EV03/)
 
+> **API Swagger:** [https://ga7-220501096-aa5-ev03-production.up.railway.app/api](https://ga7-220501096-aa5-ev03-production.up.railway.app/api)
+
 ---
 
 ## Capturas de pantalla
@@ -27,7 +29,7 @@ y reportes, con soporte de modo claro/oscuro y sidebar colapsable.
 ## Estructura del proyecto
 
 ```
-├── backend/                        # API REST — NestJS + TypeORM + SQLite
+├── backend/                        # API REST — NestJS + TypeORM + PostgreSQL
 │   └── src/
 │       ├── auth/                   # Autenticación (login, registro, JWT, logs)
 │       ├── users/                  # Usuarios (entidad, servicio, DTOs)
@@ -59,7 +61,7 @@ y reportes, con soporte de modo claro/oscuro y sidebar colapsable.
 |---------------|----------------------------------------------------------|
 | Frontend      | React 18, Vite, React Router v7, Recharts, Axios         |
 | Backend       | NestJS 10, TypeORM, Passport, JWT, bcrypt                |
-| Base de datos | SQLite (archivo local `backend/database.sqlite`)         |
+| Base de datos | PostgreSQL (Railway en producción, local en desarrollo)  |
 | Seguridad     | bcrypt (hash de contraseñas), JWT Bearer, class-validator|
 | Docs API      | Swagger UI (`/api` del backend)                          |
 
