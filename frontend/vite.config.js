@@ -13,6 +13,8 @@ const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8')
  * evitando exponer la URL real del backend en el código del cliente.
  */
 export default defineConfig({
+  // En GitHub Pages la app vive en /<repo-name>/; localmente en /
+  base: process.env.VITE_BASE_PATH || '/',
   plugins: [react()],
   define: {
     __APP_VERSION__: JSON.stringify(pkg.version),

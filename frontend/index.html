@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>Sistema de Gestión Académica — GA7-220501096-AA5-EV03</title>
+    <!-- SPA redirect: restaura la ruta codificada por 404.html en GitHub Pages -->
+    <script>
+      (function (l) {
+        if (l.search[1] === '/') {
+          var decoded = l.search.slice(1).split('&').map(function (s) {
+            return s.replace(/~and~/g, '&');
+          }).join('?');
+          window.history.replaceState(null, null,
+            l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }
+      }(window.location));
+    </script>
     <!-- Aplica el tema guardado antes de que React cargue para evitar flash -->
     <script>
       (function () {
