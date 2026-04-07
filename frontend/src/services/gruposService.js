@@ -1,6 +1,6 @@
 import api from './api';
 
-const isDev = import.meta.env.DEV;
+const isDev = import.meta.env.DEV || import.meta.env.VITE_USE_MOCK === 'true';
 
 /**
  * Devuelve todos los bloques de horario enriquecidos con datos del grupo.
