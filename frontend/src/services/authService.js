@@ -45,6 +45,7 @@ const authService = {
         telefono: MOCK_PHONES[user.correo] || null,
       };
       localStorage.setItem('token', data.access_token);
+      localStorage.setItem('lastLogin', new Date().toISOString());
       localStorage.setItem('user', JSON.stringify({
         correo: data.correo,
         nombre: data.nombre,
@@ -58,6 +59,7 @@ const authService = {
 
     if (response.data.access_token) {
       localStorage.setItem('token', response.data.access_token);
+      localStorage.setItem('lastLogin', new Date().toISOString());
       localStorage.setItem('user', JSON.stringify({
         correo: response.data.correo,
         nombre: response.data.nombre,
@@ -73,6 +75,7 @@ const authService = {
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('lastLogin');
   },
 
   /** @returns {boolean} true si existe un token guardado */

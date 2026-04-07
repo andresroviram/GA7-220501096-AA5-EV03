@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
+import ForgotPasswordForm from './components/ForgotPasswordForm';
 import MainLayout from './layouts/MainLayout';
 import { useTheme } from './hooks/useTheme';
 import Dashboard from './pages/Dashboard';
@@ -30,7 +31,7 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
     authService.isAuthenticated(),
   );
-  const [view, setView] = useState('login'); // 'login' | 'register'
+  const [view, setView] = useState('login'); // 'login' | 'register' | 'forgot'
   const { dark, toggle } = useTheme();
 
   const handleLoginSuccess = () => setIsAuthenticated(true);
@@ -45,10 +46,18 @@ function App() {
         />
       );
     }
+    if (view === 'forgot') {
+      return (
+        <ForgotPasswordForm
+          onBackToLogin={() => setView('login')}
+        />
+      );
+    }
     return (
       <LoginForm
         onLoginSuccess={handleLoginSuccess}
         onShowRegister={() => setView('register')}
+        onShowForgot={() => setView('forgot')}
       />
     );
   }

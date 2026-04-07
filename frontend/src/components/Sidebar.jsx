@@ -24,6 +24,14 @@ function Sidebar({ collapsed = false }) {
   const role        = user?.tipo_usuario ?? '';
   const visibleItems = navItems.filter((item) => canAccess(role, item.route));
 
+  const lastLoginRaw = localStorage.getItem('lastLogin');
+  const lastLoginLabel = lastLoginRaw
+    ? new Intl.DateTimeFormat('es', {
+        day: '2-digit', month: 'short', year: 'numeric',
+        hour: '2-digit', minute: '2-digit',
+      }).format(new Date(lastLoginRaw))
+    : null;
+
   return (
     <aside className={`sidebar${collapsed ? ' sidebar--collapsed' : ''}`}>
       {/* Logo / Marca */}
@@ -53,6 +61,19 @@ function Sidebar({ collapsed = false }) {
           </NavLink>
         ))}
       </nav>
+
+      {/* Versión (encima del divider) */}
+      {!collapsed && (
+        <div className="sidebar-version">v {__APP_VERSION__}</div>
+      )}
+
+      {/* Último acceso (con divider arriba) */}
+      {!collapsed && lastLoginLabel && (
+        <div className="sidebar-footer">
+          <span className="sidebar-last-login-label">Último acceso</span>
+          <span className="sidebar-last-login-value">{lastLoginLabel}</span>
+        </div>
+      )}
     </aside>
   );
 }

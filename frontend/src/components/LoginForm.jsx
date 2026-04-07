@@ -10,7 +10,7 @@ const DEMO_USERS = import.meta.env.VITE_USE_MOCK === 'true'
     ]
   : [];
 
-function LoginForm({ onLoginSuccess, onShowRegister }) {
+function LoginForm({ onLoginSuccess, onShowRegister, onShowForgot }) {
   const [correo, setCorreo]             = useState('');
   const [password, setPassword]         = useState('');
   const [remember, setRemember]         = useState(false);
@@ -138,7 +138,7 @@ function LoginForm({ onLoginSuccess, onShowRegister }) {
                 />
                 <span>Recordar por 30 días</span>
               </label>
-              <button type="button" className="login-forgot">Olvidé mi contraseña</button>
+              <button type="button" className="login-forgot" onClick={onShowForgot}>Olvidé mi contraseña</button>
             </div>
 
             {/* Error general (conexión / 400) */}
@@ -206,7 +206,7 @@ function LoginForm({ onLoginSuccess, onShowRegister }) {
           <div className="login-dot" aria-hidden="true" />
 
           {/* Versión */}
-          <p className="login-version">v 1.0.0</p>
+          <p className="login-version">v {__APP_VERSION__}</p>
         </div>
       </div>
     </div>

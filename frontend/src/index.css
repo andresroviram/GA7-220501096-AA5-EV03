@@ -345,6 +345,98 @@ body {
   margin-top: 1.5rem;
 }
 
+/* ─── Forgot Password ─────────────────────────────────────────── */
+
+.forgot-page {
+  min-height: 100vh;
+  background: #F2F5F3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.forgot-logo {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.75rem;
+}
+
+.forgot-logo-text {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1A6B4A;
+  line-height: 1.25;
+}
+
+.forgot-card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.forgot-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1C2B22;
+  margin: 0 0 0.5rem;
+  text-align: center;
+}
+
+.forgot-subtitle {
+  font-size: 0.9rem;
+  color: #5A7568;
+  text-align: center;
+  margin: 0 0 1.75rem;
+  line-height: 1.5;
+}
+
+.forgot-back-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: #3C5A4C;
+  padding: 0.5rem;
+  margin-top: 1rem;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+}
+.forgot-back-link:hover {
+  color: #1A6B4A;
+  background: #EAF5EE;
+}
+
+.forgot-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.forgot-success-icon {
+  width: 64px;
+  height: 64px;
+  background: #EAF5EE;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
 /* ─── Tarjeta de usuarios demo (solo visible en DEV) ──────────── */
 .demo-card {
   margin-top: 1.25rem;
@@ -1274,6 +1366,35 @@ body {
   text-align: center;
 }
 
+.sidebar-footer {
+  padding: 0.75rem 1.25rem 0.9rem;
+  border-top: 1px solid #E8F0EC;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.sidebar-last-login-label {
+  font-size: 0.7rem;
+  color: #9EB8A8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+}
+.sidebar-last-login-value {
+  font-size: 0.78rem;
+  color: #3C4F44;
+  font-weight: 500;
+}
+.sidebar-version {
+  margin-top: auto;
+  padding: 0 1.25rem 0.4rem;
+  font-size: 0.7rem;
+  color: #9EB8A8;
+  letter-spacing: 0.04em;
+  text-align: right;
+  align-self: flex-end;
+}
+
 /* ─── Main (Topbar + Content) ─────────────────────────────────── */
 
 .app-main {
@@ -2160,6 +2281,15 @@ body {
 
 [data-theme="dark"] .login-version { color: #525B6A; }
 
+[data-theme="dark"] .forgot-page        { background: #141922; }
+[data-theme="dark"] .forgot-card        { background: #1C2130; box-shadow: 0 4px 24px rgba(0,0,0,0.3); }
+[data-theme="dark"] .forgot-title       { color: #E2E8E4; }
+[data-theme="dark"] .forgot-subtitle    { color: #7A8A82; }
+[data-theme="dark"] .forgot-back-link   { color: #9BA5B8; }
+[data-theme="dark"] .forgot-back-link:hover { color: #3DBF8A; background: #1A2A22; }
+[data-theme="dark"] .forgot-success-icon { background: #1A2A22; }
+[data-theme="dark"] .forgot-logo-text   { color: #3DBF8A; }
+
 [data-theme="dark"] .demo-card {
   background: #1C2130;
   border-color: #2A3347;
@@ -2210,6 +2340,10 @@ body {
   background: #1F2D45;
   color: #2A9D6F;
 }
+[data-theme="dark"] .sidebar-footer          { border-color: #26304A; }
+[data-theme="dark"] .sidebar-last-login-label { color: #4A6258; }
+[data-theme="dark"] .sidebar-last-login-value  { color: #9BA5B8; }
+[data-theme="dark"] .sidebar-version            { color: #3A4E5A; }
 
 /* ─── Topbar ────────────────────────────────────────────────── */
 
