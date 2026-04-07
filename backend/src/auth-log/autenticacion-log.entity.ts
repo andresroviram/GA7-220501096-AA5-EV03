@@ -12,6 +12,6 @@ export class AutenticacionLog {
     @CreateDateColumn()
     fecha: Date;
 
-    @Column({ type: 'simple-enum', enum: ['exitoso', 'fallido'] })
+    @Column({ type: 'enum', enum: ['exitoso', 'fallido'] })
     resultado: 'exitoso' | 'fallido';
 }

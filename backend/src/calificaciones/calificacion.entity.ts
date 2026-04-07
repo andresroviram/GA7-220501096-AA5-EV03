@@ -14,7 +14,7 @@ export class Calificacion {
     id_materia: number;
 
     /** Nota entre 0.00 y 10.00 */
-    @Column({ type: 'real' })
+    @Column({ type: 'float' })
     valor: number;
 
     /** Formato 'YYYY-MM-DD' */

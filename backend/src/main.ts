@@ -10,9 +10,13 @@ import { AppModule } from './app.module';
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
-    // Habilitar CORS para aceptar peticiones del frontend React (Vite corre en :5173)
+    // Habilitar CORS para frontend local (Vite :5173) y GitHub Pages
+    const allowedOrigins = [
+        'http://localhost:5173',
+        'https://andresroviram.github.io',
+    ];
     app.enableCors({
-        origin: 'http://localhost:5173',
+        origin: allowedOrigins,
         credentials: true,
     });
 

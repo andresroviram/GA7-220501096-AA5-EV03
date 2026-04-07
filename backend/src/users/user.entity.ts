@@ -25,7 +25,7 @@ export class User {
     password: string;
 
     @Column({
-        type: 'simple-enum',
+        type: 'enum',
         enum: ['administrativo', 'docente', 'padre'],
         default: 'administrativo',
     })
@@ -38,7 +38,7 @@ export class User {
     @Column({ length: 16, nullable: true })
     resetToken: string | null;
 
-    @Column({ type: 'datetime', nullable: true })
+    @Column({ type: 'timestamp', nullable: true })
     resetTokenExpiry: Date | null;
 
     /** Permite desactivar la cuenta sin borrarla */
