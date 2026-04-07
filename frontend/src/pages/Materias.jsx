@@ -5,6 +5,8 @@ import {
 } from '../data/mockMaterias';
 import { docentes as DOCENTES_LIST_RAW } from '../data/mockDocentes';
 import * as materiasService from '../services/materiasService';
+import Button from '../components/ui/Button';
+import InputText from '../components/ui/InputText';
 
 const DOCENTES = ['', ...DOCENTES_LIST_RAW.map((d) => d.nombre)];
 const GRUPOS   = ['1A', '1B', '1C', '2A', '2B', '2C', '3A', '3B'];
@@ -38,10 +40,13 @@ function ModalMateria({ item, onSave, onCancel }) {
         </div>
         <div className="modal-form-body">
           <div className="modal-grid">
-            <div className="modal-field">
-              <label className="modal-label">Nombre de la Materia</label>
-              <input className="modal-input" value={form.nombre} onChange={(e) => set('nombre', e.target.value)} placeholder="Matemáticas" />
-            </div>
+            <InputText
+              className="modal-field"
+              label="Nombre de la Materia"
+              value={form.nombre}
+              onChange={(e) => set('nombre', e.target.value)}
+              placeholder="Matemáticas"
+            />
             <div className="modal-field">
               <label className="modal-label">Departamento</label>
               <select className="modal-select" value={form.departamento} onChange={(e) => set('departamento', e.target.value)}>
@@ -49,10 +54,16 @@ function ModalMateria({ item, onSave, onCancel }) {
                 {DEPARTAMENTOS_LIST.map((d) => <option key={d} value={d}>{d}</option>)}
               </select>
             </div>
-            <div className="modal-field">
-              <label className="modal-label">Créditos</label>
-              <input className="modal-input" type="number" min="1" max="10" value={form.creditos} onChange={(e) => set('creditos', e.target.value)} placeholder="5" />
-            </div>
+            <InputText
+              className="modal-field"
+              label="Créditos"
+              type="number"
+              min="1"
+              max="10"
+              value={form.creditos}
+              onChange={(e) => set('creditos', e.target.value)}
+              placeholder="5"
+            />
             <div className="modal-field">
               <label className="modal-label">Docente asignado</label>
               <select className="modal-select" value={form.docente} onChange={(e) => set('docente', e.target.value)}>
@@ -74,10 +85,10 @@ function ModalMateria({ item, onSave, onCancel }) {
           </div>
         </div>
         <div className="modal-form-footer">
-          <button className="btn btn--outline" onClick={onCancel}>Cancelar</button>
-          <button className="btn btn--primary" onClick={() => onSave(form)}>
+          <Button variant="secondary" onClick={onCancel}>Cancelar</Button>
+          <Button variant="primary" onClick={() => onSave(form)}>
             {isEdit ? 'Actualizar' : 'Registrar'}
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -168,8 +179,8 @@ function Materias() {
             </select>
           </div>
           <div className="filter-actions">
-            <button className="btn btn--primary" onClick={handleBuscar}><IconSearch /> Buscar</button>
-            <button className="btn btn--outline" onClick={handleLimpiar}>Limpiar</button>
+            <Button variant="primary" onClick={handleBuscar} leftIcon={<IconSearch />}>Buscar</Button>
+            <Button variant="secondary" onClick={handleLimpiar}>Limpiar</Button>
           </div>
         </div>
       </div>
@@ -179,9 +190,9 @@ function Materias() {
         <div className="table-header">
           <h3 className="table-title">Catálogo de Materias</h3>
           <div className="table-header-actions">
-            <button className="btn btn--primary" onClick={() => setModalForm({ isCreate: true })}>
-              <IconPlus /> Nueva Materia
-            </button>
+            <Button variant="primary" onClick={() => setModalForm({ isCreate: true })} leftIcon={<IconPlus />}>
+              Nueva Materia
+            </Button>
           </div>
         </div>
         <div className="table-wrapper">

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import authService from '../services/authService';
+import * as configService from '../services/configService';
 
 /* ─── Datos de configuración ── */
 const ROLES_INIT = [
@@ -28,7 +29,6 @@ const PARAMS_INIT = {
   escalaMax: '10',
   notaAprobatoria: '6',
 };
-
 import { IconSave, IconShield, IconSettings, IconUser } from '../components/Icons';
 
 /* ─── Sección de permisos ── */
@@ -101,9 +101,43 @@ function RolesPermisos() {
 function Parametros() {
   const [form, setForm] = useState(PARAMS_INIT);
   const [saved, setSaved] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    configService.getParams()
+      .then((data) => setForm({
+        institucion:    String(data.institucion    ?? ''),
+        cicloActual:    String(data.cicloActual    ?? ''),
+        maxEstPorGrupo: String(data.maxEstPorGrupo ?? ''),
+        correoContacto: String(data.correoContacto ?? ''),
+        escalaMin:      String(data.escalaMin      ?? ''),
+        escalaMax:      String(data.escalaMax      ?? ''),
+        notaAprobatoria:String(data.notaAprobatoria ?? ''),
+      }))
+      .finally(() => setLoading(false));
+  }, []);
 
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
-  const handleSave = () => { setSaved(true); setTimeout(() => setSaved(false), 2000); };
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      await configService.updateParams({
+        institucion:     form.institucion,
+        cicloActual:     form.cicloActual,
+        maxEstPorGrupo:  Number(form.maxEstPorGrupo),
+        correoContacto:  form.correoContacto,
+        escalaMin:       Number(form.escalaMin),
+        escalaMax:       Number(form.escalaMax),
+        notaAprobatoria: Number(form.notaAprobatoria),
+      });
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const fields = [
     { key: 'institucion',      label: 'Nombre de la Institución',    type: 'text',   col: 2 },
@@ -124,24 +158,30 @@ function Parametros() {
           <p className="config-section-sub">Configuración general de la institución y reglas académicas.</p>
         </div>
       </div>
-      <div className="params-grid">
-        {fields.map((f) => (
-          <div key={f.key} className={`modal-field${f.col === 2 ? ' modal-field--full' : ''}`}>
-            <label className="modal-label">{f.label}</label>
-            <input
-              className="modal-input"
-              type={f.type}
-              value={form[f.key]}
-              onChange={(e) => set(f.key, e.target.value)}
-            />
+      {loading ? (
+        <p style={{ color: '#6B7C74', padding: '1rem 0' }}>Cargando parámetros...</p>
+      ) : (
+        <>
+          <div className="params-grid">
+            {fields.map((f) => (
+              <div key={f.key} className={`modal-field${f.col === 2 ? ' modal-field--full' : ''}`}>
+                <label className="modal-label">{f.label}</label>
+                <input
+                  className="modal-input"
+                  type={f.type}
+                  value={form[f.key]}
+                  onChange={(e) => set(f.key, e.target.value)}
+                />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'flex-end' }}>
-        <button className="btn btn--primary" onClick={handleSave}>
-          <IconSave /> {saved ? '¡Guardado!' : 'Guardar Parámetros'}
-        </button>
-      </div>
+          <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'flex-end' }}>
+            <button className="btn btn--primary" onClick={handleSave} disabled={saving}>
+              <IconSave /> {saved ? '¡Guardado!' : saving ? 'Guardando...' : 'Guardar Parámetros'}
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 }

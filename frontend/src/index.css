@@ -114,98 +114,6 @@ body {
   line-height: 1.5;
 }
 
-/* ─── Grupos de campo con ícono ───────────────────────────────── */
-
-.form-group {
-  margin-bottom: 1.1rem;
-}
-
-.form-label {
-  display: block;
-  font-size: 0.825rem;
-  font-weight: 600;
-  color: #1A2E25;
-  margin-bottom: 0.4rem;
-}
-
-.input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.input-icon {
-  position: absolute;
-  left: 0.875rem;
-  color: #6B7C74;
-  display: flex;
-  align-items: center;
-  pointer-events: none;
-}
-
-.form-input {
-  width: 100%;
-  padding: 0.75rem 1rem 0.75rem 2.75rem;
-  border: 1.5px solid #D1E8DC;
-  border-radius: 10px;
-  font-size: 0.9rem;
-  color: #1A2E25;
-  background: #ffffff;
-  outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.form-input::placeholder {
-  color: #A0B4AC;
-}
-
-.form-input:focus {
-  border-color: #2A9D6F;
-  box-shadow: 0 0 0 3px rgba(42, 157, 111, 0.12);
-}
-
-.form-input:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* Estado de error inline en un campo */
-.form-input--error {
-  border-color: #E53935;
-  box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.1);
-}
-
-.form-input--error:focus {
-  border-color: #E53935;
-  box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.15);
-}
-
-/* Ícono "!" a la derecha del campo con error */
-.input-error-icon {
-  position: absolute;
-  right: 0.875rem;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #E53935;
-  color: #fff;
-  font-size: 0.75rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  flex-shrink: 0;
-}
-
-/* Texto de error debajo del campo */
-.field-error-msg {
-  font-size: 0.78rem;
-  color: #E53935;
-  margin-top: 0.3rem;
-  padding-left: 0.1rem;
-}
-
 /* ─── Opciones (recordar + olvidé) ───────────────────────────── */
 
 .login-options {
@@ -259,69 +167,6 @@ body {
   color: #c62828;
   font-size: 0.82rem;
   margin-bottom: 1rem;
-}
-
-/* ─── Botones ─────────────────────────────────────────────────── */
-
-.login-button {
-  width: 100%;
-  padding: 0.8rem;
-  border-radius: 10px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.2s, transform 0.1s;
-  margin-bottom: 0.75rem;
-}
-
-.login-button:last-of-type {
-  margin-bottom: 0;
-}
-
-.login-button--primary {
-  background: #2A9D6F;
-  color: #ffffff;
-  border: none;
-}
-
-.login-button--primary:hover:not(:disabled) {
-  opacity: 0.9;
-  transform: translateY(-1px);
-}
-
-.login-button--secondary {
-  background: transparent;
-  color: #2A9D6F;
-  border: 1.5px solid #2A9D6F;
-}
-
-.login-button--secondary:hover:not(:disabled) {
-  background: #E8F5F0;
-}
-
-.login-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-}
-
-/* ─── Spinner ─────────────────────────────────────────────────── */
-
-.loading-text {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.spinner {
-  display: inline-block;
-  width: 15px;
-  height: 15px;
-  border: 2px solid rgba(255, 255, 255, 0.45);
-  border-top-color: #fff;
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
 }
 
 @keyframes spin {
@@ -536,11 +381,6 @@ body {
   padding-right: 0.5rem;
 }
 
-/* Input tipo date sin padding-left del ícono */
-.form-input--date {
-  padding-left: 1rem;
-}
-
 /* Mensaje de éxito tras registro */
 .register-success {
   background: #E8F5F0;
@@ -622,6 +462,7 @@ body {
   gap: 0.75rem;
   align-items: flex-end;
   padding-bottom: 1px;
+  margin-left: auto;
 }
 
 /* ─── Botones reutilizables ───────────────────────────────────── */
@@ -646,12 +487,6 @@ body {
   background: #2A9D6F;
   color: #ffffff;
   border: none;
-}
-
-.btn--outline {
-  background: transparent;
-  color: #2A9D6F;
-  border: 1.5px solid #2A9D6F;
 }
 
 /* ─── Tarjeta de tabla ────────────────────────────────────────── */
@@ -931,16 +766,6 @@ body {
   justify-content: flex-end;
   gap: 0.75rem;
 }
-
-/* ─── Botón peligro ───────────────────────────────────────────── */
-
-.btn--danger {
-  background: #C62828;
-  color: #ffffff;
-  border: none;
-}
-
-.btn--danger:hover { opacity: 0.88; }
 
 /* ─── Modal de formulario ─────────────────────────────────────── */
 
@@ -2053,11 +1878,6 @@ body {
 }
 .btn--excel:hover:not(:disabled) { background: #1B5E20; }
 .btn--excel:disabled { opacity: 0.6; cursor: not-allowed; }
-
-.btn--sm {
-  padding: 0.3rem 0.75rem;
-  font-size: 0.78rem;
-}
 
 .badge--neutral {
   background: #EEF2EF;

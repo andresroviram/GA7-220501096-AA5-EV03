@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import authService from '../services/authService';
 import { IconAlertTriangle } from './Icons';
+import Button from './ui/Button';
+import InputText from './ui/InputText';
+import InputPassword from './ui/InputPassword';
+import Checkbox from './ui/Checkbox';
 
 const DEMO_USERS = import.meta.env.VITE_USE_MOCK === 'true'
   ? [
@@ -69,75 +73,46 @@ function LoginForm({ onLoginSuccess, onShowRegister, onShowForgot }) {
           <form onSubmit={handleSubmit} noValidate>
 
             {/* Correo */}
-            <div className="form-group">
-              <label htmlFor="correo" className="form-label">Correo Electrónico</label>
-              <div className="input-wrapper">
-                <span className="input-icon" aria-hidden="true">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                    <polyline points="22,6 12,13 2,6"/>
-                  </svg>
-                </span>
-                <input
-                  type="email"
-                  id="correo"
-                  className={`form-input${fieldErrors.correo ? ' form-input--error' : ''}`}
-                  value={correo}
-                  onChange={(e) => { setCorreo(e.target.value); setFieldErrors((p) => ({ ...p, correo: '' })); }}
-                  placeholder="johndoe@gmail.com"
-                  disabled={loading}
-                  autoComplete="email"
-                  autoFocus
-                />
-                {fieldErrors.correo && (
-                  <span className="input-error-icon" aria-hidden="true">!</span>
-                )}
-              </div>
-              {fieldErrors.correo && (
-                <p className="field-error-msg" role="alert">{fieldErrors.correo}</p>
-              )}
-            </div>
+            <InputText
+              label="Correo Electrónico"
+              id="correo"
+              type="email"
+              value={correo}
+              onChange={(e) => { setCorreo(e.target.value); setFieldErrors((p) => ({ ...p, correo: '' })); }}
+              placeholder="johndoe@gmail.com"
+              disabled={loading}
+              autoComplete="email"
+              autoFocus
+              error={fieldErrors.correo}
+              leftIcon={
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+              }
+            />
 
             {/* Contraseña */}
-            <div className="form-group">
-              <label htmlFor="password" className="form-label">Contraseña</label>
-              <div className="input-wrapper">
-                <span className="input-icon" aria-hidden="true">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                  </svg>
-                </span>
-                <input
-                  type="password"
-                  id="password"
-                  className={`form-input${fieldErrors.password ? ' form-input--error' : ''}`}
-                  value={password}
-                  onChange={(e) => { setPassword(e.target.value); setFieldErrors((p) => ({ ...p, password: '' })); }}
-                  placeholder="ingresar contraseña"
-                  disabled={loading}
-                  autoComplete="current-password"
-                />
-                {fieldErrors.password && (
-                  <span className="input-error-icon" aria-hidden="true">!</span>
-                )}
-              </div>
-              {fieldErrors.password && (
-                <p className="field-error-msg" role="alert">{fieldErrors.password}</p>
-              )}
-            </div>
+            <InputPassword
+              label="Contraseña"
+              id="password"
+              value={password}
+              onChange={(e) => { setPassword(e.target.value); setFieldErrors((p) => ({ ...p, password: '' })); }}
+              placeholder="ingresar contraseña"
+              disabled={loading}
+              autoComplete="current-password"
+              error={fieldErrors.password}
+            />
 
             {/* Opciones extra */}
             <div className="login-options">
-              <label className="login-remember">
-                <input
-                  type="checkbox"
-                  checked={remember}
-                  onChange={(e) => setRemember(e.target.checked)}
-                  disabled={loading}
-                />
-                <span>Recordar por 30 días</span>
-              </label>
+              <Checkbox
+                id="remember"
+                checked={remember}
+                onChange={(e) => setRemember(e.target.checked)}
+                disabled={loading}
+                label="Recordar por 30 días"
+              />
               <button type="button" className="login-forgot" onClick={onShowForgot}>Olvidé mi contraseña</button>
             </div>
 
@@ -149,30 +124,14 @@ function LoginForm({ onLoginSuccess, onShowRegister, onShowForgot }) {
             )}
 
             {/* Botón principal — Iniciar sesión */}
-            <button
-              type="submit"
-              className="login-button login-button--primary"
-              disabled={loading}
-            >
-              {loading ? (
-                <span className="loading-text">
-                  <span className="spinner" aria-hidden="true" />
-                  Verificando...
-                </span>
-              ) : (
-                'Iniciar Sesión'
-              )}
-            </button>
+            <Button type="submit" variant="primary" fullWidth loading={loading}>
+              {loading ? 'Verificando...' : 'Iniciar Sesión'}
+            </Button>
 
             {/* Botón secundario — Registrarse */}
-            <button
-              type="button"
-              className="login-button login-button--secondary"
-              disabled={loading}
-              onClick={onShowRegister}
-            >
+            <Button type="button" variant="secondary" fullWidth disabled={loading} onClick={onShowRegister}>
               Registrarme
-            </button>
+            </Button>
 
           </form>
 

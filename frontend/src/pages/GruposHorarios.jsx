@@ -9,6 +9,7 @@ import {
 import { materias as MATERIAS_LIST_RAW } from '../data/mockMaterias';
 import { docentes as DOCENTES_LIST_RAW } from '../data/mockDocentes';
 import * as gruposService from '../services/gruposService';
+import Button from '../components/ui/Button';
 import {
   IconEdit, IconTrash, IconPlus, IconSearch, IconClose,
   IconAlertTriangle as IconWarn, IconCheck,
@@ -93,10 +94,10 @@ function ModalHorario({ item, onSave, onCancel }) {
           </div>
         </div>
         <div className="modal-form-footer">
-          <button className="btn btn--outline" onClick={onCancel}>Cancelar</button>
-          <button className="btn btn--primary" onClick={() => onSave(form)}>
+          <Button variant="secondary" onClick={onCancel}>Cancelar</Button>
+          <Button variant="primary" onClick={() => onSave(form)}>
             {isEdit ? 'Actualizar' : 'Registrar'}
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -184,8 +185,8 @@ function GruposHorarios() {
             </select>
           </div>
           <div className="filter-actions">
-            <button className="btn btn--primary" onClick={handleBuscar}><IconSearch /> Buscar</button>
-            <button className="btn btn--outline" onClick={handleLimpiar}>Limpiar</button>
+            <Button variant="primary" onClick={handleBuscar} leftIcon={<IconSearch />}>Buscar</Button>
+            <Button variant="secondary" onClick={handleLimpiar}>Limpiar</Button>
           </div>
         </div>
       </div>
@@ -195,9 +196,9 @@ function GruposHorarios() {
         <div className="table-header">
           <h3 className="table-title">Horarios Registrados</h3>
           <div className="table-header-actions">
-            <button className="btn btn--primary" onClick={() => setModalForm({ isCreate: true })}>
-              <IconPlus /> Registrar Horario
-            </button>
+            <Button variant="primary" onClick={() => setModalForm({ isCreate: true })} leftIcon={<IconPlus />}>
+              Registrar Horario
+            </Button>
           </div>
         </div>
         <div className="table-wrapper">

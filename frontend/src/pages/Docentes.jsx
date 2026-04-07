@@ -8,6 +8,9 @@ import {
 } from '../data/mockDocentes';
 import * as docentesService from '../services/docentesService';
 import { downloadCSV } from '../utils/exportUtils';
+import Button from '../components/ui/Button';
+import InputText from '../components/ui/InputText';
+import DatePicker from '../components/ui/DatePicker';
 
 import {
   IconEdit, IconUserMinus as IconRemove, IconSearch, IconDownload as IconExport,
@@ -81,13 +84,13 @@ function ModalConfirm({ docente, onConfirm, onCancel }) {
           )}
         </p>
         <div className="modal-confirm-actions">
-          <button className="btn btn--outline" onClick={onCancel}>Cancelar</button>
-          <button
-            className={`btn ${esActivo ? 'btn--danger' : 'btn--primary'}`}
+          <Button variant="secondary" onClick={onCancel}>Cancelar</Button>
+          <Button
+            variant={esActivo ? 'danger' : 'primary'}
             onClick={() => onConfirm(docente)}
           >
             {esActivo ? 'Dar de Baja' : 'Reactivar'}
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -127,46 +130,38 @@ function ModalDocente({ docente, onSave, onCancel }) {
         <div className="modal-form-body">
           <div className="modal-grid">
 
-            <div className="modal-field">
-              <label className="modal-label">Nombre Completo</label>
-              <input
-                className="modal-input"
-                value={form.nombre}
-                onChange={(e) => set('nombre', e.target.value)}
-                placeholder="Dr. Juan Pérez"
-              />
-            </div>
+            <InputText
+              className="modal-field"
+              label="Nombre Completo"
+              value={form.nombre}
+              onChange={(e) => set('nombre', e.target.value)}
+              placeholder="Dr. Juan Pérez"
+            />
 
-            <div className="modal-field">
-              <label className="modal-label">Cédula Profesional</label>
-              <input
-                className="modal-input"
-                value={form.cedula}
-                onChange={(e) => set('cedula', e.target.value)}
-                placeholder="123456789"
-              />
-            </div>
+            <InputText
+              className="modal-field"
+              label="Cédula Profesional"
+              value={form.cedula}
+              onChange={(e) => set('cedula', e.target.value)}
+              placeholder="123456789"
+            />
 
-            <div className="modal-field">
-              <label className="modal-label">Email</label>
-              <input
-                className="modal-input"
-                type="email"
-                value={form.email}
-                onChange={(e) => set('email', e.target.value)}
-                placeholder="juan.perez@escuela.edu"
-              />
-            </div>
+            <InputText
+              className="modal-field"
+              label="Email"
+              type="email"
+              value={form.email}
+              onChange={(e) => set('email', e.target.value)}
+              placeholder="juan.perez@escuela.edu"
+            />
 
-            <div className="modal-field">
-              <label className="modal-label">Teléfono</label>
-              <input
-                className="modal-input"
-                value={form.telefono}
-                onChange={(e) => set('telefono', e.target.value)}
-                placeholder="+52 555-0101"
-              />
-            </div>
+            <InputText
+              className="modal-field"
+              label="Teléfono"
+              value={form.telefono}
+              onChange={(e) => set('telefono', e.target.value)}
+              placeholder="+52 555-0101"
+            />
 
             <div className="modal-field">
               <label className="modal-label">Departamento</label>
@@ -182,15 +177,12 @@ function ModalDocente({ docente, onSave, onCancel }) {
               </select>
             </div>
 
-            <div className="modal-field">
-              <label className="modal-label">Fecha de ingreso</label>
-              <input
-                className="modal-input"
-                type="date"
-                value={form.fechaIngreso}
-                onChange={(e) => set('fechaIngreso', e.target.value)}
-              />
-            </div>
+            <DatePicker
+              className="modal-field"
+              label="Fecha de ingreso"
+              value={form.fechaIngreso}
+              onChange={(e) => set('fechaIngreso', e.target.value)}
+            />
 
           </div>
 
@@ -224,10 +216,10 @@ function ModalDocente({ docente, onSave, onCancel }) {
 
         {/* Pie */}
         <div className="modal-form-footer">
-          <button className="btn btn--outline" onClick={onCancel}>Cancelar</button>
-          <button className="btn btn--primary" onClick={() => onSave(form)}>
+          <Button variant="secondary" onClick={onCancel}>Cancelar</Button>
+          <Button variant="primary" onClick={() => onSave(form)}>
             {isEdit ? 'Actualizar' : 'Registrar'}
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -371,12 +363,12 @@ function Docentes() {
           </div>
 
           <div className="filter-actions">
-            <button className="btn btn--primary" onClick={handleBuscar}>
-              <IconSearch /> Buscar
-            </button>
-            <button className="btn btn--outline" onClick={handleLimpiar}>
+            <Button variant="primary" onClick={handleBuscar} leftIcon={<IconSearch />}>
+              Buscar
+            </Button>
+            <Button variant="secondary" onClick={handleLimpiar}>
               Limpiar
-            </button>
+            </Button>
           </div>
 
         </div>
@@ -387,12 +379,12 @@ function Docentes() {
         <div className="table-header">
           <h3 className="table-title">Personal Docente</h3>
           <div className="table-header-actions">
-            <button className="btn btn--primary" onClick={() => setModalForm({ isCreate: true })}>
-              <IconPlus /> Registrar
-            </button>
-            <button className="btn btn--outline" onClick={handleExport}>
-              <IconExport /> Exportar
-            </button>
+            <Button variant="primary" onClick={() => setModalForm({ isCreate: true })} leftIcon={<IconPlus />}>
+              Registrar
+            </Button>
+            <Button variant="secondary" onClick={handleExport} leftIcon={<IconExport />}>
+              Exportar
+            </Button>
           </div>
         </div>
 

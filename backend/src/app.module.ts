@@ -8,6 +8,7 @@ import { HorariosModule } from './horarios/horarios.module';
 import { MateriasModule } from './materias/materias.module';
 import { CalificacionesModule } from './calificaciones/calificaciones.module';
 import { SeedModule } from './seed/seed.module';
+import { ConfigParamsModule } from './config-params/config-params.module';
 // Entidades
 import { User } from './users/user.entity';
 import { Alumno } from './alumnos/alumno.entity';
@@ -19,6 +20,7 @@ import { Calificacion } from './calificaciones/calificacion.entity';
 import { AutenticacionLog } from './auth-log/autenticacion-log.entity';
 import { RelacionPadres } from './relacion-padres/relacion-padres.entity';
 import { DocenteBaja } from './docente-baja/docente-baja.entity';
+import { ConfigParams } from './config-params/config-params.entity';
 
 @Module({
     imports: [
@@ -36,6 +38,7 @@ import { DocenteBaja } from './docente-baja/docente-baja.entity';
                 AutenticacionLog,
                 RelacionPadres,
                 DocenteBaja,
+                ConfigParams,
             ],
             synchronize: true, // Solo en desarrollo — en prod usar migraciones
         }),
@@ -47,6 +50,7 @@ import { DocenteBaja } from './docente-baja/docente-baja.entity';
         MateriasModule,
         CalificacionesModule,
         SeedModule,
+        ConfigParamsModule,
     ],
 })
 export class AppModule { }

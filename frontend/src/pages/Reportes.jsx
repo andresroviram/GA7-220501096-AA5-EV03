@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import * as reportesService from '../services/reportesService';
+import Button from '../components/ui/Button';
 
 import {
   IconDownload, IconFile, IconCheckCircle, IconUsers, IconBarChart, IconCalendar, IconGrid,
@@ -112,9 +113,9 @@ function Reportes() {
                     <span className={`badge ${r.formato === 'PDF' ? 'badge--pdf' : 'badge--excel'}`}>{r.formato}</span>
                   </td>
                   <td>
-                    <button className="btn btn--outline btn--sm" onClick={() => reportesService.descargarReporte(r)}>
-                      <IconDownload /> Descargar
-                    </button>
+                    <Button variant="secondary" size="sm" onClick={() => reportesService.descargarReporte(r)} leftIcon={<IconDownload />}>
+                      Descargar
+                    </Button>
                   </td>
                 </tr>
               ))}

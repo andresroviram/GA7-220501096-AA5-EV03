@@ -6,7 +6,11 @@ import {
   gruposSelect as GRUPOS_FILTER,
 } from '../data/mockCalificaciones';
 import * as calificacionesService from '../services/calificacionesService';
+import * as configService from '../services/configService';
 import { downloadCSV } from '../utils/exportUtils';
+import Button from '../components/ui/Button';
+import InputText from '../components/ui/InputText';
+import DatePicker from '../components/ui/DatePicker';
 
 import {
   IconEdit, IconSearch, IconDownload as IconExport, IconPlus, IconClose, IconCalendar,
@@ -57,15 +61,12 @@ function ModalCalificacion({ item, onSave, onCancel }) {
         <div className="modal-form-body">
           <div className="modal-stack">
 
-            <div className="modal-field">
-              <label className="modal-label">Estudiante</label>
-              <input
-                className="modal-input"
-                value={form.estudiante}
-                onChange={(e) => set('estudiante', e.target.value)}
-                placeholder="Nombre del estudiante"
-              />
-            </div>
+            <InputText
+              label="Estudiante"
+              value={form.estudiante}
+              onChange={(e) => set('estudiante', e.target.value)}
+              placeholder="Nombre del estudiante"
+            />
 
             <div className="modal-field">
               <label className="modal-label">Materia</label>
@@ -83,42 +84,32 @@ function ModalCalificacion({ item, onSave, onCancel }) {
               </select>
             </div>
 
-            <div className="modal-field">
-              <label className="modal-label">Calificación</label>
-              <input
-                className="modal-input"
-                type="number"
-                step="0.1"
-                min="0"
-                max="10"
-                value={form.calificacion}
-                onChange={(e) => set('calificacion', e.target.value)}
-                placeholder="0.0"
-              />
-            </div>
+            <InputText
+              label="Calificación"
+              type="number"
+              step="0.1"
+              min="0"
+              max="10"
+              value={form.calificacion}
+              onChange={(e) => set('calificacion', e.target.value)}
+              placeholder="0.0"
+            />
 
-            <div className="modal-field">
-              <label className="modal-label">Fecha de evaluación</label>
-              <div className="input-date-wrapper">
-                <input
-                  className="modal-input modal-input--date"
-                  type="date"
-                  value={form.fecha}
-                  onChange={(e) => set('fecha', e.target.value)}
-                />
-                <span className="input-date-icon"><IconCalendar /></span>
-              </div>
-            </div>
+            <DatePicker
+              label="Fecha de evaluación"
+              value={form.fecha}
+              onChange={(e) => set('fecha', e.target.value)}
+            />
 
           </div>
         </div>
 
         {/* Pie */}
         <div className="modal-form-footer">
-          <button className="btn btn--outline" onClick={onCancel}>Cancelar</button>
-          <button className="btn btn--primary" onClick={() => onSave(form)}>
+          <Button variant="secondary" onClick={onCancel}>Cancelar</Button>
+          <Button variant="primary" onClick={() => onSave(form)}>
             {isEdit ? 'Actualizar' : 'Registrar'}
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -131,6 +122,7 @@ let nextId = 1;
 function Calificaciones() {
   const [lista,         setLista]         = useState([]);
   const [loading,       setLoading]       = useState(true);
+  const [notaAprob,     setNotaAprob]     = useState(6);
   const [filtroMateria, setFiltroMateria] = useState('');
   const [filtroGrupo,   setFiltroGrupo]   = useState('');
   const [filtroFecha,   setFiltroFecha]   = useState('');
@@ -141,6 +133,8 @@ function Calificaciones() {
     calificacionesService.getCalificaciones()
       .then((data) => { setLista(data); nextId = data.length + 1; })
       .finally(() => setLoading(false));
+    configService.getParams()
+      .then((p) => setNotaAprob(Number(p.notaAprobatoria) || 6));
   }, []);
 
   const listaFiltrada = useMemo(() => {
@@ -234,8 +228,8 @@ function Calificaciones() {
           </div>
 
           <div className="filter-actions">
-            <button className="btn btn--primary" onClick={handleBuscar}><IconSearch /> Buscar</button>
-            <button className="btn btn--outline" onClick={handleLimpiar}>Limpiar</button>
+            <Button variant="primary" onClick={handleBuscar} leftIcon={<IconSearch />}>Buscar</Button>
+            <Button variant="secondary" onClick={handleLimpiar}>Limpiar</Button>
           </div>
 
         </div>
@@ -246,10 +240,10 @@ function Calificaciones() {
         <div className="table-header">
           <h3 className="table-title">Calificaciones Registradas</h3>
           <div className="table-header-actions">
-            <button className="btn btn--primary" onClick={() => setModalForm({ isCreate: true })}>
-              <IconPlus /> Registrar
-            </button>
-            <button className="btn btn--outline" onClick={handleExport}><IconExport /> Exportar</button>
+            <Button variant="primary" onClick={() => setModalForm({ isCreate: true })} leftIcon={<IconPlus />}>
+              Registrar
+            </Button>
+            <Button variant="secondary" onClick={handleExport} leftIcon={<IconExport />}>Exportar</Button>
           </div>
         </div>
 
@@ -273,7 +267,7 @@ function Calificaciones() {
                   <td className="td-name">{c.estudiante}</td>
                   <td>{c.materia}</td>
                   <td><span className="badge badge--grupo">{c.grupo}</span></td>
-                  <td><span className={`cal-score${c.calificacion >= 9 ? ' cal-score--high' : c.calificacion < 7 ? ' cal-score--low' : ''}`}>{c.calificacion}</span></td>
+                  <td><span className={`cal-score${c.calificacion >= 9 ? ' cal-score--high' : c.calificacion < notaAprob ? ' cal-score--low' : ''}`}>{c.calificacion}</span></td>
                   <td>{c.fecha}</td>
                   <td className="td-actions">
                     <button

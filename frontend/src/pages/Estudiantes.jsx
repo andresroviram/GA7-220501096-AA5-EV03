@@ -7,6 +7,8 @@ import {
 } from '../data/mockEstudiantes';
 import * as estudiantesService from '../services/estudiantesService';
 import { downloadCSV } from '../utils/exportUtils';
+import Button from '../components/ui/Button';
+import InputText from '../components/ui/InputText';
 
 import {
   IconEdit, IconUserMinus, IconUserPlus, IconSearch, IconDownload as IconExport,
@@ -30,13 +32,13 @@ function ModalConfirm({ estudiante, onConfirm, onCancel }) {
           )}
         </p>
         <div className="modal-confirm-actions">
-          <button className="btn btn--outline" onClick={onCancel}>Cancelar</button>
-          <button
-            className={`btn ${esActivo ? 'btn--danger' : 'btn--primary'}`}
+          <Button variant="secondary" onClick={onCancel}>Cancelar</Button>
+          <Button
+            variant={esActivo ? 'danger' : 'primary'}
             onClick={() => onConfirm(estudiante)}
           >
             {esActivo ? 'Suspender' : 'Reactivar'}
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -74,15 +76,22 @@ function ModalEstudiante({ estudiante, onSave, onCancel }) {
         <div className="modal-form-body">
           <div className="modal-grid">
 
-            <div className="modal-field">
-              <label className="modal-label">Nombre Completo</label>
-              <input className="modal-input" value={form.nombre} onChange={(e) => set('nombre', e.target.value)} placeholder="Ana García Rodríguez" />
-            </div>
+            <InputText
+              className="modal-field"
+              label="Nombre Completo"
+              value={form.nombre}
+              onChange={(e) => set('nombre', e.target.value)}
+              placeholder="Ana García Rodríguez"
+            />
 
-            <div className="modal-field">
-              <label className="modal-label">Email</label>
-              <input className="modal-input" type="email" value={form.email} onChange={(e) => set('email', e.target.value)} placeholder="ana.garcia@estudiante.edu" />
-            </div>
+            <InputText
+              className="modal-field"
+              label="Email"
+              type="email"
+              value={form.email}
+              onChange={(e) => set('email', e.target.value)}
+              placeholder="ana.garcia@estudiante.edu"
+            />
 
             <div className="modal-field">
               <label className="modal-label">Grupo</label>
@@ -92,44 +101,69 @@ function ModalEstudiante({ estudiante, onSave, onCancel }) {
               </select>
             </div>
 
-            <div className="modal-field">
-              <label className="modal-label">Edad</label>
-              <input className="modal-input" type="number" min="10" max="25" value={form.edad} onChange={(e) => set('edad', e.target.value)} placeholder="16" />
-            </div>
+            <InputText
+              className="modal-field"
+              label="Edad"
+              type="number"
+              min="10"
+              max="25"
+              value={form.edad}
+              onChange={(e) => set('edad', e.target.value)}
+              placeholder="16"
+            />
 
-            <div className="modal-field">
-              <label className="modal-label">Teléfono</label>
-              <input className="modal-input" value={form.telefono} onChange={(e) => set('telefono', e.target.value)} placeholder="+52 555-1001" />
-            </div>
+            <InputText
+              className="modal-field"
+              label="Teléfono"
+              value={form.telefono}
+              onChange={(e) => set('telefono', e.target.value)}
+              placeholder="+52 555-1001"
+            />
 
-            <div className="modal-field">
-              <label className="modal-label">Promedio</label>
-              <input className="modal-input" type="number" step="0.1" min="0" max="10" value={form.promedio} onChange={(e) => set('promedio', e.target.value)} placeholder="9.0" />
-            </div>
+            <InputText
+              className="modal-field"
+              label="Promedio"
+              type="number"
+              step="0.1"
+              min="0"
+              max="10"
+              value={form.promedio}
+              onChange={(e) => set('promedio', e.target.value)}
+              placeholder="9.0"
+            />
 
-            <div className="modal-field modal-field--full">
-              <label className="modal-label">Dirección</label>
-              <input className="modal-input" value={form.direccion} onChange={(e) => set('direccion', e.target.value)} placeholder="Calle Principal 123, Col. Centro" />
-            </div>
+            <InputText
+              className="modal-field modal-field--full"
+              label="Dirección"
+              value={form.direccion}
+              onChange={(e) => set('direccion', e.target.value)}
+              placeholder="Calle Principal 123, Col. Centro"
+            />
 
-            <div className="modal-field">
-              <label className="modal-label">Nombre del Tutor</label>
-              <input className="modal-input" value={form.tutor} onChange={(e) => set('tutor', e.target.value)} placeholder="María Rodríguez" />
-            </div>
+            <InputText
+              className="modal-field"
+              label="Nombre del Acudiente"
+              value={form.tutor}
+              onChange={(e) => set('tutor', e.target.value)}
+              placeholder="María Rodríguez"
+            />
 
-            <div className="modal-field">
-              <label className="modal-label">Teléfono del Tutor</label>
-              <input className="modal-input" value={form.tutorTelefono} onChange={(e) => set('tutorTelefono', e.target.value)} placeholder="+52 555-1002" />
-            </div>
+            <InputText
+              className="modal-field"
+              label="Teléfono del Acudiente"
+              value={form.tutorTelefono}
+              onChange={(e) => set('tutorTelefono', e.target.value)}
+              placeholder="+52 555-1002"
+            />
 
           </div>
         </div>
 
         <div className="modal-form-footer">
-          <button className="btn btn--outline" onClick={onCancel}>Cancelar</button>
-          <button className="btn btn--primary" onClick={() => onSave(form)}>
+          <Button variant="secondary" onClick={onCancel}>Cancelar</Button>
+          <Button variant="primary" onClick={() => onSave(form)}>
             {isEdit ? 'Actualizar' : 'Registrar'}
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -300,8 +334,8 @@ function Estudiantes() {
           </div>
 
           <div className="filter-actions">
-            <button className="btn btn--primary" onClick={handleBuscar}><IconSearch /> Buscar</button>
-            <button className="btn btn--outline" onClick={handleLimpiar}>Limpiar</button>
+            <Button variant="primary" onClick={handleBuscar} leftIcon={<IconSearch />}>Buscar</Button>
+            <Button variant="secondary" onClick={handleLimpiar}>Limpiar</Button>
           </div>
 
         </div>
@@ -312,10 +346,10 @@ function Estudiantes() {
         <div className="table-header">
           <h3 className="table-title">Estudiantes Registrados</h3>
           <div className="table-header-actions">
-            <button className="btn btn--primary" onClick={() => setModalForm({ isCreate: true })}>
-              <IconPlus /> Registrar Nuevo
-            </button>
-            <button className="btn btn--outline" onClick={handleExport}><IconExport /> Exportar Listado</button>
+            <Button variant="primary" onClick={() => setModalForm({ isCreate: true })} leftIcon={<IconPlus />}>
+              Registrar Nuevo
+            </Button>
+            <Button variant="secondary" onClick={handleExport} leftIcon={<IconExport />}>Exportar Listado</Button>
           </div>
         </div>
 
@@ -328,7 +362,7 @@ function Estudiantes() {
                 <th>Grupo</th>
                 <th>Edad</th>
                 <th>Contacto</th>
-                <th>Tutor</th>
+                <th>Acudiente</th>
                 <th>Promedio</th>
                 <th>Estado</th>
                 <th>Acciones</th>
