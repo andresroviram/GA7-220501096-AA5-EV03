@@ -42,7 +42,7 @@ async function bootstrap() {
 
     const port = process.env.PORT ?? 3000;
     await app.listen(port);
-    console.log(`Servidor de autenticación ejecutándose en http://localhost:${port}`);
+    console.log(`Servidor sistema integral académico ejecutándose en http://localhost:${port}`);
     console.log(`Swagger UI disponible en http://localhost:${port}/api`);
 }
 
