@@ -5,6 +5,8 @@ Sistema de gestión académica desarrollado con **React** (frontend) y **NestJS*
 Incluye autenticación JWT, gestión de estudiantes, docentes, grupos, materias, calificaciones
 y reportes, con soporte de modo claro/oscuro y sidebar colapsable.
 
+> **Demo en vivo:** [https://andresroviram.github.io/GA7-220501096-AA5-EV03/](https://andresroviram.github.io/GA7-220501096-AA5-EV03/)
+
 ---
 
 ## Capturas de pantalla
