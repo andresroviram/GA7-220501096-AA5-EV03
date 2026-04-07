@@ -23,10 +23,10 @@ const pageTitles = {
 const allNavItems = [
   { to: '/dashboard',       route: 'dashboard',       label: 'Inicio',         icon: <IconGrid /> },
   { to: '/estudiantes',     route: 'estudiantes',     label: 'Alumnos',        icon: <IconGradCap /> },
-  { to: '/docentes',        route: 'docentes',        label: 'Docentes',       icon: <IconUsers /> },
+  { to: '/calificaciones',  route: 'calificaciones',  label: 'Notas',          icon: <IconCheckSquare /> },
   { to: '/grupos',          route: 'grupos',          label: 'Grupos',         icon: <IconCalendar /> },
   { to: '/materias',        route: 'materias',        label: 'Materias',       icon: <IconBook /> },
-  { to: '/calificaciones',  route: 'calificaciones',  label: 'Notas',          icon: <IconCheckSquare /> },
+  { to: '/docentes',        route: 'docentes',        label: 'Docentes',       icon: <IconUsers /> },
   { to: '/reportes',        route: 'reportes',        label: 'Reportes',       icon: <IconBarChart /> },
   { to: '/configuraciones', route: 'configuraciones', label: 'Config',         icon: <IconSettings /> },
 ];
