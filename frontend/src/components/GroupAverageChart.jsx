@@ -4,6 +4,7 @@ import {
   ResponsiveContainer, Cell,
 } from 'recharts';
 import { groupAverages } from '../data/mockDashboard';
+import { IconBarChart } from './Icons';
 
 const PRIMARY = '#2A9D6F';
 
@@ -11,7 +12,7 @@ function GroupAverageChart() {
   return (
     <div className="widget-card">
       <h3 className="widget-title">
-        <span aria-hidden="true">📊</span> Promedio por Grupo
+        <IconBarChart /> Promedio por Grupo
       </h3>
       <div className="group-avg-list">
         {groupAverages.map((item) => (

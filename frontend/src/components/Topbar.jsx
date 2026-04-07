@@ -1,5 +1,6 @@
 import React from 'react';
 import authService from '../services/authService';
+import { IconMenu, IconSun, IconMoon, IconBell } from './Icons';
 
 /**
  * Topbar — barra superior del layout principal.
@@ -15,7 +16,7 @@ function Topbar({ title = 'Dashboard', onLogout, onToggleSidebar, darkMode = fal
   return (
     <header className="topbar">
       <div className="topbar-left">
-        <button className="topbar-menu-btn" aria-label="Menú" onClick={onToggleSidebar}>☰</button>
+        <button className="topbar-menu-btn" aria-label="Menú" onClick={onToggleSidebar}><IconMenu /></button>
         <h2 className="topbar-title">{title}</h2>
       </div>
 
@@ -27,11 +28,11 @@ function Topbar({ title = 'Dashboard', onLogout, onToggleSidebar, darkMode = fal
           onClick={onToggleTheme}
           title={darkMode ? 'Modo claro' : 'Modo oscuro'}
         >
-          {darkMode ? '☀️' : '🌙'}
+          {darkMode ? <IconSun /> : <IconMoon />}
         </button>
 
         {/* Notificaciones */}
-        <button className="topbar-icon-btn" aria-label="Notificaciones">🔔</button>
+        <button className="topbar-icon-btn" aria-label="Notificaciones"><IconBell /></button>
 
         {/* Usuario */}
         <div className="topbar-user">

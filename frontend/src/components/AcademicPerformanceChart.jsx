@@ -4,12 +4,13 @@ import {
   ResponsiveContainer, CartesianGrid,
 } from 'recharts';
 import { academicPerformance } from '../data/mockDashboard';
+import { IconBarChart } from './Icons';
 
 function AcademicPerformanceChart() {
   return (
     <div className="widget-card">
       <h3 className="widget-title">
-        <span aria-hidden="true">📊</span> Rendimiento Académico
+        <IconBarChart /> Rendimiento Académico
       </h3>
       <ResponsiveContainer width="100%" height={200}>
         <BarChart data={academicPerformance} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>

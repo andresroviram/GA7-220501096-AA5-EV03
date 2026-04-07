@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import authService from '../services/authService';
+import { IconCheckCircle, IconAlertTriangle } from './Icons';
 
 function RegisterForm({ onBackToLogin, onRegisterSuccess }) {
   const [form, setForm] = useState({
@@ -79,7 +80,7 @@ function RegisterForm({ onBackToLogin, onRegisterSuccess }) {
 
           {success ? (
             <div className="register-success" role="status">
-              <span aria-hidden="true">✅</span> ¡Cuenta creada exitosamente! Redirigiendo al login…
+              <IconCheckCircle /> ¡Cuenta creada exitosamente! Redirigiendo al login…
             </div>
           ) : (
             <form onSubmit={handleSubmit} noValidate>
@@ -221,7 +222,7 @@ function RegisterForm({ onBackToLogin, onRegisterSuccess }) {
               {/* Error */}
               {error && (
                 <div className="error-alert" role="alert">
-                  <span aria-hidden="true">⚠️</span> {error}
+                  <IconAlertTriangle /> {error}
                 </div>
               )}
 

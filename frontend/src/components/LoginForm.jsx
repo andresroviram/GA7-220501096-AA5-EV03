@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import authService from '../services/authService';
+import { IconAlertTriangle } from './Icons';
 
 const DEMO_USERS = import.meta.env.VITE_USE_MOCK === 'true'
   ? [
@@ -143,7 +144,7 @@ function LoginForm({ onLoginSuccess, onShowRegister }) {
             {/* Error general (conexión / 400) */}
             {generalError && (
               <div className="error-alert" role="alert">
-                <span aria-hidden="true">⚠️</span> {generalError}
+                <IconAlertTriangle /> {generalError}
               </div>
             )}
 
@@ -178,7 +179,7 @@ function LoginForm({ onLoginSuccess, onShowRegister }) {
           {/* ── Tarjeta de usuarios demo (solo en desarrollo) ─── */}
           {DEMO_USERS.length > 0 && (
             <div className="demo-card">
-              <p className="demo-card__title">👩‍💻 Cuentas de prueba</p>
+              <p className="demo-card__title">Cuentas de prueba</p>
               <div className="demo-card__list">
                 {DEMO_USERS.map((u) => (
                   <div key={u.correo} className="demo-card__item">

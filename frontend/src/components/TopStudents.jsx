@@ -1,11 +1,12 @@
 import React from 'react';
 import { topStudents } from '../data/mockDashboard';
+import { IconBarChart } from './Icons';
 
 function TopStudents() {
   return (
     <div className="widget-card">
       <h3 className="widget-title">
-        <span aria-hidden="true">📊</span> Top 5 Mejores Alumnos
+        <IconBarChart /> Top 5 Mejores Alumnos
       </h3>
       <ol className="top-students-list">
         {topStudents.map((student) => (

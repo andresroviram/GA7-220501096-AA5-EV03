@@ -1,15 +1,20 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import {
+  IconGrid, IconGradCap, IconUsers, IconCalendar,
+  IconBook, IconCheckSquare, IconBarChart, IconSettings, IconSchool,
+} from './Icons';
+
 
 const navItems = [
-  { to: '/dashboard',          label: 'Dashboard',         icon: '⊞' },
-  { to: '/estudiantes',        label: 'Estudiantes',       icon: '🎓' },
-  { to: '/docentes',           label: 'Docentes',          icon: '👥' },
-  { to: '/grupos',             label: 'Grupos y horarios', icon: '📅' },
-  { to: '/materias',           label: 'Materias',          icon: '📋' },
-  { to: '/calificaciones',     label: 'Calificaciones',    icon: '✅' },
-  { to: '/reportes',           label: 'Reportes',          icon: '📊' },
-  { to: '/configuraciones',    label: 'Configuraciones',   icon: '⚙️' },
+  { to: '/dashboard',          label: 'Dashboard',         icon: <IconGrid /> },
+  { to: '/estudiantes',        label: 'Estudiantes',       icon: <IconGradCap /> },
+  { to: '/docentes',           label: 'Docentes',          icon: <IconUsers /> },
+  { to: '/grupos',             label: 'Grupos y horarios', icon: <IconCalendar /> },
+  { to: '/materias',           label: 'Materias',          icon: <IconBook /> },
+  { to: '/calificaciones',     label: 'Calificaciones',    icon: <IconCheckSquare /> },
+  { to: '/reportes',           label: 'Reportes',          icon: <IconBarChart /> },
+  { to: '/configuraciones',    label: 'Configuraciones',   icon: <IconSettings /> },
 ];
 
 function Sidebar({ collapsed = false }) {
@@ -17,7 +22,7 @@ function Sidebar({ collapsed = false }) {
     <aside className={`sidebar${collapsed ? ' sidebar--collapsed' : ''}`}>
       {/* Logo / Marca */}
       <div className="sidebar-brand">
-        <div className="sidebar-brand-icon">🎓</div>
+        <div className="sidebar-brand-icon"><IconSchool /></div>
         {!collapsed && (
           <div>
             <p className="sidebar-brand-name">Sistema Integral</p>

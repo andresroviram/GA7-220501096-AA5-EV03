@@ -3,6 +3,7 @@ import {
   PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend,
 } from 'recharts';
 import { gradeDistribution } from '../data/mockDashboard';
+import { IconPieChart } from './Icons';
 
 const total = gradeDistribution.reduce((sum, g) => sum + g.value, 0);
 
@@ -10,7 +11,7 @@ function GradeDistributionChart() {
   return (
     <div className="widget-card">
       <h3 className="widget-title">
-        <span aria-hidden="true">🕐</span> Distribución por Grado
+        <IconPieChart /> Distribución por Grado
       </h3>
       <div className="donut-wrapper">
         <ResponsiveContainer width="100%" height={200}>

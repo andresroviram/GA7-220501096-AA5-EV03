@@ -13,40 +13,10 @@ import * as gruposService from '../services/gruposService';
 const MATERIAS = MATERIAS_LIST_RAW.map((m) => m.nombre);
 const DOCENTES = DOCENTES_LIST_RAW.map((d) => d.nombre);
 
-/* ─── Íconos ── */
-const IconEdit = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-  </svg>
-);
-const IconTrash = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/>
-    <path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/>
-  </svg>
-);
-const IconPlus = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-    <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-  </svg>
-);
-const IconSearch = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-  </svg>
-);
-const IconClose = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-  </svg>
-);
-const IconWarn = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-    <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-  </svg>
-);
+import {
+  IconEdit, IconTrash, IconPlus, IconSearch, IconClose,
+  IconAlertTriangle as IconWarn, IconCheck,
+} from '../components/Icons';
 
 /* ─── Modal Horario ── */
 function ModalHorario({ item, onSave, onCancel }) {
@@ -258,7 +228,7 @@ function GruposHorarios() {
                   <td>
                     {h.estado === 'Conflicto'
                       ? <span className="badge badge--suspended"><IconWarn /> Conflicto</span>
-                      : <span className="badge badge--active">✓ Activo</span>}
+                      : <span className="badge badge--active"><IconCheck /> Activo</span>}
                   </td>
                   <td className="td-actions">
                     <button className="action-btn action-btn--edit" title="Editar" onClick={() => setModalForm({ item: h })}>

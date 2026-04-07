@@ -15,25 +15,21 @@ export const stats = [
     id: 1,
     label: 'Estudiantes Registrados',
     value: estudiantes.length,
-    icon: '🎓',
   },
   {
     id: 2,
     label: 'Docentes Activos',
     value: docentes.filter((d) => d.estado === 'Activo').length,
-    icon: '👥',
   },
   {
     id: 3,
     label: 'Materias Activas',
     value: materias.filter((m) => m.estado === 'Activo').length,
-    icon: '📋',
   },
   {
     id: 4,
     label: 'Grupos Activos',
     value: estadisticasGrupos.totalGrupos,
-    icon: '📅',
   },
 ];
 
