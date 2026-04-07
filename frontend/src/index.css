@@ -2979,6 +2979,19 @@ body {
     padding: 0;
   }
 
+  /* Branding en la esquina superior izquierda (sobre el formulario) */
+  .login-right::before {
+    content: "Sistema Integral";
+    position: absolute;
+    top: 1rem;
+    left: 1.5rem;
+    font-size: 1rem;
+    font-weight: 800;
+    color: #1A6B4A;
+    z-index: 2;
+    letter-spacing: -0.01em;
+  }
+
   /* Ajusta los círculos decorativos para que no se corten raro */
   .login-deco--top    { width: 120px; height: 120px; top: -40px; right: -40px; }
   .login-deco--bottom { width: 100px; height: 100px; bottom: -30px; right: -30px; }
@@ -2988,19 +3001,6 @@ body {
   .login-form-container.register-form-container {
     max-width: 100%;
     padding: 2rem 1.25rem 1.5rem;
-  }
-
-  /* Branding arriba del formulario (sin el panel izquierdo) */
-  .login-right::before {
-    content: "Sistema Integral";
-    display: block;
-    font-size: 1.1rem;
-    font-weight: 800;
-    color: #1A6B4A;
-    text-align: center;
-    padding: 1.5rem 1.25rem 0;
-    letter-spacing: -0.01em;
-    position: static;
   }
 
   /* Demo card de cuentas de prueba — full width */

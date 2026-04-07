@@ -45,9 +45,9 @@ async function bootstrap() {
     SwaggerModule.setup('api', app, document);
 
     const port = process.env.PORT ?? 3000;
-    await app.listen(port);
-    console.log(`Servidor sistema integral académico ejecutándose en http://localhost:${port}`);
-    console.log(`Swagger UI disponible en http://localhost:${port}/api`);
+    await app.listen(port, '0.0.0.0');
+    console.log(`Servidor sistema integral académico ejecutándose en http://0.0.0.0:${port}`);
+    console.log(`Swagger UI disponible en http://0.0.0.0:${port}/api`);
 }
 
 bootstrap();
