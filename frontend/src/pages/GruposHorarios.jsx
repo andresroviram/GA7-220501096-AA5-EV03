@@ -95,14 +95,18 @@ function ModalHorario({ item, onSave, onCancel }) {
             {isEdit && (
               <div className="modal-field modal-field--full">
                 <label className="modal-label">Estado del horario</label>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
-                  <input
-                    type="checkbox"
-                    checked={form.activo}
-                    onChange={(e) => set('activo', e.target.checked)}
-                    style={{ width: 16, height: 16, accentColor: 'var(--color-primary, #4f46e5)', cursor: 'pointer' }}
-                  />
-                  <span style={{ fontSize: '0.875rem' }}>{form.activo ? 'Activo' : 'Inactivo'}</span>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }}>
+                  <label className="permiso-toggle">
+                    <input
+                      type="checkbox"
+                      checked={form.activo}
+                      onChange={(e) => set('activo', e.target.checked)}
+                    />
+                    <span className="permiso-toggle-slider" />
+                  </label>
+                  <span style={{ fontSize: '0.875rem', color: form.activo ? '#2A9D6F' : '#94a3b8', fontWeight: 500 }}>
+                    {form.activo ? 'Activo' : 'Inactivo'}
+                  </span>
                 </label>
               </div>
             )}
@@ -282,7 +286,7 @@ function GruposHorarios() {
                     {h.estado === 'Conflicto'
                       ? <span className="badge badge--suspended" title={h.motivoConflicto || 'Conflicto de horario'}><IconWarn /> Conflicto</span>
                       : h.estado === 'Inactivo'
-                      ? <span className="badge" style={{ background: '#f1f5f9', color: '#64748b' }}>Inactivo</span>
+                      ? <span className="badge badge--inactive">Inactivo</span>
                       : <span className="badge badge--active"><IconCheck /> Activo</span>}
                   </td>
                   <td className="td-actions">

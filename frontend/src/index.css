@@ -2357,6 +2357,16 @@ body {
   color: #EF9A9A;
   border-color: #4E2020;
 }
+[data-theme="dark"] .badge--pdf {
+  background: #2A1212;
+  color: #EF9A9A;
+  border-color: #4E1E1E;
+}
+[data-theme="dark"] .badge--excel {
+  background: #0F2118;
+  color: #6FCF97;
+  border-color: #1A3D28;
+}
 
 /* ─── Botones de acción en tabla ────────────────────────────── */
 
