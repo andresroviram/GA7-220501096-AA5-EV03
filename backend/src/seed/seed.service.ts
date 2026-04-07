@@ -9,6 +9,8 @@ import { Horario } from '../horarios/horario.entity';
 import { GrupoHorario } from '../horarios/grupo-horario.entity';
 import { Materia } from '../materias/materia.entity';
 import { Calificacion } from '../calificaciones/calificacion.entity';
+import { Rol } from '../roles/rol.entity';
+import { Permiso } from '../roles/permiso.entity';
 
 /** Usuarios demo — estos son los que se muestran en la tarjeta de login del frontend */
 const DEMO_USERS = [
@@ -30,6 +32,8 @@ export class SeedService implements OnModuleInit {
         @InjectRepository(GrupoHorario) private readonly grupoHorarioRepo: Repository<GrupoHorario>,
         @InjectRepository(Materia) private readonly materiaRepo: Repository<Materia>,
         @InjectRepository(Calificacion) private readonly califRepo: Repository<Calificacion>,
+        @InjectRepository(Rol) private readonly rolRepo: Repository<Rol>,
+        @InjectRepository(Permiso) private readonly permisoRepo: Repository<Permiso>,
     ) { }
 
     async onModuleInit() {
@@ -115,5 +119,40 @@ export class SeedService implements OnModuleInit {
             this.logger.log(`    [${u.tipo_usuario}] ${u.correo}  /  ${u.password}`);
         }
         this.logger.log('');
+
+        /* ── Roles y permisos ── */
+        const MODULOS = ['Dashboard', 'Docentes', 'Estudiantes', 'Calificaciones', 'Grupos/Horarios', 'Materias', 'Reportes', 'Configuraciones'];
+        const ROLES_SEED: Array<{ nombre: string; descripcion: string; permisos: Record<string, boolean> }> = [
+            {
+                nombre: 'Administrador',
+                descripcion: 'Acceso completo al sistema',
+                permisos: MODULOS.reduce((a, m) => ({ ...a, [m]: true }), {}),
+            },
+            {
+                nombre: 'Docente',
+                descripcion: 'Gestión de calificaciones y grupos',
+                permisos: { Dashboard: true, Docentes: false, Estudiantes: true, Calificaciones: true, 'Grupos/Horarios': true, Materias: true, Reportes: true, Configuraciones: false },
+            },
+            {
+                nombre: 'Estudiante',
+                descripcion: 'Consulta de notas y horarios',
+                permisos: { Dashboard: true, Docentes: false, Estudiantes: false, Calificaciones: true, 'Grupos/Horarios': true, Materias: false, Reportes: false, Configuraciones: false },
+            },
+            {
+                nombre: 'Padre/Tutor',
+                descripcion: 'Seguimiento de acudidos',
+                permisos: { Dashboard: true, Docentes: false, Estudiantes: true, Calificaciones: true, 'Grupos/Horarios': true, Materias: false, Reportes: true, Configuraciones: false },
+            },
+        ];
+
+        for (const rd of ROLES_SEED) {
+            const rol = await this.rolRepo.save(
+                this.rolRepo.create({ nombre: rd.nombre, descripcion: rd.descripcion }),
+            );
+            const permisosSeed = MODULOS.map((m) =>
+                this.permisoRepo.create({ id_rol: rol.id, modulo: m, acceso: rd.permisos[m] ?? false }),
+            );
+            await this.permisoRepo.save(permisosSeed);
+        }
     }
 }

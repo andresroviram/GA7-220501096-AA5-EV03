@@ -2,24 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import authService from '../services/authService';
 import * as configService from '../services/configService';
+import * as rolesService from '../services/rolesService';
 
 /* ─── Datos de configuración ── */
-const ROLES_INIT = [
-  { id: 1, rol: 'Administrador', descripcion: 'Acceso completo al sistema' },
-  { id: 2, rol: 'Profesor',      descripcion: 'Gestión de calificaciones y grupos' },
-  { id: 3, rol: 'Estudiante',    descripcion: 'Consulta de notas y horarios' },
-  { id: 4, rol: 'Padre/Tutor',   descripcion: 'Seguimiento de acudidos' },
-];
-
-const MODULOS = ['Dashboard', 'Docentes', 'Estudiantes', 'Calificaciones', 'Grupos/Horarios', 'Materias', 'Reportes', 'Configuraciones'];
-
-const PERMISOS_INIT = {
-  1: MODULOS.reduce((a, m) => ({ ...a, [m]: true }), {}),
-  2: { Dashboard: true, Docentes: false, Estudiantes: true, Calificaciones: true, 'Grupos/Horarios': true, Materias: true, Reportes: true, Configuraciones: false },
-  3: { Dashboard: true, Docentes: false, Estudiantes: false, Calificaciones: true, 'Grupos/Horarios': true, Materias: false, Reportes: false, Configuraciones: false },
-  4: { Dashboard: true, Docentes: false, Estudiantes: true, Calificaciones: true, 'Grupos/Horarios': true, Materias: false, Reportes: true, Configuraciones: false },
-};
-
 const PARAMS_INIT = {
   institucion: 'Institución Educativa Demo',
   cicloActual: '2025-I',
@@ -33,16 +18,55 @@ import { IconSave, IconShield, IconSettings, IconUser } from '../components/Icon
 
 /* ─── Sección de permisos ── */
 function RolesPermisos() {
-  const [permisos, setPermisos] = useState(PERMISOS_INIT);
-  const [saved, setSaved] = useState(false);
+  const [roles,    setRoles]    = useState([]);
+  const [permisos, setPermisos] = useState({}); // { [rolId]: { [modulo]: boolean } }
+  const [loading,  setLoading]  = useState(true);
+  const [saving,   setSaving]   = useState(false);
+  const [saved,    setSaved]    = useState(false);
 
-  const toggle = (rolId, modulo) =>
-    setPermisos((p) => ({ ...p, [rolId]: { ...p[rolId], [modulo]: !p[rolId][modulo] } }));
+  const MODULOS = ['Dashboard', 'Docentes', 'Estudiantes', 'Calificaciones', 'Grupos/Horarios', 'Materias', 'Reportes', 'Configuraciones'];
 
-  const handleSave = () => {
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+  useEffect(() => {
+    rolesService.getRoles()
+      .then((data) => {
+        setRoles(data);
+        // Convertir array de permisos a mapa { rolId: { modulo: bool } }
+        const mapa = {};
+        data.forEach((r) => {
+          mapa[r.id] = {};
+          (r.permisos ?? []).forEach((p) => { mapa[r.id][p.modulo] = p.acceso; });
+        });
+        setPermisos(mapa);
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  const toggle = (rolId, modulo) => {
+    if (rolId === 1) return; // Administrador — solo lectura
+    setPermisos((p) => ({ ...p, [rolId]: { ...p[rolId], [modulo]: !p[rolId]?.[modulo] } }));
   };
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      // Guardar solo roles editables (no el Admin id=1)
+      const editables = roles.filter((r) => r.id !== 1);
+      await Promise.all(editables.map((r) => {
+        const lista = MODULOS.map((m) => ({ modulo: m, acceso: !!permisos[r.id]?.[m] }));
+        return rolesService.updateRolPermisos(r.id, lista);
+      }));
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (loading) return (
+    <div className="config-section">
+      <p style={{ color: '#6B7C74', padding: '1rem 0' }}>Cargando roles y permisos...</p>
+    </div>
+  );
 
   return (
     <div className="config-section">
@@ -58,9 +82,9 @@ function RolesPermisos() {
           <thead>
             <tr>
               <th className="permisos-th permisos-th--rol">Módulo</th>
-              {ROLES_INIT.map((r) => (
+              {roles.map((r) => (
                 <th key={r.id} className="permisos-th permisos-th--check">
-                  <div className="permisos-rol-name">{r.rol}</div>
+                  <div className="permisos-rol-name">{r.nombre}</div>
                   <div className="permisos-rol-desc">{r.descripcion}</div>
                 </th>
               ))}
@@ -70,7 +94,7 @@ function RolesPermisos() {
             {MODULOS.map((m) => (
               <tr key={m} className="permisos-row">
                 <td className="permisos-td permisos-td--modulo">{m}</td>
-                {ROLES_INIT.map((r) => (
+                {roles.map((r) => (
                   <td key={r.id} className="permisos-td permisos-td--check">
                     <label className="permiso-toggle">
                       <input
@@ -89,8 +113,8 @@ function RolesPermisos() {
         </table>
       </div>
       <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'flex-end' }}>
-        <button className="btn btn--primary" onClick={handleSave}>
-          <IconSave /> {saved ? '¡Guardado!' : 'Guardar Permisos'}
+        <button className="btn btn--primary" onClick={handleSave} disabled={saving}>
+          <IconSave /> {saved ? '¡Guardado!' : saving ? 'Guardando...' : 'Guardar Permisos'}
         </button>
       </div>
     </div>

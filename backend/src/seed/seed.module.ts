@@ -8,10 +8,12 @@ import { Horario } from '../horarios/horario.entity';
 import { GrupoHorario } from '../horarios/grupo-horario.entity';
 import { Materia } from '../materias/materia.entity';
 import { Calificacion } from '../calificaciones/calificacion.entity';
+import { Rol } from '../roles/rol.entity';
+import { Permiso } from '../roles/permiso.entity';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([User, Alumno, Grupo, Horario, GrupoHorario, Materia, Calificacion]),
+        TypeOrmModule.forFeature([User, Alumno, Grupo, Horario, GrupoHorario, Materia, Calificacion, Rol, Permiso]),
     ],
     providers: [SeedService],
 })
