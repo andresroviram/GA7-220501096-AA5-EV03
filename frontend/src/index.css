@@ -2627,3 +2627,232 @@ body {
 [data-theme="dark"] .permisos-td--modulo  { color: #D4DAE8; }
 [data-theme="dark"] .permiso-toggle-slider { background: #2A3347; }
 
+
+
+/* ═══════════════════════════════════════════════════════════════
+   COMPONENTES UI GLOBALES
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── Button ──────────────────────────────────────────────────── */
+.ui-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s, background 0.15s, border-color 0.15s;
+  border: 1.5px solid transparent;
+  white-space: nowrap;
+}
+.ui-btn--full { width: 100%; }
+.ui-btn__content { display: flex; align-items: center; gap: 0.4rem; }
+.ui-btn__icon { display: flex; align-items: center; }
+
+/* Tamaños */
+.ui-btn--sm { font-size: 0.8rem;  padding: 0.45rem 0.875rem; }
+.ui-btn--md { font-size: 0.9rem;  padding: 0.7rem  1.1rem;   }
+.ui-btn--lg { font-size: 1rem;    padding: 0.875rem 1.5rem;  }
+
+/* Variantes */
+.ui-btn--primary   { background: #2A9D6F; color: #fff; border-color: #2A9D6F; }
+.ui-btn--secondary { background: transparent; color: #2A9D6F; border-color: #2A9D6F; }
+.ui-btn--ghost     { background: transparent; color: #3C5A4C; border-color: transparent; }
+.ui-btn--danger    { background: #E53935; color: #fff; border-color: #E53935; }
+
+.ui-btn--primary:hover:not(:disabled)   { opacity: 0.88; transform: translateY(-1px); }
+.ui-btn--secondary:hover:not(:disabled) { background: #EAF5EE; }
+.ui-btn--ghost:hover:not(:disabled)     { background: #EAF5EE; color: #1A6B4A; }
+.ui-btn--danger:hover:not(:disabled)    { opacity: 0.88; transform: translateY(-1px); }
+
+.ui-btn:disabled, .ui-btn--loading { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+/* Spinner del botón */
+.ui-spinner {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+/* ─── Campos (InputText, InputPassword, DatePicker) ─────────────── */
+.ui-field { margin-bottom: 1rem; }
+.ui-field__label {
+  display: block;
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: #1A2E25;
+  margin-bottom: 0.4rem;
+}
+.ui-field__wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.ui-field__icon {
+  position: absolute;
+  color: #6B7C74;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+.ui-field__icon--left  { left: 0.875rem; }
+.ui-field__icon--right { right: 0.875rem; }
+
+.ui-field__input {
+  width: 100%;
+  padding: 0.72rem 1rem;
+  border: 1.5px solid #D1E8DC;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  color: #1A2E25;
+  background: #ffffff;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.ui-field__input--pl { padding-left: 2.75rem; }
+.ui-field__input--pr { padding-right: 2.75rem; }
+.ui-field__input::placeholder { color: #A0B4AC; }
+.ui-field__input:focus {
+  border-color: #2A9D6F;
+  box-shadow: 0 0 0 3px rgba(42,157,111,0.12);
+}
+.ui-field__input:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.ui-field__wrapper--error .ui-field__input {
+  border-color: #E53935;
+  box-shadow: 0 0 0 3px rgba(229,57,53,0.1);
+}
+.ui-field__wrapper--error .ui-field__input:focus {
+  box-shadow: 0 0 0 3px rgba(229,57,53,0.15);
+}
+
+.ui-field__error { font-size: 0.78rem; color: #E53935; margin-top: 0.3rem; }
+.ui-field__hint  { font-size: 0.78rem; color: #7A9A8A; margin-top: 0.3rem; }
+
+/* Toggle mostrar/ocultar contraseña */
+.ui-field__toggle {
+  position: absolute;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6B7C74;
+  display: flex;
+  align-items: center;
+  padding: 0.2rem;
+  border-radius: 4px;
+  transition: color 0.15s;
+}
+.ui-field__toggle:hover { color: #2A9D6F; }
+
+/* ─── Checkbox ────────────────────────────────────────────────── */
+.ui-checkbox { margin-bottom: 0.75rem; }
+.ui-checkbox__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+}
+.ui-checkbox__input {
+  position: absolute;
+  opacity: 0;
+  width: 0; height: 0;
+}
+.ui-checkbox__box {
+  width: 18px; height: 18px;
+  border: 2px solid #B2D8C8;
+  border-radius: 5px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s;
+}
+.ui-checkbox__check { color: transparent; transition: color 0.15s; }
+.ui-checkbox__input:checked ~ .ui-checkbox__box {
+  background: #2A9D6F;
+  border-color: #2A9D6F;
+}
+.ui-checkbox__input:checked ~ .ui-checkbox__box .ui-checkbox__check { color: #fff; }
+.ui-checkbox__input:focus-visible ~ .ui-checkbox__box {
+  box-shadow: 0 0 0 3px rgba(42,157,111,0.2);
+}
+.ui-checkbox__text { font-size: 0.875rem; color: #3C5A4C; }
+
+/* ─── Toast ───────────────────────────────────────────────────── */
+.toast-container {
+  position: fixed;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  pointer-events: none;
+}
+.toast-container--bottom-right  { bottom: 1.5rem; right: 1.5rem; align-items: flex-end; }
+.toast-container--bottom-left   { bottom: 1.5rem; left:  1.5rem; align-items: flex-start; }
+.toast-container--top-right     { top: 1.5rem;    right: 1.5rem; align-items: flex-end; }
+.toast-container--top-left      { top: 1.5rem;    left:  1.5rem; align-items: flex-start; }
+.toast-container--top-center    { top: 1.5rem;    left: 50%; transform: translateX(-50%); align-items: center; }
+.toast-container--bottom-center { bottom: 1.5rem; left: 50%; transform: translateX(-50%); align-items: center; }
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  min-width: 240px;
+  max-width: 380px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  pointer-events: all;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.25s, transform 0.25s;
+}
+.toast--visible { opacity: 1; transform: translateY(0); }
+
+.toast--success { background: #E8F5ED; color: #1A6B4A; border-left: 4px solid #2A9D6F; }
+.toast--error   { background: #FEECEC; color: #C62828; border-left: 4px solid #E53935; }
+.toast--warning { background: #FFF8E1; color: #8A6D00; border-left: 4px solid #FFC107; }
+.toast--info    { background: #E3F2FD; color: #0D47A1; border-left: 4px solid #1976D2; }
+
+.toast__icon    { flex-shrink: 0; }
+.toast__message { flex: 1; line-height: 1.4; }
+.toast__close {
+  background: none; border: none; cursor: pointer;
+  color: inherit; opacity: 0.6;
+  display: flex; align-items: center; padding: 0.1rem;
+  border-radius: 4px; transition: opacity 0.15s;
+}
+.toast__close:hover { opacity: 1; }
+
+/* ─── Dark mode: UI globales ─────────────────────────────────── */
+[data-theme="dark"] .ui-btn--secondary { color: #3DBF8A; border-color: #2A9D6F; }
+[data-theme="dark"] .ui-btn--secondary:hover:not(:disabled) { background: #1A2A22; }
+[data-theme="dark"] .ui-btn--ghost     { color: #9BA5B8; }
+[data-theme="dark"] .ui-btn--ghost:hover:not(:disabled) { background: #1A2A22; color: #3DBF8A; }
+
+[data-theme="dark"] .ui-field__label   { color: #C8D4CC; }
+[data-theme="dark"] .ui-field__input   { background: #1C2130; border-color: #26304A; color: #E0E6E2; }
+[data-theme="dark"] .ui-field__input::placeholder { color: #4A5568; }
+[data-theme="dark"] .ui-field__input:focus { border-color: #3DBF8A; box-shadow: 0 0 0 3px rgba(61,191,138,0.15); }
+[data-theme="dark"] .ui-field__icon   { color: #4A6258; }
+[data-theme="dark"] .ui-field__toggle { color: #4A6258; }
+[data-theme="dark"] .ui-field__toggle:hover { color: #3DBF8A; }
+[data-theme="dark"] .ui-field__hint   { color: #4A6258; }
+
+[data-theme="dark"] .ui-checkbox__box  { background: #1C2130; border-color: #26304A; }
+[data-theme="dark"] .ui-checkbox__text { color: #9BA5B8; }
+
+[data-theme="dark"] .toast--success { background: #0D2018; color: #5EC996; border-left-color: #2A9D6F; }
+[data-theme="dark"] .toast--error   { background: #1E0A0A; color: #EF9A9A; border-left-color: #E53935; }
+[data-theme="dark"] .toast--warning { background: #1A1500; color: #FFD54F; border-left-color: #FFC107; }
+[data-theme="dark"] .toast--info    { background: #051525; color: #90CAF9; border-left-color: #1976D2; }
