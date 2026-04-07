@@ -38,6 +38,7 @@ import { Permiso } from './roles/permiso.entity';
                 ssl: config.get('NODE_ENV') === 'production'
                     ? { rejectUnauthorized: false }
                     : false,
+                synchronize: true,
                 entities: [
                     User,
                     Alumno,
@@ -53,7 +54,6 @@ import { Permiso } from './roles/permiso.entity';
                     Rol,
                     Permiso,
                 ],
-                synchronize: config.get('NODE_ENV') !== 'production',
             }),
         }),
         UsersModule,
