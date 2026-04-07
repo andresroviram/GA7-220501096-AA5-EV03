@@ -30,6 +30,7 @@ function ModalHorario({ item, onSave, onCancel }) {
     horaInicio: item?.horaInicio || '',
     horaFin:    item?.horaFin    || '',
     aula:       item?.aula       || '',
+    activo:     item ? item.estado !== 'Inactivo' : true,
   });
   const set = (f, v) => setForm((p) => ({ ...p, [f]: v }));
 
@@ -91,6 +92,20 @@ function ModalHorario({ item, onSave, onCancel }) {
                 {HORAS_LIST.map((h) => <option key={h} value={h}>{h}</option>)}
               </select>
             </div>
+            {isEdit && (
+              <div className="modal-field modal-field--full">
+                <label className="modal-label">Estado del horario</label>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                  <input
+                    type="checkbox"
+                    checked={form.activo}
+                    onChange={(e) => set('activo', e.target.checked)}
+                    style={{ width: 16, height: 16, accentColor: 'var(--color-primary, #4f46e5)', cursor: 'pointer' }}
+                  />
+                  <span style={{ fontSize: '0.875rem' }}>{form.activo ? 'Activo' : 'Inactivo'}</span>
+                </label>
+              </div>
+            )}
           </div>
         </div>
         <div className="modal-form-footer">
@@ -102,6 +117,39 @@ function ModalHorario({ item, onSave, onCancel }) {
       </div>
     </div>
   );
+}
+
+/* ─── Detección de conflictos ── */
+function overlapsTime(s1, e1, s2, e2) { return s1 < e2 && s2 < e1; }
+
+function detectarConflictos(lista) {
+  const activos = lista.filter((h) => h.estado !== 'Inactivo');
+  const motivosMap = new Map();
+
+  for (let i = 0; i < activos.length; i++) {
+    for (let j = i + 1; j < activos.length; j++) {
+      const a = activos[i];
+      const b = activos[j];
+      if (a.dia !== b.dia) continue;
+      if (!overlapsTime(a.horaInicio, a.horaFin, b.horaInicio, b.horaFin)) continue;
+      if (a.aula && a.aula === b.aula) {
+        const msg = `${a.aula} ya ocupada (${a.dia} ${a.horaInicio}–${a.horaFin})`;
+        if (!motivosMap.has(a.id)) motivosMap.set(a.id, msg);
+        if (!motivosMap.has(b.id)) motivosMap.set(b.id, msg);
+      }
+      if (a.docente && a.docente === b.docente) {
+        const msg = `${a.docente} ya tiene clase (${a.dia} ${a.horaInicio}–${a.horaFin})`;
+        if (!motivosMap.has(a.id)) motivosMap.set(a.id, msg);
+        if (!motivosMap.has(b.id)) motivosMap.set(b.id, msg);
+      }
+    }
+  }
+
+  return lista.map((h) => {
+    if (h.estado === 'Inactivo') return h;
+    const motivo = motivosMap.get(h.id) ?? null;
+    return { ...h, estado: motivo ? 'Conflicto' : 'Activo', motivoConflicto: motivo };
+  });
 }
 
 /* ─── Componente principal ── */
@@ -117,7 +165,7 @@ function GruposHorarios() {
 
   useEffect(() => {
     gruposService.getHorarios()
-      .then((data) => { setLista(data); nextId = data.length + 100; })
+      .then((data) => { setLista(detectarConflictos(data)); nextId = data.length + 100; })
       .finally(() => setLoading(false));
   }, []);
 
@@ -132,15 +180,19 @@ function GruposHorarios() {
   const handleLimpiar = () => { setFiltroGrupo(''); setFiltroDia(''); setBusqueda({ grupo: '', dia: '' }); };
 
   const handleSave = (form) => {
+    const { activo, ...rest } = form;
+    const estadoManual = activo === false ? 'Inactivo' : 'Activo';
+    let newLista;
     if (modalForm?.isCreate) {
-      setLista((p) => [...p, { ...form, id: nextId++, estado: 'Activo' }]);
+      newLista = [...lista, { ...rest, id: nextId++, estado: estadoManual }];
     } else {
-      setLista((p) => p.map((h) => h.id === modalForm.item.id ? { ...h, ...form } : h));
+      newLista = lista.map((h) => h.id === modalForm.item.id ? { ...h, ...rest, estado: estadoManual } : h);
     }
+    setLista(detectarConflictos(newLista));
     setModalForm(null);
   };
 
-  const handleDelete = (id) => setLista((p) => p.filter((h) => h.id !== id));
+  const handleDelete = (id) => setLista(detectarConflictos(lista.filter((h) => h.id !== id)));
 
   const conflictos = lista.filter((h) => h.estado === 'Conflicto').length;
 
@@ -228,7 +280,9 @@ function GruposHorarios() {
                   <td><span className="badge badge--aula">{h.aula}</span></td>
                   <td>
                     {h.estado === 'Conflicto'
-                      ? <span className="badge badge--suspended"><IconWarn /> Conflicto</span>
+                      ? <span className="badge badge--suspended" title={h.motivoConflicto || 'Conflicto de horario'}><IconWarn /> Conflicto</span>
+                      : h.estado === 'Inactivo'
+                      ? <span className="badge" style={{ background: '#f1f5f9', color: '#64748b' }}>Inactivo</span>
                       : <span className="badge badge--active"><IconCheck /> Activo</span>}
                   </td>
                   <td className="td-actions">

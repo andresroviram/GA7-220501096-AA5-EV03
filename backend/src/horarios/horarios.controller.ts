@@ -35,6 +35,9 @@ export class HorariosController {
     @Get('bloques/estadisticas')
     getEstadisticas() { return this.service.getEstadisticas(); }
 
+    @Post('bloques/recalcular')
+    recalcular() { return this.service.recalcular(); }
+
     @Post('bloques')
     createBloque(@Body() dto: CreateGrupoHorarioDto) { return this.service.createBloque(dto); }
 

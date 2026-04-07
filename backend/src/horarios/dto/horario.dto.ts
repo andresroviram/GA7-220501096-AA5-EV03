@@ -59,6 +59,6 @@ export class UpdateGrupoHorarioDto {
     @IsOptional() @IsString() @MaxLength(20)
     aula?: string;
 
-    @IsOptional() @IsString() @IsIn(['Activo', 'Conflicto'])
+    @IsOptional() @IsString() @IsIn(['Activo', 'Inactivo', 'Conflicto'])
     estado?: string;
 }

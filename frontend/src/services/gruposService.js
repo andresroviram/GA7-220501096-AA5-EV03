@@ -46,3 +46,10 @@ export async function deleteHorario(id) {
   if (isDev) return;
   await api.delete(`/horarios/bloques/${id}`);
 }
+
+/** Recalcula y persiste los conflictos de horario en el backend. */
+export async function recalcularConflictos() {
+  if (isDev) return;
+  const res = await api.post('/horarios/bloques/recalcular');
+  return res.data;
+}
