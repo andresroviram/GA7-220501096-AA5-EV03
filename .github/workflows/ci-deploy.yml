@@ -41,6 +41,8 @@ jobs:
               env:
                   # Base path = /<nombre-del-repo>/ para que los assets apunten bien en Pages
                   VITE_BASE_PATH: /${{ github.event.repository.name }}/
+                  # Sin backend desplegado, GitHub Pages usa datos mock
+                  VITE_USE_MOCK: "true"
               run: npm run build
 
             # Solo sube el artefacto cuando sea push a main (no en PRs)
