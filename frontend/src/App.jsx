@@ -24,9 +24,9 @@ import authService from './services/authService';
 import { canAccess } from './utils/permissions';
 import { ToastProvider } from './components/ui/Toast';
 
-/** Redirige a / (login) si el usuario no está autenticado. */
+/** Redirige a /login si el usuario no está autenticado. */
 function PrivateRoute() {
-  return authService.isAuthenticated() ? <Outlet /> : <Navigate to="/" replace />;
+  return authService.isAuthenticated() ? <Outlet /> : <Navigate to="/login" replace />;
 }
 
 /** Redirige al dashboard si el rol no tiene acceso a la ruta. */
@@ -49,15 +49,20 @@ function AppRoutes() {
   const handleLogout = () => {
     authService.logout();
     forceUpdate((n) => n + 1);
-    navigate('/', { replace: true });
+    navigate('/login', { replace: true });
   };
 
   return (
     <Routes>
-      {/* ── Rutas públicas ───────────────────────────────────────────────── */}
-      {/* Raíz = login cuando no hay sesión */}
+      {/* Raíz → redirige según sesión */}
       <Route
         path="/"
+        element={<Navigate to={authService.isAuthenticated() ? '/dashboard' : '/login'} replace />}
+      />
+
+      {/* ── Rutas públicas ───────────────────────────────────────────────── */}
+      <Route
+        path="/login"
         element={
           authService.isAuthenticated()
             ? <Navigate to="/dashboard" replace />
@@ -70,8 +75,6 @@ function AppRoutes() {
             )
         }
       />
-      {/* /login redirige a / para compatibilidad con links directos */}
-      <Route path="/login" element={<Navigate to="/" replace />} />
       <Route
         path="/register"
         element={
@@ -79,8 +82,8 @@ function AppRoutes() {
             ? <Navigate to="/dashboard" replace />
             : (
               <RegisterForm
-                onBackToLogin={() => navigate('/')}
-                onRegisterSuccess={() => navigate('/')}
+                onBackToLogin={() => navigate('/login')}
+                onRegisterSuccess={() => navigate('/login')}
               />
             )
         }
@@ -90,14 +93,13 @@ function AppRoutes() {
         element={
           authService.isAuthenticated()
             ? <Navigate to="/dashboard" replace />
-            : <ForgotPasswordForm onBackToLogin={() => navigate('/')} />
+            : <ForgotPasswordForm onBackToLogin={() => navigate('/login')} />
         }
       />
 
       {/* ── Rutas protegidas (requieren sesión activa) ────────────────────── */}
       <Route element={<PrivateRoute />}>
         <Route element={<MainLayout onLogout={handleLogout} darkMode={dark} onToggleTheme={toggle} />}>
-          <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard"       element={<Dashboard />} />
           <Route path="/estudiantes"     element={<PermissionRoute route="estudiantes"><Estudiantes /></PermissionRoute>} />
           <Route path="/docentes"        element={<PermissionRoute route="docentes"><Docentes /></PermissionRoute>} />
