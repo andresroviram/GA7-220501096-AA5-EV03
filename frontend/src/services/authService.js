@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-/** URL base del módulo de autenticación en el backend (vía proxy de Vite) */
-const AUTH_API_URL = '/api/auth';
+/** URL base del módulo de autenticación — usa backend real en producción si VITE_API_URL está definida */
+const AUTH_API_URL = `${import.meta.env.VITE_API_URL ?? '/api'}/auth`;
 
 /**
  * Cuando VITE_USE_MOCK=true en .env.development se usan estos usuarios

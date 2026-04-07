@@ -2954,3 +2954,75 @@ body {
 [data-theme="dark"] .m-searchbar-input   { color: #E8F5F0; }
 [data-theme="dark"] .m-entity-card       { background: #1E2D26; border-color: #2C3E35; }
 [data-theme="dark"] .m-entity-card-name  { color: #E8F5F0; }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE — Pantallas de autenticación (≤ 767 px)
+   ════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* ─── Login + Registro ─────────────────────────────────────── */
+  .login-page {
+    flex-direction: column;
+    min-height: 100dvh;
+  }
+
+  /* Oculta el panel decorativo izquierdo en móvil */
+  .login-left {
+    display: none;
+  }
+
+  /* El panel derecho ocupa toda la pantalla */
+  .login-right {
+    flex: 1 0 auto;
+    width: 100%;
+    padding: 0;
+  }
+
+  /* Ajusta los círculos decorativos para que no se corten raro */
+  .login-deco--top    { width: 120px; height: 120px; top: -40px; right: -40px; }
+  .login-deco--bottom { width: 100px; height: 100px; bottom: -30px; right: -30px; }
+
+  /* Formulario: ocupa todo el ancho con padding lateral cómodo */
+  .login-form-container,
+  .login-form-container.register-form-container {
+    max-width: 100%;
+    padding: 2rem 1.25rem 1.5rem;
+  }
+
+  /* Branding arriba del formulario (sin el panel izquierdo) */
+  .login-right::before {
+    content: "Sistema Integral";
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #1A6B4A;
+    text-align: center;
+    padding: 1.5rem 1.25rem 0;
+    letter-spacing: -0.01em;
+    position: static;
+  }
+
+  /* Demo card de cuentas de prueba — full width */
+  .demo-card {
+    margin-top: 1.25rem;
+  }
+
+  /* ─── Forgot Password ──────────────────────────────────────── */
+  .forgot-logo {
+    position: static;
+    text-align: center;
+    margin-bottom: 1.25rem;
+  }
+
+  .forgot-card {
+    padding: 1.75rem 1.25rem;
+  }
+}
+
+/* ─── Dark mode — responsive login ──────────────────────────── */
+@media (max-width: 767px) {
+  [data-theme="dark"] .login-right::before {
+    color: #3DBF8A;
+  }
+}
