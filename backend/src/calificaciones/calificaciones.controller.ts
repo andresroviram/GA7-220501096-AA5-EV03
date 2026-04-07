@@ -1,8 +1,11 @@
 import { Controller, Get, Post, Patch, Delete, Body, Param, Query, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { CalificacionesService } from './calificaciones.service';
 import { CreateCalificacionDto, UpdateCalificacionDto } from './dto/calificacion.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 
+@ApiTags('calificaciones')
+@ApiBearerAuth('access-token')
 @UseGuards(JwtAuthGuard)
 @Controller('calificaciones')
 export class CalificacionesController {

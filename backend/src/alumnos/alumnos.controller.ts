@@ -1,8 +1,11 @@
 import { Controller, Get, Post, Patch, Delete, Body, Param, Query, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { AlumnosService } from './alumnos.service';
 import { CreateAlumnoDto, UpdateAlumnoDto } from './dto/alumno.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 
+@ApiTags('alumnos')
+@ApiBearerAuth('access-token')
 @UseGuards(JwtAuthGuard)
 @Controller('alumnos')
 export class AlumnosController {

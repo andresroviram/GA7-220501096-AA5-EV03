@@ -1,8 +1,11 @@
 import { Controller, Get, Post, Patch, Delete, Body, Param, Query, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { MateriasService } from './materias.service';
 import { CreateMateriaDto, UpdateMateriaDto } from './dto/materia.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 
+@ApiTags('materias')
+@ApiBearerAuth('access-token')
 @UseGuards(JwtAuthGuard)
 @Controller('materias')
 export class MateriasController {

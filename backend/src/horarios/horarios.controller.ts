@@ -1,8 +1,11 @@
 import { Controller, Get, Post, Patch, Delete, Body, Param, Query, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { HorariosService } from './horarios.service';
 import { CreateHorarioDto, UpdateHorarioDto, CreateGrupoHorarioDto, UpdateGrupoHorarioDto } from './dto/horario.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 
+@ApiTags('horarios')
+@ApiBearerAuth('access-token')
 @UseGuards(JwtAuthGuard)
 @Controller('horarios')
 export class HorariosController {
