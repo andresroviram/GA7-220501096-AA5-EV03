@@ -27,8 +27,8 @@ async function bootstrap() {
     // Configuración de Swagger UI
     // Disponible en http://localhost:<port>/api
     const swaggerConfig = new DocumentBuilder()
-        .setTitle('Login Service API')
-        .setDescription('API de inicio de sesión — GA7-220501096-AA5-EV01')
+        .setTitle('SIA Service API')
+        .setDescription('API — GA7-220501096-AA5-EV03')
         .setVersion('1.0')
         .addBearerAuth(
             { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
