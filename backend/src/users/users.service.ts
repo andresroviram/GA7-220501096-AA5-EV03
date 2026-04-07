@@ -1,8 +1,9 @@
-import { Injectable, OnModuleInit, ConflictException } from '@nestjs/common';
+import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { User } from './user.entity';
+import { User, TipoUsuario } from './user.entity';
+import { CreateUsuarioDto, UpdateUsuarioDto } from './dto/usuario.dto';
 
 /**
  * UsersService — lógica de negocio relacionada con los usuarios.
@@ -12,90 +13,57 @@ import { User } from './user.entity';
  *  - Sembrar un usuario de prueba al inicio si la base de datos está vacía.
  */
 @Injectable()
-export class UsersService implements OnModuleInit {
+export class UsersService {
     constructor(
         @InjectRepository(User)
-        private readonly usersRepository: Repository<User>,
+        private readonly repo: Repository<User>,
     ) { }
 
-    /**
-     * Hook del ciclo de vida de NestJS que se ejecuta cuando el módulo termina
-     * de inicializarse. Aquí aprovechamos para crear el usuario de prueba.
-     */
-    async onModuleInit(): Promise<void> {
-        await this.seedDefaultUser();
+    /** Busca usuario activo por correo (usado por AuthService y JwtStrategy) */
+    async findByCorreo(correo: string): Promise<User | undefined> {
+        return this.repo.findOne({ where: { correo, isActive: true } }) as Promise<User | undefined>;
     }
 
-    /**
-     * Crea un usuario administrador de prueba si la tabla está vacía.
-     * De este modo siempre existe al menos una cuenta con la que probar el login.
-     *
-     * Credenciales de prueba:
-     *   usuario:    admin
-     *   contraseña: Admin123!
-     */
-    private async seedDefaultUser(): Promise<void> {
-        const count = await this.usersRepository.count();
-
-        if (count === 0) {
-            // bcrypt.hash(contraseña, saltRounds) — 10 rounds es el estándar recomendado
-            const hashedPassword = await bcrypt.hash('Admin123!', 10);
-
-            const user = this.usersRepository.create({
-                username: 'admin',
-                password: hashedPassword,
-            });
-
-            await this.usersRepository.save(user);
-            console.log('✔ Usuario de prueba creado → usuario: admin | contraseña: Admin123!');
-        }
+    /** Busca usuario activo por id (usado por JwtStrategy) */
+    async findById(id: number): Promise<User | undefined> {
+        return this.repo.findOne({ where: { id, isActive: true } }) as Promise<User | undefined>;
     }
 
-    /**
-     * Busca un usuario activo por su nombre de usuario.
-     * Devuelve undefined si no existe o si la cuenta está desactivada.
-     *
-     * @param username - Nombre de usuario a buscar
-     */
-    async findByUsername(username: string): Promise<User | undefined> {
-        return this.usersRepository.findOne({
-            where: { username, isActive: true },
-        });
+    /** Lista usuarios — opcionalmente filtrada por tipo */
+    findAll(tipo?: TipoUsuario): Promise<User[]> {
+        if (tipo) return this.repo.find({ where: { tipo_usuario: tipo } });
+        return this.repo.find();
     }
 
-    /**
-     * Crea un nuevo usuario en la base de datos.
-     * Lanza ConflictException si el username ya existe.
-     *
-     * @param username    - Correo/usuario único
-     * @param password    - Contraseña en texto plano (se hashea aquí)
-     * @param fullName    - Nombre completo
-     * @param identification - Número de identificación
-     * @param birthDate   - Fecha de nacimiento ISO
-     */
-    async createUser(
-        username: string,
-        password: string,
-        fullName: string,
-        identification: string,
-        birthDate: string,
-    ): Promise<Omit<User, 'password'>> {
-        const existing = await this.usersRepository.findOne({ where: { username } });
-        if (existing) {
-            throw new ConflictException('El correo ya está registrado');
-        }
+    async findOne(id: number): Promise<User> {
+        const u = await this.repo.findOne({ where: { id } });
+        if (!u) throw new NotFoundException(`Usuario #${id} no encontrado`);
+        return u;
+    }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+    /** Crea un usuario. Lanza ConflictException si el correo ya existe. */
+    async createUser(dto: CreateUsuarioDto): Promise<Omit<User, 'password'>> {
+        const existing = await this.repo.findOne({ where: { correo: dto.correo } });
+        if (existing) throw new ConflictException('El correo ya está registrado');
 
-        const user = this.usersRepository.create({
-            username,
-            password: hashedPassword,
-        });
-
-        const saved = await this.usersRepository.save(user);
-
-        // No retornar el hash de la contraseña
-        const { password: _pwd, ...result } = saved;
+        const hashed = await bcrypt.hash(dto.password, 10);
+        const saved = await this.repo.save(
+            this.repo.create({ ...dto, password: hashed }),
+        );
+        const { password: _p, ...result } = saved;
         return result;
+    }
+
+    async updateUser(id: number, dto: UpdateUsuarioDto): Promise<Omit<User, 'password'>> {
+        await this.findOne(id);
+        await this.repo.update(id, dto);
+        const updated = await this.findOne(id);
+        const { password: _p, ...result } = updated;
+        return result;
+    }
+
+    async removeUser(id: number): Promise<void> {
+        await this.findOne(id);
+        await this.repo.delete(id);
     }
 }

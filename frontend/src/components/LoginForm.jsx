@@ -1,8 +1,16 @@
 import React, { useState } from 'react';
 import authService from '../services/authService';
 
+const DEMO_USERS = import.meta.env.DEV
+  ? [
+      { label: 'Administrador', correo: 'admin@escuela.edu',             password: 'Admin123!',   color: '#2A9D6F' },
+      { label: 'Docente',       correo: 'maria.garcia@escuela.edu',      password: 'Docente123!', color: '#1976D2' },
+      { label: 'Padre / Tutor', correo: 'juan.rodriguez@escuela.edu',   password: 'Padre123!',   color: '#7B1FA2' },
+    ]
+  : [];
+
 function LoginForm({ onLoginSuccess, onShowRegister }) {
-  const [username, setUsername]         = useState('');
+  const [correo, setCorreo]             = useState('');
   const [password, setPassword]         = useState('');
   const [remember, setRemember]         = useState(false);
   const [fieldErrors, setFieldErrors]   = useState({});
@@ -15,13 +23,13 @@ function LoginForm({ onLoginSuccess, onShowRegister }) {
     setGeneralError('');
 
     const errors = {};
-    if (!username.trim()) errors.username = 'El correo es requerido.';
+    if (!correo.trim())   errors.correo   = 'El correo es requerido.';
     if (!password.trim()) errors.password = 'La contraseña es requerida.';
     if (Object.keys(errors).length > 0) { setFieldErrors(errors); return; }
 
     setLoading(true);
     try {
-      await authService.login(username, password);
+      await authService.login(correo, password);
       onLoginSuccess();
     } catch (err) {
       if (err.response?.status === 401) {
@@ -61,7 +69,7 @@ function LoginForm({ onLoginSuccess, onShowRegister }) {
 
             {/* Correo */}
             <div className="form-group">
-              <label htmlFor="username" className="form-label">Correo Electrónico</label>
+              <label htmlFor="correo" className="form-label">Correo Electrónico</label>
               <div className="input-wrapper">
                 <span className="input-icon" aria-hidden="true">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -70,20 +78,23 @@ function LoginForm({ onLoginSuccess, onShowRegister }) {
                   </svg>
                 </span>
                 <input
-                  type="text"
-                  id="username"
-                  className={`form-input${fieldErrors.username ? ' form-input--error' : ''}`}
-                  value={username}
-                  onChange={(e) => { setUsername(e.target.value); setFieldErrors((p) => ({ ...p, username: '' })); }}
+                  type="email"
+                  id="correo"
+                  className={`form-input${fieldErrors.correo ? ' form-input--error' : ''}`}
+                  value={correo}
+                  onChange={(e) => { setCorreo(e.target.value); setFieldErrors((p) => ({ ...p, correo: '' })); }}
                   placeholder="johndoe@gmail.com"
                   disabled={loading}
-                  autoComplete="username"
+                  autoComplete="email"
                   autoFocus
                 />
-                {fieldErrors.username && (
+                {fieldErrors.correo && (
                   <span className="input-error-icon" aria-hidden="true">!</span>
                 )}
               </div>
+              {fieldErrors.correo && (
+                <p className="field-error-msg" role="alert">{fieldErrors.correo}</p>
+              )}
             </div>
 
             {/* Contraseña */}
@@ -163,6 +174,32 @@ function LoginForm({ onLoginSuccess, onShowRegister }) {
             </button>
 
           </form>
+
+          {/* ── Tarjeta de usuarios demo (solo en desarrollo) ─── */}
+          {DEMO_USERS.length > 0 && (
+            <div className="demo-card">
+              <p className="demo-card__title">👩‍💻 Cuentas de prueba</p>
+              <div className="demo-card__list">
+                {DEMO_USERS.map((u) => (
+                  <div key={u.correo} className="demo-card__item">
+                    <div>
+                      <span className="demo-card__badge" style={{ backgroundColor: u.color }}>
+                        {u.label}
+                      </span>
+                      <span className="demo-card__email">{u.correo}</span>
+                    </div>
+                    <button
+                      type="button"
+                      className="demo-card__btn"
+                      onClick={() => { setCorreo(u.correo); setPassword(u.password); }}
+                    >
+                      Usar
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Punto decorativo */}
           <div className="login-dot" aria-hidden="true" />

@@ -4,6 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Inicio de Sesión — GA7-220501096-AA5-EV01</title>
+    <!-- Aplica el tema guardado antes de que React cargue para evitar flash -->
+    <script>
+      (function () {
+        var t = localStorage.getItem('theme');
+        document.documentElement.dataset.theme = t === 'dark' ? 'dark' : 'light';
+      })();
+    </script>
   </head>
   <body>
     <!-- Punto de montaje de la aplicación React -->

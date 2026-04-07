@@ -8,10 +8,10 @@ export const reportesRecientes = [
 ];
 
 export const tiposReporte = [
-  { key: 'calificaciones', label: 'Calificaciones',  descripcion: 'Reporte general de notas por grupo o materia',    icon: '📝' },
-  { key: 'estudiantes',    label: 'Estudiantes',     descripcion: 'Listado de estudiantes registrados con estadísticas', icon: '👨‍🎓' },
-  { key: 'docentes',       label: 'Docentes',        descripcion: 'Historial y estado del personal docente',          icon: '👩‍🏫' },
-  { key: 'horarios',       label: 'Horarios',        descripcion: 'Distribución de horarios por grupo y aula',        icon: '📅' },
-  { key: 'asistencia',     label: 'Asistencia',      descripcion: 'Registro de asistencia por estudiante o grupo',    icon: '✅' },
-  { key: 'rendimiento',    label: 'Rendimiento',     descripcion: 'Indicadores de rendimiento académico general',     icon: '📊' },
+  { id: 1, titulo: 'Calificaciones',  descripcion: 'Reporte general de notas por grupo o materia',          icono: 'file',     filtros: ['grupo', 'periodo'] },
+  { id: 2, titulo: 'Estudiantes',     descripcion: 'Listado de estudiantes registrados con estadísticas',   icono: 'users',    filtros: ['grupo'] },
+  { id: 3, titulo: 'Docentes',        descripcion: 'Historial y estado del personal docente',               icono: 'check',    filtros: ['periodo'] },
+  { id: 4, titulo: 'Horarios',        descripcion: 'Distribución de horarios por grupo y aula',             icono: 'calendar', filtros: ['grupo'] },
+  { id: 5, titulo: 'Asistencia',      descripcion: 'Registro de asistencia por estudiante o grupo',         icono: 'grid',     filtros: ['grupo', 'periodo'] },
+  { id: 6, titulo: 'Rendimiento',     descripcion: 'Indicadores de rendimiento académico general',          icono: 'chart',    filtros: ['periodo'] },
 ];

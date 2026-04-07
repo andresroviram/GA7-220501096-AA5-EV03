@@ -6,19 +6,29 @@ import authService from '../services/authService';
  * Muestra el título de la página activa, controles de notificaciones,
  * modo oscuro (visual) y la info del usuario logueado.
  */
-function Topbar({ title = 'Dashboard', onLogout }) {
-  const username = authService.getCurrentUser() || 'Carlos Pérez';
+function Topbar({ title = 'Dashboard', onLogout, onToggleSidebar, darkMode = false, onToggleTheme }) {
+  const user     = authService.getCurrentUser();
+  const nombre   = user?.nombre   || 'Usuario';
+  const rol      = user?.tipo_usuario || 'administrador';
+  const rolLabel = { administrativo: 'Administrador', docente: 'Docente', padre: 'Padre / Tutor' }[rol] ?? 'Usuario';
 
   return (
     <header className="topbar">
       <div className="topbar-left">
-        <button className="topbar-menu-btn" aria-label="Menú">☰</button>
+        <button className="topbar-menu-btn" aria-label="Menú" onClick={onToggleSidebar}>☰</button>
         <h2 className="topbar-title">{title}</h2>
       </div>
 
       <div className="topbar-right">
-        {/* Modo oscuro — solo visual por ahora */}
-        <button className="topbar-icon-btn" aria-label="Modo oscuro">🌙</button>
+        {/* Toggle modo claro / oscuro */}
+        <button
+          className="topbar-icon-btn"
+          aria-label={darkMode ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+          onClick={onToggleTheme}
+          title={darkMode ? 'Modo claro' : 'Modo oscuro'}
+        >
+          {darkMode ? '☀️' : '🌙'}
+        </button>
 
         {/* Notificaciones */}
         <button className="topbar-icon-btn" aria-label="Notificaciones">🔔</button>
@@ -26,8 +36,8 @@ function Topbar({ title = 'Dashboard', onLogout }) {
         {/* Usuario */}
         <div className="topbar-user">
           <div className="topbar-user-info">
-            <span className="topbar-user-name">{username}</span>
-            <span className="topbar-user-role">Administrador</span>
+            <span className="topbar-user-name">{nombre}</span>
+            <span className="topbar-user-role">{rolLabel}</span>
           </div>
           <button
             className="topbar-avatar"
@@ -35,7 +45,7 @@ function Topbar({ title = 'Dashboard', onLogout }) {
             title="Cerrar sesión"
             aria-label="Cerrar sesión"
           >
-            {username.charAt(0).toUpperCase()}
+            {nombre.charAt(0).toUpperCase()}
           </button>
         </div>
       </div>

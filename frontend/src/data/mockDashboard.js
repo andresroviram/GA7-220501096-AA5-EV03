@@ -1,49 +1,86 @@
 // ─── Datos mock del Dashboard ─────────────────────────────────────────────────
-// Todos los datos de la vista principal están centralizados aquí.
-// Cuando se conecte el backend, solo se reemplaza este archivo por llamadas API.
+// Todos los valores se derivan de los otros mocks para mantener una única
+// fuente de verdad. Cuando se conecte el backend, solo se reemplazan los
+// imports por llamadas API.
 
+import { estudiantes }         from './mockEstudiantes';
+import { docentes }            from './mockDocentes';
+import { materias }            from './mockMaterias';
+import { estadisticasGrupos }  from './mockGrupos';
+import { promediosPorGrupo }   from './mockCalificaciones';
+
+// ── Stat cards ────────────────────────────────────────────────────────────────
 export const stats = [
-  { id: 1, label: 'Estudiantes Registrados', value: '1.653', icon: '🎓' },
-  { id: 2, label: 'Docentes Activos',        value: '89',    icon: '👥' },
-  { id: 3, label: 'Materias Activas',        value: '156',   icon: '📋' },
-  { id: 4, label: 'Grupos Activos',          value: '42',    icon: '📅' },
+  {
+    id: 1,
+    label: 'Estudiantes Registrados',
+    value: estudiantes.length,
+    icon: '🎓',
+  },
+  {
+    id: 2,
+    label: 'Docentes Activos',
+    value: docentes.filter((d) => d.estado === 'Activo').length,
+    icon: '👥',
+  },
+  {
+    id: 3,
+    label: 'Materias Activas',
+    value: materias.filter((m) => m.estado === 'Activo').length,
+    icon: '📋',
+  },
+  {
+    id: 4,
+    label: 'Grupos Activos',
+    value: estadisticasGrupos.totalGrupos,
+    icon: '📅',
+  },
 ];
 
-export const topStudents = [
-  { id: 1, name: 'Ana García',       group: 'Grupo 3A', score: 9.8 },
-  { id: 2, name: 'Carlos López',     group: 'Grupo 2B', score: 9.6 },
-  { id: 3, name: 'María Rodríguez',  group: 'Grupo 3A', score: 9.5 },
-  { id: 4, name: 'Juan Pérez',       group: 'Grupo 1C', score: 9.3 },
-  { id: 5, name: 'Laura Martínez',   group: 'Grupo 2A', score: 9.2 },
-];
+// ── Top 5 alumnos por promedio ────────────────────────────────────────────────
+export const topStudents = [...estudiantes]
+  .sort((a, b) => b.promedio - a.promedio)
+  .slice(0, 5)
+  .map((est, i) => ({
+    id: i + 1,
+    name: est.nombre.split(' ').slice(0, 2).join(' '),
+    group: `Grupo ${est.grupo}`,
+    score: est.promedio,
+  }));
 
-export const groupAverages = [
-  { grupo: 'Grupo 1A', promedio: 8.2 },
-  { grupo: 'Grupo 1B', promedio: 8.5 },
-  { grupo: 'Grupo 1C', promedio: 8.8 },
-  { grupo: 'Grupo 2A', promedio: 8.1 },
-  { grupo: 'Grupo 2B', promedio: 8.1 },
-  { grupo: 'Grupo 3A', promedio: 7.5 },
-  { grupo: 'Grupo 3B', promedio: 9.1 },
-  { grupo: 'Grupo 3C', promedio: 8.7 },
-  { grupo: 'Grupo 4A', promedio: 9.0 },
-];
+// ── Promedio por grupo — deduplicado, para el widget de barras ────────────────
+const _seen = new Set();
+const _dedupedPromedios = promediosPorGrupo.filter(({ grupo }) => {
+  if (_seen.has(grupo)) return false;
+  _seen.add(grupo);
+  return true;
+});
 
-export const academicPerformance = [
-  { grupo: '1A', promedio: 7.8 },
-  { grupo: '1B', promedio: 8.2 },
-  { grupo: '1C', promedio: 8.5 },
-  { grupo: '2A', promedio: 7.9 },
-  { grupo: '2B', promedio: 8.0 },
-  { grupo: '3A', promedio: 7.4 },
-  { grupo: '3B', promedio: 8.9 },
-  { grupo: '3C', promedio: 8.6 },
-  { grupo: '4A', promedio: 9.0 },
-];
+// Formato largo "Grupo 1A" para GroupAverageChart
+export const groupAverages = _dedupedPromedios.map(({ grupo, promedio }) => ({
+  grupo: `Grupo ${grupo}`,
+  promedio,
+}));
 
-export const gradeDistribution = [
-  { name: '1er Grado', value: 72,  color: '#2A9D6F' },
-  { name: '2do Grado', value: 68,  color: '#4DD4A8' },
-  { name: '3er Grado', value: 65,  color: '#1A6B4A' },
-  { name: '4to Grado', value: 37,  color: '#E63946' },
-];
+// Formato corto "1A" para el eje X de AcademicPerformanceChart
+export const academicPerformance = _dedupedPromedios.map(({ grupo, promedio }) => ({
+  grupo,
+  promedio,
+}));
+
+// ── Distribución de estudiantes por grado ────────────────────────────────────
+const _gradeCounts = {};
+estudiantes.forEach(({ grupo }) => {
+  const grade = grupo.charAt(0);
+  _gradeCounts[grade] = (_gradeCounts[grade] || 0) + 1;
+});
+
+const _LABELS  = { '1': '1er Grado', '2': '2do Grado', '3': '3er Grado', '4': '4to Grado', '5': '5to Grado', '6': '6to Grado' };
+const _COLORS  = ['#2A9D6F', '#4DD4A8', '#1A6B4A', '#E63946', '#F4A261', '#E9C46A'];
+
+export const gradeDistribution = Object.entries(_gradeCounts).map(([grade, value], i) => ({
+  name:  _LABELS[grade] ?? `Grado ${grade}`,
+  value,
+  color: _COLORS[i % _COLORS.length],
+}));
+

@@ -1,11 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
-  estudiantes as initialEstudiantes,
   GRUPOS_LIST,
   ESTADOS_LIST,
   RANGOS_EDAD,
   GRUPOS_WIDGET,
 } from '../data/mockEstudiantes';
+import * as estudiantesService from '../services/estudiantesService';
 
 /* ─── Íconos ────────────────────────────────────────────────────────────────── */
 const IconEdit = () => (
@@ -223,13 +223,20 @@ function EstadoBadge({ estado }) {
 let nextId = 9;
 
 function Estudiantes() {
-  const [lista,        setLista]        = useState(initialEstudiantes);
+  const [lista,        setLista]        = useState([]);
+  const [loading,      setLoading]      = useState(true);
   const [filtroGrupo,  setFiltroGrupo]  = useState('');
   const [filtroEstado, setFiltroEstado] = useState('');
   const [filtroRango,  setFiltroRango]  = useState('');
   const [busqueda,     setBusqueda]     = useState({ grupo: '', estado: '', rango: '' });
   const [modalConfirm, setModalConfirm] = useState(null);
   const [modalForm,    setModalForm]    = useState(null);
+
+  useEffect(() => {
+    estudiantesService.getEstudiantes()
+      .then((data) => { setLista(data); nextId = data.length + 1; })
+      .finally(() => setLoading(false));
+  }, []);
 
   const listaFiltrada = useMemo(() => {
     return lista.filter((e) => {
@@ -387,13 +394,17 @@ function Estudiantes() {
                   </td>
                   <td><span className="badge badge--grupo">{e.grupo}</span></td>
                   <td><span className="td-edad">{e.edad} años</span></td>
-                  <td className="td-contact">
-                    <span className="contact-phone"><IconPhone /> {e.telefono}</span>
-                    <span className="contact-email"><IconPin /> {e.direccion.length > 22 ? e.direccion.slice(0, 22) + '...' : e.direccion}</span>
+                  <td>
+                    <div className="td-contact">
+                      <span className="contact-phone"><IconPhone /> {e.telefono}</span>
+                      <span className="contact-email"><IconPin /> {e.direccion.length > 22 ? e.direccion.slice(0, 22) + '...' : e.direccion}</span>
+                    </div>
                   </td>
-                  <td className="td-contact">
-                    <span className="contact-phone"><IconUser /> {e.tutor}</span>
-                    <span className="contact-phone"><IconPhone /> {e.tutorTelefono}</span>
+                  <td>
+                    <div className="td-contact">
+                      <span className="contact-phone"><IconUser /> {e.tutor}</span>
+                      <span className="contact-phone"><IconPhone /> {e.tutorTelefono}</span>
+                    </div>
                   </td>
                   <td><span className="badge badge--promedio">{e.promedio}</span></td>
                   <td><EstadoBadge estado={e.estado} /></td>

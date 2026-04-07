@@ -1,12 +1,12 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import {
-  docentes as initialDocentes,
   docentesPorDepartamento,
   estadisticasDocentes,
   departamentos,
   estados,
   materias as MATERIAS_LIST,
 } from '../data/mockDocentes';
+import * as docentesService from '../services/docentesService';
 
 /* ─── Íconos SVG inline ─────────────────────────────────────────────────────── */
 const IconEdit = () => (
@@ -277,15 +277,22 @@ function ModalDocente({ docente, onSave, onCancel }) {
 }
 
 /* ─── Componente principal ──────────────────────────────────────────────────── */
-let nextId = initialDocentes.length + 1;
+let nextId = 1;
 
 function Docentes() {
-  const [lista,        setLista]        = useState(initialDocentes);
+  const [lista,        setLista]        = useState([]);
+  const [loading,      setLoading]      = useState(true);
   const [filtroDept,   setFiltroDept]   = useState('');
   const [filtroEstado, setFiltroEstado] = useState('');
   const [busqueda,     setBusqueda]     = useState({ dept: '', estado: '' });
   const [modalConfirm, setModalConfirm] = useState(null); // docente a confirmar
   const [modalForm,    setModalForm]    = useState(null); // null | { docente } para editar, o {} para crear
+
+  useEffect(() => {
+    docentesService.getDocentes()
+      .then((data) => { setLista(data); nextId = data.length + 1; })
+      .finally(() => setLoading(false));
+  }, []);
 
   /* Aplicar filtros solo al hacer clic en Buscar */
   const docentesFiltrados = useMemo(() => {

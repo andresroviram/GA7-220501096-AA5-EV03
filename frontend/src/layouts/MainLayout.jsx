@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import Topbar from '../components/Topbar';
@@ -16,9 +16,10 @@ const pageTitles = {
   '/configuraciones': 'Configuraciones',
 };
 
-function MainLayout({ onLogout }) {
-  const location = useLocation();
-  const title = pageTitles[location.pathname] ?? 'Dashboard';
+function MainLayout({ onLogout, darkMode, onToggleTheme }) {
+  const location  = useLocation();
+  const title     = pageTitles[location.pathname] ?? 'Dashboard';
+  const [collapsed, setCollapsed] = useState(false);
 
   const handleLogout = () => {
     authService.logout();
@@ -27,9 +28,15 @@ function MainLayout({ onLogout }) {
 
   return (
     <div className="app-layout">
-      <Sidebar />
+      <Sidebar collapsed={collapsed} />
       <div className="app-main">
-        <Topbar title={title} onLogout={handleLogout} />
+        <Topbar
+          title={title}
+          onLogout={handleLogout}
+          onToggleSidebar={() => setCollapsed((c) => !c)}
+          darkMode={darkMode}
+          onToggleTheme={onToggleTheme}
+        />
         <main className="app-content">
           <Outlet />
         </main>

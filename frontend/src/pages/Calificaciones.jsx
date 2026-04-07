@@ -1,11 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import {
-  calificaciones as initialCalificaciones,
   promediosPorGrupo,
   materias as MATERIAS_LIST,
   gruposSelect as GRUPOS_FILTER,
 } from '../data/mockCalificaciones';
+import * as calificacionesService from '../services/calificacionesService';
 
 /* ─── Ícono editar ──────────────────────────────────────────────────────────── */
 const IconEdit = () => (
@@ -163,15 +163,22 @@ function ModalCalificacion({ item, onSave, onCancel }) {
 }
 
 /* ─── Componente principal ──────────────────────────────────────────────────── */
-let nextId = initialCalificaciones.length + 1;
+let nextId = 1;
 
 function Calificaciones() {
-  const [lista,         setLista]         = useState(initialCalificaciones);
+  const [lista,         setLista]         = useState([]);
+  const [loading,       setLoading]       = useState(true);
   const [filtroMateria, setFiltroMateria] = useState('');
   const [filtroGrupo,   setFiltroGrupo]   = useState('');
   const [filtroFecha,   setFiltroFecha]   = useState('');
   const [busqueda,      setBusqueda]      = useState({ materia: '', grupo: '', fecha: '' });
   const [modalForm,     setModalForm]     = useState(null);
+
+  useEffect(() => {
+    calificacionesService.getCalificaciones()
+      .then((data) => { setLista(data); nextId = data.length + 1; })
+      .finally(() => setLoading(false));
+  }, []);
 
   const listaFiltrada = useMemo(() => {
     return lista.filter((c) => {

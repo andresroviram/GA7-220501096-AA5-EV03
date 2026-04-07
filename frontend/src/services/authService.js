@@ -1,85 +1,90 @@
 import axios from 'axios';
 
-/**
- * authService — servicio de autenticación del frontend.
- *
- * Centraliza todas las operaciones relacionadas con la sesión del usuario:
- * comunicación con la API, almacenamiento del token y consulta del estado.
- *
- * El token JWT se guarda en localStorage para persistir entre recargas de página.
- * En aplicaciones de mayor criticidad puede usarse una cookie HttpOnly.
- */
-
 /** URL base del módulo de autenticación en el backend (vía proxy de Vite) */
 const AUTH_API_URL = '/api/auth';
 
+/** Usuarios de prueba disponibles solo en modo desarrollo */
+const MOCK_USERS = [
+  { correo: 'admin@escuela.edu',           password: 'Admin123!',   nombre: 'Admin Sistema',    tipo_usuario: 'administrativo' },
+  { correo: 'maria.garcia@escuela.edu',    password: 'Docente123!', nombre: 'María García',      tipo_usuario: 'docente' },
+  { correo: 'juan.rodriguez@escuela.edu',  password: 'Padre123!',   nombre: 'Juan Rodríguez',    tipo_usuario: 'padre' },
+  { correo: 'laura.martinez@escuela.edu',  password: 'Docente123!', nombre: 'Laura Martínez',    tipo_usuario: 'docente' },
+];
+
 const authService = {
   /**
-   * Envía las credenciales al endpoint POST /auth/login.
-   * Si el servidor responde con un token, lo almacena en localStorage.
-   *
-   * @param {string} username - Nombre de usuario
-   * @param {string} password - Contraseña en texto plano (se envía por HTTPS en producción)
-   * @returns {Promise<{access_token: string, username: string}>} Datos de sesión
-   * @throws {AxiosError} Si las credenciales son incorrectas (401) o hay error de red
+   * En desarrollo: valida contra MOCK_USERS sin necesidad de backend.
+   * En producción: llama a POST /auth/login.
    */
-  async login(username, password) {
-    const response = await axios.post(`${AUTH_API_URL}/login`, {
-      username,
-      password,
-    });
+  async login(correo, password) {
+    if (import.meta.env.DEV) {
+      const user = MOCK_USERS.find(
+        (u) => u.correo === correo && u.password === password,
+      );
+      if (!user) {
+        // Simula un 401 para que LoginForm muestre el mensaje correcto
+        const err = new Error('Credenciales incorrectas');
+        err.response = { status: 401 };
+        throw err;
+      }
+      const data = {
+        access_token: 'mock-token-dev',
+        correo: user.correo,
+        nombre: user.nombre,
+        tipo_usuario: user.tipo_usuario,
+      };
+      localStorage.setItem('token', data.access_token);
+      localStorage.setItem('user', JSON.stringify({
+        correo: data.correo,
+        nombre: data.nombre,
+        tipo_usuario: data.tipo_usuario,
+      }));
+      return data;
+    }
 
-    // Guardar token y nombre de usuario para uso posterior
+    const response = await axios.post(`${AUTH_API_URL}/login`, { correo, password });
+
     if (response.data.access_token) {
       localStorage.setItem('token', response.data.access_token);
-      localStorage.setItem('username', response.data.username);
+      localStorage.setItem('user', JSON.stringify({
+        correo: response.data.correo,
+        nombre: response.data.nombre,
+        tipo_usuario: response.data.tipo_usuario,
+      }));
     }
 
     return response.data;
   },
 
-  /**
-   * Cierra la sesión actual eliminando los datos del localStorage.
-   * El token queda inválido en el cliente (el servidor lo rechazará si se reutiliza
-   * después de que expire, o si se implementa una lista negra en el backend).
-   */
+  /** Cierra la sesión eliminando todos los datos del localStorage. */
   logout() {
     localStorage.removeItem('token');
-    localStorage.removeItem('username');
+    localStorage.removeItem('user');
   },
 
-  /**
-   * Comprueba si hay una sesión activa basándose en la presencia del token.
-   * No verifica la validez o expiración del token (eso lo hace el backend).
-   *
-   * @returns {boolean} true si existe un token guardado
-   */
+  /** @returns {boolean} true si existe un token guardado */
   isAuthenticated() {
     return !!localStorage.getItem('token');
   },
 
   /**
-   * Devuelve el nombre del usuario en sesión.
-   *
-   * @returns {string|null} Nombre de usuario o null si no hay sesión
+   * Devuelve el objeto de usuario almacenado en sesión.
+   * @returns {{ correo: string, nombre: string, tipo_usuario: string } | null}
    */
   getCurrentUser() {
-    return localStorage.getItem('username');
+    const raw = localStorage.getItem('user');
+    if (!raw) return null;
+    try { return JSON.parse(raw); } catch { return null; }
   },
 
-  /**
-   * Devuelve el token JWT almacenado, útil para incluirlo
-   * en el header Authorization de peticiones a rutas protegidas.
-   *
-   * @returns {string|null} Token JWT o null
-   */
+  /** @returns {string|null} Token JWT o null */
   getToken() {
     return localStorage.getItem('token');
   },
 
   /**
    * Registra un nuevo usuario mediante POST /auth/register.
-   * @param {object} data - { fullName, username, identification, birthDate, password }
+   * @param {{ nombre: string, apellido: string, correo: string, password: string, tipo_usuario: string }} data
    */
   async register(data) {
     const response = await axios.post(`${AUTH_API_URL}/register`, data);

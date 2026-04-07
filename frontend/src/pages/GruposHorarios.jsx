@@ -1,6 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
-  horarios as initialHorarios,
   estadisticasGrupos,
   GRUPOS_LIST,
   DIAS_LIST,
@@ -9,6 +8,7 @@ import {
 } from '../data/mockGrupos';
 import { materias as MATERIAS_LIST_RAW } from '../data/mockMaterias';
 import { docentes as DOCENTES_LIST_RAW } from '../data/mockDocentes';
+import * as gruposService from '../services/gruposService';
 
 const MATERIAS = MATERIAS_LIST_RAW.map((m) => m.nombre);
 const DOCENTES = DOCENTES_LIST_RAW.map((d) => d.nombre);
@@ -137,11 +137,18 @@ function ModalHorario({ item, onSave, onCancel }) {
 let nextId = 100;
 
 function GruposHorarios() {
-  const [lista,       setLista]       = useState(initialHorarios);
+  const [lista,       setLista]       = useState([]);
+  const [loading,     setLoading]     = useState(true);
   const [filtroGrupo, setFiltroGrupo] = useState('');
   const [filtroDia,   setFiltroDia]   = useState('');
   const [busqueda,    setBusqueda]    = useState({ grupo: '', dia: '' });
   const [modalForm,   setModalForm]   = useState(null);
+
+  useEffect(() => {
+    gruposService.getHorarios()
+      .then((data) => { setLista(data); nextId = data.length + 100; })
+      .finally(() => setLoading(false));
+  }, []);
 
   const listaFiltrada = useMemo(() =>
     lista.filter((h) => {

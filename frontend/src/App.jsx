@@ -8,6 +8,7 @@ import {
 import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
 import MainLayout from './layouts/MainLayout';
+import { useTheme } from './hooks/useTheme';
 import Dashboard from './pages/Dashboard';
 import Docentes from './pages/Docentes';
 import Calificaciones from './pages/Calificaciones';
@@ -23,6 +24,7 @@ function App() {
     authService.isAuthenticated(),
   );
   const [view, setView] = useState('login'); // 'login' | 'register'
+  const { dark, toggle } = useTheme();
 
   const handleLoginSuccess = () => setIsAuthenticated(true);
   const handleLogout       = () => setIsAuthenticated(false);
@@ -48,7 +50,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* Layout principal con sidebar y topbar */}
-        <Route element={<MainLayout onLogout={handleLogout} />}>
+        <Route element={<MainLayout onLogout={handleLogout} darkMode={dark} onToggleTheme={toggle} />}>
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard"       element={<Dashboard />} />
           <Route path="/estudiantes"     element={<Estudiantes />} />

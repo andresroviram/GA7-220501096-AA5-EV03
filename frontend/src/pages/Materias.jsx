@@ -1,11 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
-  materias as initialMaterias,
   materiasPorDepto,
   DEPARTAMENTOS_LIST,
   ESTADOS_LIST,
 } from '../data/mockMaterias';
 import { docentes as DOCENTES_LIST_RAW } from '../data/mockDocentes';
+import * as materiasService from '../services/materiasService';
 
 const DOCENTES = ['', ...DOCENTES_LIST_RAW.map((d) => d.nombre)];
 const GRUPOS   = ['1A', '1B', '1C', '2A', '2B', '2C', '3A', '3B'];
@@ -91,11 +91,18 @@ function ModalMateria({ item, onSave, onCancel }) {
 let nextId = 100;
 
 function Materias() {
-  const [lista,        setLista]        = useState(initialMaterias);
+  const [lista,        setLista]        = useState([]);
+  const [loading,      setLoading]      = useState(true);
   const [filtroDepto,  setFiltroDepto]  = useState('');
   const [filtroEstado, setFiltroEstado] = useState('');
   const [busqueda,     setBusqueda]     = useState({ depto: '', estado: '' });
   const [modalForm,    setModalForm]    = useState(null);
+
+  useEffect(() => {
+    materiasService.getMaterias()
+      .then((data) => { setLista(data); nextId = data.length + 100; })
+      .finally(() => setLoading(false));
+  }, []);
 
   const listaFiltrada = useMemo(() =>
     lista.filter((m) => {

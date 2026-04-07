@@ -1,9 +1,12 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service';
+import { AutenticacionLog } from '../auth-log/autenticacion-log.entity';
 import { LoginDto } from './dto/login.dto';
-import { RegisterDto } from './dto/register.dto';
+import { CreateUsuarioDto } from '../users/dto/usuario.dto';
 
 /**
  * AuthService — lógica de negocio del módulo de autenticación.
@@ -16,6 +19,8 @@ export class AuthService {
     constructor(
         private readonly usersService: UsersService,
         private readonly jwtService: JwtService,
+        @InjectRepository(AutenticacionLog)
+        private readonly logRepo: Repository<AutenticacionLog>,
     ) { }
 
     /**
@@ -32,36 +37,35 @@ export class AuthService {
      * @returns Objeto con el token JWT y el nombre de usuario
      * @throws UnauthorizedException si las credenciales son incorrectas
      */
-    async login(loginDto: LoginDto): Promise<{ access_token: string; username: string }> {
-        const { username, password } = loginDto;
-
-        // Paso 1: Buscar usuario activo en la base de datos
-        const user = await this.usersService.findByUsername(username);
-
-        // Paso 2: Verificar existencia y comparar contraseña con el hash almacenado.
-        // bcrypt.compare es resistente a timing attacks gracias a su implementación constante.
+    async login(loginDto: LoginDto) {
+        const { correo, password } = loginDto;
+        const user = await this.usersService.findByCorreo(correo);
         const passwordValid = user ? await bcrypt.compare(password, user.password) : false;
 
+        // Registrar intento en el log
+        if (user) {
+            await this.logRepo.save(
+                this.logRepo.create({
+                    id_usuario: user.id,
+                    resultado: passwordValid ? 'exitoso' : 'fallido',
+                }),
+            );
+        }
+
         if (!user || !passwordValid) {
-            // Mensaje genérico para no revelar cuál campo es incorrecto
             throw new UnauthorizedException('Credenciales inválidas');
         }
 
-        // Paso 3: Crear el payload del token.
-        // "sub" es el identificador estándar JWT (sujeto).
-        const payload = { username: user.username, sub: user.id };
-
+        const payload = { sub: user.id, correo: user.correo, tipo: user.tipo_usuario };
         return {
             access_token: this.jwtService.sign(payload),
-            username: user.username,
+            correo: user.correo,
+            nombre: `${user.nombre} ${user.apellido}`,
+            tipo_usuario: user.tipo_usuario,
         };
     }
 
-    /**
-     * Registra un nuevo usuario y devuelve sus datos (sin contraseña).
-     */
-    async register(registerDto: RegisterDto) {
-        const { username, password, fullName, identification, birthDate } = registerDto;
-        return this.usersService.createUser(username, password, fullName, identification, birthDate);
+    async register(dto: CreateUsuarioDto) {
+        return this.usersService.createUser(dto);
     }
 }

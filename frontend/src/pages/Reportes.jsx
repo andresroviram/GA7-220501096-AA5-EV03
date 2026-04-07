@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { reportesRecientes, tiposReporte } from '../data/mockReportes';
+import React, { useState, useEffect } from 'react';
+import * as reportesService from '../services/reportesService';
 
 /* ─── Íconos ── */
 const IconDownload = () => (<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>);
@@ -64,13 +64,21 @@ function ReporteCard({ tipo }) {
 
 /* ─── Componente principal ── */
 function Reportes() {
+  const [tipos,    setTipos]    = useState([]);
+  const [recientes, setRecientes] = useState([]);
+
+  useEffect(() => {
+    reportesService.getTiposReporte().then(setTipos);
+    reportesService.getReportesRecientes().then(setRecientes);
+  }, []);
+
   return (
     <div className="module-page">
       <div className="reporte-section">
         <h3 className="section-heading">Generar Reportes</h3>
         <p className="section-sub">Selecciona el tipo de reporte, aplica los filtros y descarga en el formato requerido.</p>
         <div className="reporte-grid">
-          {tiposReporte.map((t) => <ReporteCard key={t.id} tipo={t} />)}
+          {tipos.map((t) => <ReporteCard key={t.id} tipo={t} />)}
         </div>
       </div>
 
@@ -91,7 +99,7 @@ function Reportes() {
               </tr>
             </thead>
             <tbody>
-              {reportesRecientes.map((r) => (
+              {recientes.map((r) => (
                 <tr key={r.id}>
                   <td><span className="badge badge--neutral">{r.tipo}</span></td>
                   <td style={{ fontSize: '0.84rem' }}>{r.descripcion}</td>

@@ -1,41 +1,40 @@
-import {
-    Entity,
-    Column,
-    PrimaryGeneratedColumn,
-    CreateDateColumn,
-} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
+
+export type TipoUsuario = 'administrativo' | 'docente' | 'padre';
 
 /**
- * Entidad User — representa la tabla "users" en la base de datos SQLite.
- *
- * Campos:
- *   id         — clave primaria autoincremental
- *   username   — nombre de usuario único
- *   password   — hash bcrypt de la contraseña (nunca texto plano)
- *   isActive   — permite desactivar cuentas sin borrarlas
- *   createdAt  — fecha de creación del registro
+ * Entidad User — tabla 'usuario' según el modelo de datos del sistema.
  */
-@Entity('users')
+@Entity('usuario')
 export class User {
     @PrimaryGeneratedColumn()
     id: number;
 
-    /** Nombre de usuario — debe ser único en la tabla */
-    @Column({ unique: true })
-    username: string;
+    @Column({ length: 50 })
+    nombre: string;
 
-    /**
-     * Contraseña almacenada como hash bcrypt.
-     * Nunca se devuelve en respuestas de la API.
-     */
-    @Column()
+    @Column({ length: 50 })
+    apellido: string;
+
+    /** Correo electrónico — se usa como identificador de login */
+    @Column({ length: 100, unique: true })
+    correo: string;
+
+    /** Hash bcrypt de la contraseña — nunca se expone en respuestas */
+    @Column({ length: 255 })
     password: string;
 
-    /** Indica si la cuenta está activa; las inactivas no pueden iniciar sesión */
+    @Column({
+        type: 'simple-enum',
+        enum: ['administrativo', 'docente', 'padre'],
+        default: 'administrativo',
+    })
+    tipo_usuario: TipoUsuario;
+
+    /** Permite desactivar la cuenta sin borrarla */
     @Column({ default: true })
     isActive: boolean;
 
-    /** Fecha y hora en que se creó el registro */
     @CreateDateColumn()
     createdAt: Date;
 }
