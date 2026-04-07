@@ -6,6 +6,7 @@ import {
   gruposSelect as GRUPOS_FILTER,
 } from '../data/mockCalificaciones';
 import * as calificacionesService from '../services/calificacionesService';
+import { downloadCSV } from '../utils/exportUtils';
 
 import {
   IconEdit, IconSearch, IconDownload as IconExport, IconPlus, IconClose, IconCalendar,
@@ -154,6 +155,21 @@ function Calificaciones() {
   const handleBuscar = () =>
     setBusqueda({ materia: filtroMateria, grupo: filtroGrupo, fecha: filtroFecha });
 
+  const handleExport = () => {
+    downloadCSV(
+      listaFiltrada,
+      [
+        { key: 'id',           label: 'ID'           },
+        { key: 'estudiante',   label: 'Estudiante'   },
+        { key: 'materia',      label: 'Materia'      },
+        { key: 'grupo',        label: 'Grupo'        },
+        { key: 'calificacion', label: 'Calificación' },
+        { key: 'fecha',        label: 'Fecha'        },
+      ],
+      `calificaciones-${new Date().toISOString().slice(0, 10)}.csv`
+    );
+  };
+
   const handleLimpiar = () => {
     setFiltroMateria(''); setFiltroGrupo(''); setFiltroFecha('');
     setBusqueda({ materia: '', grupo: '', fecha: '' });
@@ -233,7 +249,7 @@ function Calificaciones() {
             <button className="btn btn--primary" onClick={() => setModalForm({ isCreate: true })}>
               <IconPlus /> Registrar
             </button>
-            <button className="btn btn--outline"><IconExport /> Exportar</button>
+            <button className="btn btn--outline" onClick={handleExport}><IconExport /> Exportar</button>
           </div>
         </div>
 

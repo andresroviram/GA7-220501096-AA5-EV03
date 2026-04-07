@@ -1,6 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import {
-  materiasPorDepto,
   DEPARTAMENTOS_LIST,
   ESTADOS_LIST,
 } from '../data/mockMaterias';
@@ -125,7 +124,16 @@ function Materias() {
   const handleToggleEstado = (id) =>
     setLista((p) => p.map((m) => m.id === id ? { ...m, estado: m.estado === 'Activo' ? 'Inactivo' : 'Activo' } : m));
 
-  const maxDepto = Math.max(...materiasPorDepto.map((d) => d.total), 1);
+  /* Materias por departamento, calculado desde lista */
+  const materiasPorDeptoCalc = useMemo(() => {
+    const map = {};
+    lista.forEach((m) => {
+      map[m.departamento] = (map[m.departamento] || 0) + 1;
+    });
+    return Object.entries(map).map(([departamento, total]) => ({ departamento, total }));
+  }, [lista]);
+
+  const maxDepto = Math.max(...materiasPorDeptoCalc.map((d) => d.total), 1);
 
   /* Stats dinámicos */
   const activas    = lista.filter((m) => m.estado === 'Activo').length;
@@ -237,7 +245,7 @@ function Materias() {
         <div className="widget-card">
           <h3 className="widget-title"><IconBook /> Materias por Departamento</h3>
           <div className="dept-bar-list">
-            {materiasPorDepto.map((item) => (
+            {materiasPorDeptoCalc.map((item) => (
               <div key={item.departamento} className="dept-bar-row">
                 <span className="dept-bar-label">{item.departamento}</span>
                 <div className="dept-bar-track">

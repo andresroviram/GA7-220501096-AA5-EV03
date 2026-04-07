@@ -23,12 +23,13 @@ function ReporteCard({ tipo }) {
   const [periodo, setPeriodo] = useState('');
   const [loading, setLoading] = useState(null);
 
-  const handleGenerar = (fmt) => {
+  const handleGenerar = async (fmt) => {
     setLoading(fmt);
-    setTimeout(() => {
+    try {
+      await reportesService.generarReporte(tipo.id, fmt, { grupo, periodo });
+    } finally {
       setLoading(null);
-      alert(`Reporte "${tipo.titulo}" en formato ${fmt.toUpperCase()} generado.\n(Integración backend pendiente)`);
-    }, 800);
+    }
   };
 
   return (
@@ -111,7 +112,7 @@ function Reportes() {
                     <span className={`badge ${r.formato === 'PDF' ? 'badge--pdf' : 'badge--excel'}`}>{r.formato}</span>
                   </td>
                   <td>
-                    <button className="btn btn--outline btn--sm" onClick={() => alert('Descarga simulada (backend pendiente)')}>
+                    <button className="btn btn--outline btn--sm" onClick={() => reportesService.descargarReporte(r)}>
                       <IconDownload /> Descargar
                     </button>
                   </td>

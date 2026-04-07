@@ -2248,25 +2248,30 @@ body {
 [data-theme="dark"] .reporte-card-title,
 [data-theme="dark"] .modal-confirm-title { color: #D4DAE8; }
 
-[data-theme="dark"] .stat-card-label,
-[data-theme="dark"] .section-sub,
-[data-theme="dark"] .config-submenu {
+[data-theme="dark"] .stat-card-label {
   background: #1E2D26;
-  border-color: #2C3E35;
+}
+[data-theme="dark"] .config-submenu {
+  background: #1C2130;
+  border-color: #26304A;
+}
+[data-theme="dark"] .section-sub {
+  background: transparent;
 }
 [data-theme="dark"] .config-submenu-item {
-  color: #9EB8A8;
+  color: #9BA5B8;
 }
 [data-theme="dark"] .config-submenu-item:hover {
-  background: #253320;
-  color: #3DBF8A;
+  background: #232B3E;
+  color: #7EC8A4;
 }
 [data-theme="dark"] .config-submenu-item--active {
   background: #2A9D6F;
   color: #fff;
 }
 [data-theme="dark"] .config-submenu-item--active:hover {
-  background: #3DBF8A;
+  background: #228A5A;
+  color: #fff;
 }
 [data-theme="dark"] .config-section-sub,
 [data-theme="dark"] .reporte-card-desc,
@@ -2361,6 +2366,12 @@ body {
   color: #9BA5B8;
   border-color: #26304A;
 }
+[data-theme="dark"] .badge--inactive,
+[data-theme="dark"] .badge--suspended {
+  background: #2A1A1A;
+  color: #EF9A9A;
+  border-color: #4E2020;
+}
 
 /* ─── Botones de acción en tabla ────────────────────────────── */
 
@@ -2387,8 +2398,9 @@ body {
 
 [data-theme="dark"] .stats-list-row    { border-color: #1F2535; }
 [data-theme="dark"] .stats-list-label  { color: #D4DAE8; }
-[data-theme="dark"] .stats-list-value--neutral { background: #1F2535; color: #D4DAE8; }
-[data-theme="dark"] .stats-list-value--active  { background: #26304A; color: #D4DAE8; }
+[data-theme="dark"] .stats-list-value--neutral  { background: #1F2535; color: #D4DAE8; }
+[data-theme="dark"] .stats-list-value--active   { background: #26304A; color: #D4DAE8; }
+[data-theme="dark"] .stats-list-value--inactive { background: #2A1A1A; color: #EF9A9A; }
 
 [data-theme="dark"] .donut-total        { color: #D4DAE8; }
 [data-theme="dark"] .donut-legend-item  { color: #7A8599; }

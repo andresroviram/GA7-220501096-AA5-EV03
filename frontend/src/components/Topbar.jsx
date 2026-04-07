@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import authService from '../services/authService';
 import { IconMenu, IconSun, IconMoon, IconBell, IconUser, IconLogOut } from './Icons';
 
@@ -12,7 +13,8 @@ function Topbar({ title = 'Dashboard', onLogout, onToggleSidebar, darkMode = fal
   const rolLabel = { administrativo: 'Administrador', docente: 'Docente', padre: 'Padre / Tutor' }[rol] ?? 'Usuario';
 
   const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef = useRef(null);
+  const menuRef  = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     function handleClick(e) {
@@ -60,7 +62,7 @@ function Topbar({ title = 'Dashboard', onLogout, onToggleSidebar, darkMode = fal
 
           {menuOpen && (
             <div className="topbar-user-dropdown" role="menu">
-              <button className="topbar-dropdown-item" role="menuitem" onClick={() => setMenuOpen(false)}>
+              <button className="topbar-dropdown-item" role="menuitem" onClick={() => { setMenuOpen(false); navigate('/configuraciones', { state: { tab: 'perfil' } }); }}>
                 <IconUser />
                 <span>Ver mi perfil</span>
               </button>

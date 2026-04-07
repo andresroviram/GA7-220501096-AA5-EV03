@@ -7,6 +7,7 @@ import {
   materias as MATERIAS_LIST,
 } from '../data/mockDocentes';
 import * as docentesService from '../services/docentesService';
+import { downloadCSV } from '../utils/exportUtils';
 
 import {
   IconEdit, IconUserMinus as IconRemove, IconSearch, IconDownload as IconExport,
@@ -261,6 +262,22 @@ function Docentes() {
   }, [lista, busqueda]);
 
   const handleBuscar = () => setBusqueda({ dept: filtroDept, estado: filtroEstado });
+
+  const handleExport = () => {
+    downloadCSV(
+      docentesFiltrados,
+      [
+        { key: 'id',           label: 'ID'           },
+        { key: 'nombre',       label: 'Nombre'       },
+        { key: 'departamento', label: 'Departamento' },
+        { key: 'email',        label: 'Email'        },
+        { key: 'estado',       label: 'Estado'       },
+        { key: 'fechaIngreso', label: 'Fecha Ingreso'},
+      ],
+      `docentes-${new Date().toISOString().slice(0, 10)}.csv`
+    );
+  };
+
   const handleLimpiar = () => {
     setFiltroDept('');
     setFiltroEstado('');
@@ -373,7 +390,7 @@ function Docentes() {
             <button className="btn btn--primary" onClick={() => setModalForm({ isCreate: true })}>
               <IconPlus /> Registrar
             </button>
-            <button className="btn btn--outline">
+            <button className="btn btn--outline" onClick={handleExport}>
               <IconExport /> Exportar
             </button>
           </div>

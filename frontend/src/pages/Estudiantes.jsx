@@ -6,6 +6,7 @@ import {
   GRUPOS_WIDGET,
 } from '../data/mockEstudiantes';
 import * as estudiantesService from '../services/estudiantesService';
+import { downloadCSV } from '../utils/exportUtils';
 
 import {
   IconEdit, IconUserMinus, IconUserPlus, IconSearch, IconDownload as IconExport,
@@ -187,6 +188,21 @@ function Estudiantes() {
     setBusqueda({ grupo: '', estado: '', rango: '' });
   };
 
+  const handleExport = () => {
+    downloadCSV(
+      listaFiltrada,
+      [
+        { key: 'id',      label: 'Matrícula' },
+        { key: 'nombre',  label: 'Nombre'    },
+        { key: 'grupo',   label: 'Grupo'     },
+        { key: 'edad',    label: 'Edad'      },
+        { key: 'promedio',label: 'Promedio'  },
+        { key: 'estado',  label: 'Estado'    },
+      ],
+      `estudiantes-${new Date().toISOString().slice(0, 10)}.csv`
+    );
+  };
+
   const handleConfirmStatus = (est) => {
     setLista((prev) =>
       prev.map((e) =>
@@ -299,7 +315,7 @@ function Estudiantes() {
             <button className="btn btn--primary" onClick={() => setModalForm({ isCreate: true })}>
               <IconPlus /> Registrar Nuevo
             </button>
-            <button className="btn btn--outline"><IconExport /> Exportar Listado</button>
+            <button className="btn btn--outline" onClick={handleExport}><IconExport /> Exportar Listado</button>
           </div>
         </div>
 

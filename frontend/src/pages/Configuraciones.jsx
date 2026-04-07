@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import authService from '../services/authService';
 
 /* ─── Datos de configuración ── */
 const ROLES_INIT = [
@@ -27,7 +29,7 @@ const PARAMS_INIT = {
   notaAprobatoria: '6',
 };
 
-import { IconSave, IconShield, IconSettings } from '../components/Icons';
+import { IconSave, IconShield, IconSettings, IconUser } from '../components/Icons';
 
 /* ─── Sección de permisos ── */
 function RolesPermisos() {
@@ -144,9 +146,66 @@ function Parametros() {
   );
 }
 
+/* ─── Sección Mi Perfil ── */
+function MiPerfil() {
+  const user = authService.getCurrentUser();
+  const [form, setForm] = useState({
+    nombre:   user?.nombre        || '',
+    email:    user?.email         || '',
+    telefono: user?.telefono      || '',
+    rol:      user?.tipo_usuario  || '',
+  });
+  const [saved, setSaved] = useState(false);
+
+  const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
+  const handleSave = () => { setSaved(true); setTimeout(() => setSaved(false), 2000); };
+
+  const rolLabel = {
+    administrativo: 'Administrador',
+    docente: 'Docente',
+    padre: 'Padre / Tutor',
+  }[form.rol] ?? form.rol;
+
+  return (
+    <div className="config-section">
+      <div className="config-section-header">
+        <div className="config-section-icon"><IconUser /></div>
+        <div>
+          <h3 className="config-section-title">Mi Perfil</h3>
+          <p className="config-section-sub">Información de tu cuenta en el sistema.</p>
+        </div>
+      </div>
+      <div className="params-grid">
+        <div className="modal-field modal-field--full">
+          <label className="modal-label">Nombre completo</label>
+          <input className="modal-input" type="text" value={form.nombre} onChange={(e) => set('nombre', e.target.value)} />
+        </div>
+        <div className="modal-field">
+          <label className="modal-label">Correo electrónico</label>
+          <input className="modal-input" type="email" value={form.email} onChange={(e) => set('email', e.target.value)} />
+        </div>
+        <div className="modal-field">
+          <label className="modal-label">Teléfono</label>
+          <input className="modal-input" type="tel" value={form.telefono} onChange={(e) => set('telefono', e.target.value)} />
+        </div>
+        <div className="modal-field">
+          <label className="modal-label">Rol</label>
+          <input className="modal-input" type="text" value={rolLabel} readOnly style={{ opacity: 0.6, cursor: 'not-allowed' }} />
+        </div>
+      </div>
+      <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'flex-end' }}>
+        <button className="btn btn--primary" onClick={handleSave}>
+          <IconSave /> {saved ? '¡Guardado!' : 'Guardar Cambios'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 /* ─── Componente principal ── */
 function Configuraciones() {
-  const [activeTab, setActiveTab] = useState('roles');
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState(location.state?.tab || 'roles');
 
   return (
     <div className="module-page">
@@ -163,10 +222,17 @@ function Configuraciones() {
         >
           <IconSettings /> Parámetros del Sistema
         </button>
+        <button
+          className={`config-submenu-item${activeTab === 'perfil' ? ' config-submenu-item--active' : ''}`}
+          onClick={() => setActiveTab('perfil')}
+        >
+          <IconUser /> Mi Perfil
+        </button>
       </div>
 
       {activeTab === 'roles'  && <RolesPermisos />}
       {activeTab === 'params' && <Parametros />}
+      {activeTab === 'perfil' && <MiPerfil />}
     </div>
   );
 }
