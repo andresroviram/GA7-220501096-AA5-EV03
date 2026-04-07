@@ -7,6 +7,21 @@ y reportes, con soporte de modo claro/oscuro y sidebar colapsable.
 
 ---
 
+## Capturas de pantalla
+
+<table>
+  <tr>
+    <td><img src="screenshots/login.png" alt="Login" width="100%"/></td>
+    <td><img src="screenshots/dashboard.png" alt="Dashboard" width="100%"/></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/estudiantes.png" alt="Estudiantes" width="100%"/></td>
+    <td><img src="screenshots/calificaciones.png" alt="Calificaciones" width="100%"/></td>
+  </tr>
+</table>
+
+---
+
 ## Estructura del proyecto
 
 ```
