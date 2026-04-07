@@ -24,9 +24,9 @@ import authService from './services/authService';
 import { canAccess } from './utils/permissions';
 import { ToastProvider } from './components/ui/Toast';
 
-/** Redirige a /login si el usuario no está autenticado. */
+/** Redirige a / (login) si el usuario no está autenticado. */
 function PrivateRoute() {
-  return authService.isAuthenticated() ? <Outlet /> : <Navigate to="/login" replace />;
+  return authService.isAuthenticated() ? <Outlet /> : <Navigate to="/" replace />;
 }
 
 /** Redirige al dashboard si el rol no tiene acceso a la ruta. */
@@ -49,14 +49,15 @@ function AppRoutes() {
   const handleLogout = () => {
     authService.logout();
     forceUpdate((n) => n + 1);
-    navigate('/login', { replace: true });
+    navigate('/', { replace: true });
   };
 
   return (
     <Routes>
       {/* ── Rutas públicas ───────────────────────────────────────────────── */}
+      {/* Raíz = login cuando no hay sesión */}
       <Route
-        path="/login"
+        path="/"
         element={
           authService.isAuthenticated()
             ? <Navigate to="/dashboard" replace />
@@ -69,6 +70,8 @@ function AppRoutes() {
             )
         }
       />
+      {/* /login redirige a / para compatibilidad con links directos */}
+      <Route path="/login" element={<Navigate to="/" replace />} />
       <Route
         path="/register"
         element={
@@ -76,8 +79,8 @@ function AppRoutes() {
             ? <Navigate to="/dashboard" replace />
             : (
               <RegisterForm
-                onBackToLogin={() => navigate('/login')}
-                onRegisterSuccess={() => navigate('/login')}
+                onBackToLogin={() => navigate('/')}
+                onRegisterSuccess={() => navigate('/')}
               />
             )
         }
@@ -87,7 +90,7 @@ function AppRoutes() {
         element={
           authService.isAuthenticated()
             ? <Navigate to="/dashboard" replace />
-            : <ForgotPasswordForm onBackToLogin={() => navigate('/login')} />
+            : <ForgotPasswordForm onBackToLogin={() => navigate('/')} />
         }
       />
 
@@ -107,9 +110,6 @@ function AppRoutes() {
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Route>
       </Route>
-
-      {/* Raíz y cualquier ruta no reconocida fuera de las anteriores */}
-      <Route path="/" element={<Navigate to={authService.isAuthenticated() ? '/dashboard' : '/login'} replace />} />
     </Routes>
   );
 }
