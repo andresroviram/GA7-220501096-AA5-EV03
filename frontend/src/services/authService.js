@@ -55,20 +55,57 @@ const authService = {
       return data;
     }
 
-    const response = await axios.post(`${AUTH_API_URL}/login`, { correo, password });
+    try {
+      const response = await axios.post(`${AUTH_API_URL}/login`, { correo, password });
 
-    if (response.data.access_token) {
-      localStorage.setItem('token', response.data.access_token);
-      localStorage.setItem('lastLogin', new Date().toISOString());
-      localStorage.setItem('user', JSON.stringify({
-        correo: response.data.correo,
-        nombre: response.data.nombre,
-        tipo_usuario: response.data.tipo_usuario,
-        telefono: response.data.telefono ?? null,
-      }));
+      if (response.data.access_token) {
+        localStorage.setItem('token', response.data.access_token);
+        localStorage.setItem('lastLogin', new Date().toISOString());
+        localStorage.setItem('user', JSON.stringify({
+          correo: response.data.correo,
+          nombre: response.data.nombre,
+          tipo_usuario: response.data.tipo_usuario,
+          telefono: response.data.telefono ?? null,
+        }));
+      }
+
+      return response.data;
+    } catch (err) {
+      // Si el error es de red (sin backend disponible) intentar con mock local
+      if (!err.response) {
+        const user = MOCK_USERS.find(
+          (u) => u.correo === correo && u.password === password,
+        );
+        if (!user) {
+          const authErr = new Error('Credenciales incorrectas');
+          authErr.response = { status: 401 };
+          throw authErr;
+        }
+        const MOCK_PHONES = {
+          'admin@escuela.edu':          '+52 555-0100',
+          'maria.garcia@escuela.edu':   '+52 555-0102',
+          'juan.rodriguez@escuela.edu': '+52 555-0200',
+          'laura.martinez@escuela.edu': '+52 555-0106',
+        };
+        const data = {
+          access_token: 'mock-token-fallback',
+          correo: user.correo,
+          nombre: user.nombre,
+          tipo_usuario: user.tipo_usuario,
+          telefono: MOCK_PHONES[user.correo] || null,
+        };
+        localStorage.setItem('token', data.access_token);
+        localStorage.setItem('lastLogin', new Date().toISOString());
+        localStorage.setItem('user', JSON.stringify({
+          correo: data.correo,
+          nombre: data.nombre,
+          tipo_usuario: data.tipo_usuario,
+          telefono: data.telefono,
+        }));
+        return data;
+      }
+      throw err;
     }
-
-    return response.data;
   },
 
   /** Cierra la sesión eliminando todos los datos del localStorage. */
