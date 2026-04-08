@@ -207,6 +207,24 @@ function GruposHorarios() {
   const handleBuscar  = () => setBusqueda({ grupo: filtroGrupo, dia: filtroDia });
   const handleLimpiar = () => { setFiltroGrupo(''); setFiltroDia(''); setBusqueda({ grupo: '', dia: '' }); };
 
+  const handleExport = () => {
+    downloadCSV(
+      listaFiltrada,
+      [
+        { key: 'id',         label: 'ID'         },
+        { key: 'grupo',      label: 'Grupo'      },
+        { key: 'materia',    label: 'Materia'    },
+        { key: 'docente',    label: 'Docente'    },
+        { key: 'dia',        label: 'Día'        },
+        { key: 'horaInicio', label: 'Hora Inicio'},
+        { key: 'horaFin',    label: 'Hora Fin'   },
+        { key: 'aula',       label: 'Aula'       },
+        { key: 'estado',     label: 'Estado'     },
+      ],
+      `horarios-${new Date().toISOString().slice(0, 10)}.csv`
+    );
+  };
+
   const handleSave = (form) => {
     const { activo, ...rest } = form;
     const estadoManual = activo === false ? 'Inactivo' : 'Activo';
@@ -290,21 +308,7 @@ function GruposHorarios() {
                 Registrar Horario
               </Button>
             )}
-            <Button variant="secondary" onClick={() => downloadCSV(
-              listaFiltrada,
-              [
-                { key: 'id',        label: 'ID'        },
-                { key: 'grupo',     label: 'Grupo'     },
-                { key: 'materia',   label: 'Materia'   },
-                { key: 'docente',   label: 'Docente'   },
-                { key: 'dia',       label: 'Día'       },
-                { key: 'horaInicio',label: 'Hora Inicio'},
-                { key: 'horaFin',   label: 'Hora Fin'  },
-                { key: 'aula',      label: 'Aula'      },
-                { key: 'estado',    label: 'Estado'    },
-              ],
-              `horarios-${new Date().toISOString().slice(0, 10)}.csv`
-            )} leftIcon={<IconDownload />}>
+            <Button variant="secondary" onClick={handleExport} leftIcon={<IconDownload />}>
               Exportar
             </Button>
           </div>

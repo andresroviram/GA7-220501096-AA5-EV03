@@ -124,6 +124,22 @@ function Materias() {
   const handleBuscar  = () => setBusqueda({ depto: filtroDepto, estado: filtroEstado });
   const handleLimpiar = () => { setFiltroDepto(''); setFiltroEstado(''); setBusqueda({ depto: '', estado: '' }); };
 
+  const handleExport = () => {
+    downloadCSV(
+      listaFiltrada,
+      [
+        { key: 'id',           label: 'ID'           },
+        { key: 'nombre',       label: 'Materia'      },
+        { key: 'departamento', label: 'Departamento' },
+        { key: 'creditos',     label: 'Créditos'     },
+        { key: 'docente',      label: 'Docente'      },
+        { key: 'grupos',       label: 'Grupos'       },
+        { key: 'estado',       label: 'Estado'       },
+      ],
+      `materias-${new Date().toISOString().slice(0, 10)}.csv`
+    );
+  };
+
   const handleSave = (form) => {
     if (modalForm?.isCreate) {
       const id = `MAT${String(nextId++).padStart(3, '0')}`;
@@ -197,19 +213,7 @@ function Materias() {
             <Button variant="primary" onClick={() => setModalForm({ isCreate: true })} leftIcon={<IconPlus />}>
               Nueva Materia
             </Button>
-            <Button variant="secondary" onClick={() => downloadCSV(
-              listaFiltrada,
-              [
-                { key: 'id',           label: 'ID'           },
-                { key: 'nombre',       label: 'Materia'      },
-                { key: 'departamento', label: 'Departamento' },
-                { key: 'creditos',     label: 'Créditos'     },
-                { key: 'docente',      label: 'Docente'      },
-                { key: 'grupos',       label: 'Grupos'       },
-                { key: 'estado',       label: 'Estado'       },
-              ],
-              `materias-${new Date().toISOString().slice(0, 10)}.csv`
-            )} leftIcon={<IconDownload />}>
+            <Button variant="secondary" onClick={handleExport} leftIcon={<IconDownload />}>
               Exportar
             </Button>
           </div>
