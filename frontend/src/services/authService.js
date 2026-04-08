@@ -93,6 +93,8 @@ const authService = {
 
       return response.data;
     } catch (err) {
+      // Re-lanzar errores propios (ej: usuario pendiente) sin pasar por el fallback mock
+      if (err.code === 'USER_PENDING') throw err;
       // Si el error es de red (sin backend disponible) intentar con mock local
       if (!err.response) {
         const user = MOCK_USERS.find(
