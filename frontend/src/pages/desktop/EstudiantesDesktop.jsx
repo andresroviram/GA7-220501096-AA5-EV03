@@ -105,8 +105,7 @@ function AcudienteCombobox({ padres, tutor, tutorId, onChange }) {
             ×
           </button>
         )}
-      </div>
-      {open && (
+        {open && (
         <ul className="combobox-dropdown">
           {filtered.length === 0 ? (
             <li className="combobox-empty">Sin coincidencias</li>
@@ -123,7 +122,8 @@ function AcudienteCombobox({ padres, tutor, tutorId, onChange }) {
             ))
           )}
         </ul>
-      )}
+        )}
+      </div>
     </div>
   );
 }
