@@ -57,9 +57,27 @@ export class SeedService implements OnModuleInit {
         if (!this.dataSource.isInitialized) {
             await this.dataSource.initialize();
         }
+        // Seed principal (usuarios, alumnos, grupos, etc.) — solo si la BD está vacía
         const count = await this.usuarioRepo.count();
-        if (count > 0) return; // Ya hay datos, no re-sembrar
-        await this.seed();
+        if (count === 0) {
+            await this.seed();
+        } else {
+            // Seed incremental: tablas nuevas que pueden estar vacías en BD existente
+            await this.seedReportes();
+        }
+    }
+
+    private async seedReportes() {
+        const count = await this.reporteRepo.count();
+        if (count > 0) return;
+        this.logger.log('🌱 Sembrando reportes recientes...');
+        await this.reporteRepo.save([
+            { tipo: 'Calificaciones', descripcion: 'Reporte general de calificaciones',     fecha: '2025-05-20', generadoPor: 'Admin', formato: 'PDF' },
+            { tipo: 'Estudiantes',   descripcion: 'Listado de estudiantes activos',         fecha: '2025-05-18', generadoPor: 'Admin', formato: 'Excel' },
+            { tipo: 'Docentes',      descripcion: 'Historial de docentes por departamento', fecha: '2025-05-15', generadoPor: 'Admin', formato: 'PDF' },
+            { tipo: 'Asistencia',    descripcion: 'Reporte de asistencia Grupo 3A',         fecha: '2025-05-10', generadoPor: 'Admin', formato: 'PDF' },
+        ]);
+        this.logger.log('✅ Reportes sembrados.');
     }
 
     async seed() {
@@ -197,12 +215,6 @@ export class SeedService implements OnModuleInit {
             await this.permisoRepo.save(permisosSeed);
         }
 
-        /* ── Reportes recientes ── */
-        await this.reporteRepo.save([
-            { tipo: 'Calificaciones', descripcion: 'Reporte general de calificaciones',     fecha: '2025-05-20', generadoPor: 'Admin', formato: 'PDF' },
-            { tipo: 'Estudiantes',   descripcion: 'Listado de estudiantes activos',         fecha: '2025-05-18', generadoPor: 'Admin', formato: 'Excel' },
-            { tipo: 'Docentes',      descripcion: 'Historial de docentes por departamento', fecha: '2025-05-15', generadoPor: 'Admin', formato: 'PDF' },
-            { tipo: 'Asistencia',    descripcion: 'Reporte de asistencia Grupo 3A',         fecha: '2025-05-10', generadoPor: 'Admin', formato: 'PDF' },
-        ]);
+        await this.seedReportes();
     }
 }
