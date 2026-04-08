@@ -1,6 +1,6 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { User } from '../users/user.entity';
 import { Alumno } from '../alumnos/alumno.entity';
@@ -42,7 +42,6 @@ export class SeedService implements OnModuleInit {
     private readonly logger = new Logger(SeedService.name);
 
     constructor(
-        private readonly dataSource: DataSource,
         @InjectRepository(User) private readonly usuarioRepo: Repository<User>,
         @InjectRepository(Alumno) private readonly alumnoRepo: Repository<Alumno>,
         @InjectRepository(Grupo) private readonly grupoRepo: Repository<Grupo>,
@@ -79,9 +78,6 @@ export class SeedService implements OnModuleInit {
     }
 
     async onModuleInit() {
-        if (!this.dataSource.isInitialized) {
-            await this.dataSource.initialize();
-        }
         const count = await this.usuarioRepo.count();
         if (count === 0) {
             await this.seed();
