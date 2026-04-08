@@ -1444,6 +1444,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
+  min-width: 0;
+  overflow: hidden;
 }
 .sidebar-last-login-label {
   font-size: 0.7rem;
@@ -1451,11 +1453,17 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.04em;
   font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .sidebar-last-login-value {
   font-size: 0.78rem;
   color: #3C4F44;
   font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .sidebar-version {
   margin-top: auto;
