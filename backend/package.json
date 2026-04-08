@@ -9,7 +9,7 @@
     "clean": "rm -rf dist tsconfig.build.tsbuildinfo",
     "build": "npm run clean && nest build",
     "start": "nest start",
-    "start:dev": "nest start --watch",
+    "start:dev": "NODE_NO_WARNINGS=1 nest start --watch",
     "start:prod": "node dist/main"
   },
   "dependencies": {
