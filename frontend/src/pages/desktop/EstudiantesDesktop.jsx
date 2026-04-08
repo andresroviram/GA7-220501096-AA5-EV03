@@ -10,6 +10,7 @@ import * as estudiantesService from '../../services/estudiantesService';
 import { getPadres } from '../../services/estudiantesService';
 import { downloadCSV } from '../../utils/exportUtils';
 import Button from '../../components/ui/Button';
+import { useToast } from '../../components/ui/Toast';
 import InputText from '../../components/ui/InputText';
 
 import {
@@ -280,6 +281,7 @@ function EstadoBadge({ estado }) {
 let nextId = 9;
 
 function Estudiantes() {
+  const toast = useToast();
   const [lista,        setLista]        = useState([]);
   const [loading,      setLoading]      = useState(true);
   const [filtroGrupo,  setFiltroGrupo]  = useState('');
@@ -336,19 +338,46 @@ function Estudiantes() {
     setModalConfirm(null);
   };
 
-  const handleSave = (form) => {
-    if (modalForm?.isCreate) {
-      const idStr = `EST${String(nextId++).padStart(3, '0')}`;
-      const correo_padre = form.tutorCorreo ? [form.tutorCorreo] : [];
-      setLista((prev) => [...prev, { ...form, id: idStr, edad: Number(form.edad), promedio: parseFloat(form.promedio) || 0, estado: 'Activo', correo_padre }]);
-    } else {
-      setLista((prev) =>
-        prev.map((e) =>
-          e.id === modalForm.estudiante.id
-            ? { ...e, ...form, edad: Number(form.edad), promedio: parseFloat(form.promedio) || e.promedio, correo_padre: form.tutorCorreo ? [form.tutorCorreo] : e.correo_padre }
-            : e
-        )
-      );
+  const handleSave = async (form) => {
+    const [primerNombre, ...restoNombre] = (form.nombre || '').trim().split(' ');
+    const nombre   = primerNombre || '';
+    const apellido = restoNombre.join(' ') || '';
+
+    const payload = {
+      nombre,
+      apellido,
+      grupo:          form.grupo        || undefined,
+      email:          form.email        || undefined,
+      telefono:       form.telefono     || undefined,
+      direccion:      form.direccion    || undefined,
+      tutor:          form.tutor        || undefined,
+      tutor_telefono: form.tutorTelefono || undefined,
+      promedio:       form.promedio !== '' ? parseFloat(form.promedio) : undefined,
+      id_padre:       form.tutorId      ?? undefined,
+    };
+
+    try {
+      if (modalForm?.isCreate) {
+        const saved = await estudiantesService.createEstudiante({
+          ...payload,
+          fecha_nacimiento: '2000-01-01',
+          id_grupo:         1,
+        });
+        setLista((prev) => [...prev, saved]);
+        nextId++;
+        toast.success('Estudiante registrado correctamente');
+      } else {
+        const updated = await estudiantesService.updateEstudiante(
+          modalForm.estudiante.id,
+          payload,
+        );
+        setLista((prev) =>
+          prev.map((e) => (e.id === modalForm.estudiante.id ? updated : e))
+        );
+        toast.success('Estudiante actualizado correctamente');
+      }
+    } catch (err) {
+      toast.error('Error al guardar el estudiante');
     }
     setModalForm(null);
   };

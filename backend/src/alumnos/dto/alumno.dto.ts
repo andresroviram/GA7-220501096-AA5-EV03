@@ -1,5 +1,4 @@
-import { IsString, IsNotEmpty, IsInt, MaxLength, IsDateString } from 'class-validator';
-import { IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty, IsInt, MaxLength, IsDateString, IsOptional, IsNumber } from 'class-validator';
 
 export class CreateAlumnoDto {
     @IsString() @IsNotEmpty() @MaxLength(50)
@@ -13,6 +12,31 @@ export class CreateAlumnoDto {
 
     @IsInt()
     id_grupo: number;
+
+    @IsOptional() @IsString() @MaxLength(100)
+    email?: string;
+
+    @IsOptional() @IsString() @MaxLength(20)
+    telefono?: string;
+
+    @IsOptional() @IsString() @MaxLength(200)
+    direccion?: string;
+
+    @IsOptional() @IsString() @MaxLength(100)
+    tutor?: string;
+
+    @IsOptional() @IsString() @MaxLength(20)
+    tutor_telefono?: string;
+
+    @IsOptional() @IsNumber()
+    promedio?: number;
+
+    @IsOptional() @IsString() @MaxLength(20)
+    estado?: string;
+
+    /** ID del usuario padre/acudiente para crear la relación en relacion_padres */
+    @IsOptional() @IsInt()
+    id_padre?: number;
 }
 
 export class UpdateAlumnoDto {
@@ -27,4 +51,33 @@ export class UpdateAlumnoDto {
 
     @IsOptional() @IsInt()
     id_grupo?: number;
+
+    /** Nombre del grupo (ej: "3A"). El servicio resuelve el id_grupo correspondiente. */
+    @IsOptional() @IsString() @MaxLength(20)
+    grupo?: string;
+
+    @IsOptional() @IsString() @MaxLength(100)
+    email?: string;
+
+    @IsOptional() @IsString() @MaxLength(20)
+    telefono?: string;
+
+    @IsOptional() @IsString() @MaxLength(200)
+    direccion?: string;
+
+    @IsOptional() @IsString() @MaxLength(100)
+    tutor?: string;
+
+    @IsOptional() @IsString() @MaxLength(20)
+    tutor_telefono?: string;
+
+    @IsOptional() @IsNumber()
+    promedio?: number;
+
+    @IsOptional() @IsString() @MaxLength(20)
+    estado?: string;
+
+    /** ID del usuario padre/acudiente. null para eliminar la relación. */
+    @IsOptional() @IsInt()
+    id_padre?: number;
 }
