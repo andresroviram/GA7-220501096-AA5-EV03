@@ -7,13 +7,11 @@ import InputText from './ui/InputText';
 import InputPassword from './ui/InputPassword';
 import Checkbox from './ui/Checkbox';
 
-const DEMO_USERS = import.meta.env.VITE_USE_MOCK === 'true'
-  ? [
-      { label: 'Administrador', correo: 'admin@escuela.edu',             password: 'Admin123!',   color: '#2A9D6F' },
-      { label: 'Docente',       correo: 'maria.garcia@escuela.edu',      password: 'Docente123!', color: '#1976D2' },
-      { label: 'Padre / Acudiente', correo: 'juan.rodriguez@escuela.edu',   password: 'Padre123!',   color: '#7B1FA2' },
-    ]
-  : [];
+const DEMO_USERS = [
+  { label: 'Administrador',     correo: 'admin@escuela.edu',          password: 'Admin123!',   color: '#2A9D6F' },
+  { label: 'Docente',           correo: 'maria.garcia@escuela.edu',   password: 'Docente123!', color: '#1976D2' },
+  { label: 'Padre / Acudiente', correo: 'juan.rodriguez@escuela.edu', password: 'Padre123!',   color: '#7B1FA2' },
+];
 
 function LoginForm({ onLoginSuccess, onShowRegister, onShowForgot }) {
   const navigate                        = useNavigate();
