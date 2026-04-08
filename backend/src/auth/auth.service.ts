@@ -7,7 +7,7 @@ import * as crypto from 'crypto';
 import { UsersService } from '../users/users.service';
 import { AutenticacionLog } from '../auth-log/autenticacion-log.entity';
 import { LoginDto } from './dto/login.dto';
-import { CreateUsuarioDto } from '../users/dto/usuario.dto';
+import { RegisterDto } from './dto/register.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { User } from '../users/user.entity';
@@ -72,8 +72,19 @@ export class AuthService {
         };
     }
 
-    async register(dto: CreateUsuarioDto) {
-        return this.usersService.createUser(dto);
+    async register(dto: RegisterDto) {
+        const parts = dto.fullName.trim().split(/\s+/);
+        const nombre = parts[0];
+        const apellido = parts.length > 1 ? parts.slice(1).join(' ') : parts[0];
+
+        return this.usersService.createUser({
+            nombre,
+            apellido,
+            correo: dto.username,
+            password: dto.password,
+            tipo_usuario: 'pendiente' as any,
+            cedula: dto.identification,
+        } as any);
     }
 
     /**
