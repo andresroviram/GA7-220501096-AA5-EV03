@@ -79,8 +79,8 @@ y reportes, con soporte de modo claro/oscuro y sidebar colapsable.
 ### 1. Clonar el repositorio
 
 ```bash
-git clone <url-del-repositorio>
-cd "Diseño y Desarrollo de servicios web - caso GA7-220501096-AA5-EV03"
+git clone https://github.com/andresroviram/GA7-220501096-AA5-EV03.git
+cd GA7-220501096-AA5-EV03
 ```
 
 ### 2. Backend (NestJS)
