@@ -143,7 +143,7 @@ Sembradas automáticamente por el SeedService al arrancar el backend por primera
 | `admin@escuela.edu`             | `Admin123!`  | Administrativo   |
 | `maria.garcia@escuela.edu`      | `Docente123!`| Docente          |
 | `laura.martinez@escuela.edu`    | `Docente123!`| Docente          |
-| `juan.rodriguez@escuela.edu`    | `Padre123!`  | Padre / Tutor    |
+| `juan.rodriguez@escuela.edu`    | `Padre123!`  | Padre / Acudiente|
 
 ---
 
@@ -203,12 +203,12 @@ Consultar la documentación completa en **http://localhost:3000/api**
 Usuario        Frontend (React)         Backend (NestJS)       Base de datos
   |                  |                        |                      |
   |--- correo/pass-->|                        |                      |
-  |                  |-- POST /auth/login ---->|                      |
-  |                  |                        |-- findByCorreo() ---->|
-  |                  |                        |<-- user + hash -------|
-  |                  |                        |-- bcrypt.compare()    |
-  |                  |                        |-- log intento ------->|
-  |                  |<---- JWT + perfil ------|                      |
+  |                  |-- POST /auth/login --->|                      |
+  |                  |                        |-- findByCorreo() --->|
+  |                  |                        |<-- user + hash ------|
+  |                  |                        |-- bcrypt.compare()   |
+  |                  |                        |-- log intento ------>|
+  |                  |<---- JWT + perfil -----|                      |
   |<-- Dashboard ----|                        |                      |
 ```
 
