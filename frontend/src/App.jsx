@@ -22,6 +22,8 @@ import GruposHorarios from './pages/GruposHorarios';
 import Materias from './pages/Materias';
 import Reportes from './pages/Reportes';
 import Configuraciones from './pages/Configuraciones';
+import PendingScreen from './components/PendingScreen';
+import Roles from './pages/Roles';
 import authService from './services/authService';
 import { canAccess } from './utils/permissions';
 import { ToastProvider } from './components/ui/Toast';
@@ -100,6 +102,10 @@ function AppRoutes() {
             : <ForgotPasswordForm onBackToLogin={() => navigate('/login')} />
         }
       />
+      <Route
+        path="/pendiente"
+        element={<PendingScreen onBackToLogin={() => navigate('/login')} />}
+      />
 
       {/* ── Rutas protegidas (requieren sesión activa) ────────────────────── */}
       <Route element={<PrivateRoute />}>
@@ -112,6 +118,7 @@ function AppRoutes() {
           <Route path="/calificaciones"  element={<PermissionRoute route="calificaciones"><Calificaciones /></PermissionRoute>} />
           <Route path="/reportes"        element={<PermissionRoute route="reportes"><Reportes /></PermissionRoute>} />
           <Route path="/configuraciones" element={<PermissionRoute route="configuraciones"><Configuraciones /></PermissionRoute>} />
+          <Route path="/roles"        element={<PermissionRoute route="roles"><Roles /></PermissionRoute>} />
           {/* Ruta desconocida dentro de la app → dashboard */}
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Route>

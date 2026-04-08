@@ -16,6 +16,7 @@ const MOCK_USERS = [
   { correo: 'maria.garcia@escuela.edu',    password: 'Docente123!', nombre: 'María García',      tipo_usuario: 'docente' },
   { correo: 'juan.rodriguez@escuela.edu',  password: 'Padre123!',   nombre: 'Juan Rodríguez',    tipo_usuario: 'padre' },
   { correo: 'laura.martinez@escuela.edu',  password: 'Docente123!', nombre: 'Laura Martínez',    tipo_usuario: 'docente' },
+  { correo: 'pendiente@escuela.edu',       password: 'Pendiente123!', nombre: 'Ana Pendiente',   tipo_usuario: 'pendiente' },
 ];
 
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true';
@@ -68,12 +69,23 @@ const authService = {
         tipo_usuario: user.tipo_usuario,
         telefono: MOCK_PHONES[user.correo] || null,
       };
+      if (data.tipo_usuario === 'pendiente') {
+        const pendingErr = new Error('Usuario pendiente de activación');
+        pendingErr.code = 'USER_PENDING';
+        throw pendingErr;
+      }
       saveSession(data, remember);
       return data;
     }
 
     try {
       const response = await axios.post(`${AUTH_API_URL}/login`, { correo, password });
+
+      if (response.data.tipo_usuario === 'pendiente') {
+        const pendingErr = new Error('Usuario pendiente de activación');
+        pendingErr.code = 'USER_PENDING';
+        throw pendingErr;
+      }
 
       if (response.data.access_token) {
         saveSession(response.data, remember);
@@ -104,6 +116,11 @@ const authService = {
           tipo_usuario: user.tipo_usuario,
           telefono: MOCK_PHONES[user.correo] || null,
         };
+        if (data.tipo_usuario === 'pendiente') {
+          const pendingErr = new Error('Usuario pendiente de activación');
+          pendingErr.code = 'USER_PENDING';
+          throw pendingErr;
+        }
         saveSession(data, remember);
         return data;
       }

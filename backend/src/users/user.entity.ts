@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
 
-export type TipoUsuario = 'administrativo' | 'docente' | 'padre';
+export type TipoUsuario = 'administrativo' | 'docente' | 'padre' | 'pendiente';
 
 /**
  * Entidad User — tabla 'usuario' según el modelo de datos del sistema.
@@ -26,8 +26,8 @@ export class User {
 
     @Column({
         type: 'enum',
-        enum: ['administrativo', 'docente', 'padre'],
-        default: 'administrativo',
+        enum: ['administrativo', 'docente', 'padre', 'pendiente'],
+        default: 'pendiente',
     })
     tipo_usuario: TipoUsuario;
 

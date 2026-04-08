@@ -5,7 +5,7 @@ import { canAccess } from '../utils/permissions';
 import { useTheme } from '../hooks/useTheme';
 import {
   IconGrid, IconGradCap, IconUsers,
-  IconCheckSquare, IconBarChart, IconSettings, IconCalendar,
+  IconCheckSquare, IconBarChart, IconSettings, IconCalendar, IconShield,
   IconMenu, IconSun, IconMoon, IconBell, IconLogOut, IconUser,
 } from '../components/Icons';
 
@@ -18,6 +18,7 @@ const pageTitles = {
   '/calificaciones':  'Calificaciones',
   '/reportes':        'Reportes',
   '/configuraciones': 'Configuraciones',
+  '/roles':           'Roles de Usuario',
 };
 
 // Los primeros 5 aparecen en el bottom nav (prioridad: accesos rápidos del dashboard)
@@ -30,6 +31,7 @@ const allNavItems = [
   // Solo en drawer:
   { to: '/grupos',          route: 'grupos',          label: 'Grupos',   icon: <IconCalendar /> },
   { to: '/configuraciones', route: 'configuraciones', label: 'Config',   icon: <IconSettings /> },
+  { to: '/roles',           route: 'roles',           label: 'Roles',    icon: <IconShield /> },
 ];
 
 /**

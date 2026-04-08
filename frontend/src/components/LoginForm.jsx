@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import authService from '../services/authService';
 import { IconAlertTriangle } from './Icons';
 import Button from './ui/Button';
@@ -15,6 +16,7 @@ const DEMO_USERS = import.meta.env.VITE_USE_MOCK === 'true'
   : [];
 
 function LoginForm({ onLoginSuccess, onShowRegister, onShowForgot }) {
+  const navigate                        = useNavigate();
   const [correo, setCorreo]             = useState('');
   const [password, setPassword]         = useState('');
   const [remember, setRemember]         = useState(false);
@@ -37,6 +39,10 @@ function LoginForm({ onLoginSuccess, onShowRegister, onShowForgot }) {
       await authService.login(correo, password, remember);
       onLoginSuccess();
     } catch (err) {
+      if (err.code === 'USER_PENDING') {
+        navigate('/pendiente', { replace: true });
+        return;
+      }
       if (err.response?.status === 401) {
         setFieldErrors({ password: 'Contraseña incorrecta' });
       } else if (err.response?.status === 400) {

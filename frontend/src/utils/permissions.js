@@ -6,7 +6,7 @@
 export const ROLE_PERMISSIONS = {
   administrativo: [
     'dashboard', 'estudiantes', 'docentes', 'grupos',
-    'materias', 'calificaciones', 'reportes', 'configuraciones',
+    'materias', 'calificaciones', 'reportes', 'configuraciones', 'roles',
   ],
   docente: [
     'dashboard', 'estudiantes', 'grupos',

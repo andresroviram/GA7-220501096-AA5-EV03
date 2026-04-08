@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   IconGrid, IconGradCap, IconUsers, IconCalendar,
-  IconBook, IconCheckSquare, IconBarChart, IconSettings, IconSchool,
+  IconBook, IconCheckSquare, IconBarChart, IconSettings, IconSchool, IconShield,
 } from './Icons';
 import authService from '../services/authService';
 import { canAccess } from '../utils/permissions';
@@ -18,6 +18,7 @@ const navItems = [
   { to: '/calificaciones',  route: 'calificaciones',  label: 'Calificaciones',    icon: <IconCheckSquare /> },
   { to: '/reportes',        route: 'reportes',        label: 'Reportes',          icon: <IconBarChart /> },
   { to: '/configuraciones', route: 'configuraciones', label: 'Configuraciones',   icon: <IconSettings /> },
+  { to: '/roles',           route: 'roles',           label: 'Roles',             icon: <IconShield /> },
 ];
 
 function Sidebar({ collapsed = false }) {

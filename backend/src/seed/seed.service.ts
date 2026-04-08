@@ -19,7 +19,7 @@ import { Reporte } from '../reportes/reporte.entity';
  */
 const DEMO_USERS: Array<{
     nombre: string; apellido: string; correo: string; telefono: string;
-    password: string; tipo_usuario: 'administrativo' | 'docente' | 'padre';
+    password: string; tipo_usuario: 'administrativo' | 'docente' | 'padre' | 'pendiente';
     cedula?: string; departamento?: string; fecha_ingreso?: string;
 }> = [
         { nombre: 'Carlos', apellido: 'Admin', correo: 'admin@escuela.edu', telefono: '+52 555-0100', password: 'Admin123!', tipo_usuario: 'administrativo' },
@@ -32,6 +32,8 @@ const DEMO_USERS: Array<{
         { nombre: 'Laura', apellido: 'Torres', correo: 'laura.torres@escuela.edu', telefono: '+52 555-0106', password: 'Docente123!', tipo_usuario: 'docente', cedula: '67890123', departamento: 'Matemáticas', fecha_ingreso: '2020-11-05' },
         // Padre de familia
         { nombre: 'Juan', apellido: 'Rodríguez', correo: 'juan.rodriguez@escuela.edu', telefono: '+52 555-0200', password: 'Padre123!', tipo_usuario: 'padre' },
+        // Usuario sin rol asignado — para probar el flujo de pendiente
+        { nombre: 'Ana', apellido: 'Pendiente', correo: 'pendiente@escuela.edu', telefono: '', password: 'Pendiente123!', tipo_usuario: 'pendiente' },
     ];
 
 @Injectable()
