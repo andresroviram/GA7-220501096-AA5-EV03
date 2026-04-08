@@ -8,6 +8,10 @@ import authService from '../services/authService';
 import { canAccess } from '../utils/permissions';
 import * as configService from '../services/configService';
 
+function ShimmerInline({ width, height = 12, style = {} }) {
+  return <div className="shimmer-box" style={{ width, height, borderRadius: 4, ...style }} />;
+}
+
 
 const navItems = [
   { to: '/dashboard',       route: 'dashboard',       label: 'Dashboard',         icon: <IconGrid /> },
@@ -26,11 +30,11 @@ function Sidebar({ collapsed = false }) {
   const role        = user?.tipo_usuario ?? '';
   const visibleItems = navItems.filter((item) => canAccess(role, item.route));
 
-  const [institucion, setInstitucion] = useState('Sistema Integral');
+  const [institucion, setInstitucion] = useState(null);
   useEffect(() => {
     configService.getParams()
-      .then((p) => { if (p?.institucion) setInstitucion(p.institucion); })
-      .catch(() => {});
+      .then((p) => { setInstitucion(p?.institucion || 'Sistema Integral'); })
+      .catch(() => { setInstitucion('Sistema Integral'); });
   }, []);
 
   const lastLoginRaw = localStorage.getItem('lastLogin') ?? sessionStorage.getItem('lastLogin');
@@ -48,8 +52,18 @@ function Sidebar({ collapsed = false }) {
         <div className="sidebar-brand-icon"><IconSchool /></div>
         {!collapsed && (
           <div>
-            <p className="sidebar-brand-name">{institucion}</p>
-            <p className="sidebar-brand-sub">Sistema Integral Académico</p>
+            {institucion === null
+              ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  <ShimmerInline width={120} height={13} />
+                  <ShimmerInline width={90} height={10} />
+                </div>
+              ) : (
+                <>
+                  <p className="sidebar-brand-name">{institucion}</p>
+                  <p className="sidebar-brand-sub">Sistema Integral Académico</p>
+                </>
+              )}
           </div>
         )}
       </div>
