@@ -52,32 +52,44 @@ export class SeedService implements OnModuleInit {
         @InjectRepository(Reporte) private readonly reporteRepo: Repository<Reporte>,
     ) { }
 
+    /**
+     * Registro incremental: cada entrada es una tabla independiente.
+     * Al arrancar, si la tabla está vacía se siembra automáticamente.
+     * Para agregar datos nuevos a futuro: solo agregar una entrada aquí.
+     */
+    private get incrementalSeeds(): Array<{ repo: Repository<any>; name: string; data: any[] }> {
+        return [
+            {
+                repo: this.reporteRepo,
+                name: 'reportes',
+                data: [
+                    { tipo: 'Calificaciones', descripcion: 'Reporte general de calificaciones', fecha: '2025-05-20', generadoPor: 'Admin', formato: 'PDF' },
+                    { tipo: 'Estudiantes', descripcion: 'Listado de estudiantes activos', fecha: '2025-05-18', generadoPor: 'Admin', formato: 'Excel' },
+                    { tipo: 'Docentes', descripcion: 'Historial de docentes por departamento', fecha: '2025-05-15', generadoPor: 'Admin', formato: 'PDF' },
+                    { tipo: 'Asistencia', descripcion: 'Reporte de asistencia Grupo 3A', fecha: '2025-05-10', generadoPor: 'Admin', formato: 'PDF' },
+                ],
+            },
+            // ── Agrega aquí nuevas tablas sin tocar ningún otro método ──
+            // { repo: this.otraRepo, name: 'otra', data: [...] },
+        ];
+    }
+
     async onModuleInit() {
-        // Espera a que TypeORM haya sincronizado el esquema antes de consultar
         if (!this.dataSource.isInitialized) {
             await this.dataSource.initialize();
         }
-        // Seed principal (usuarios, alumnos, grupos, etc.) — solo si la BD está vacía
         const count = await this.usuarioRepo.count();
         if (count === 0) {
             await this.seed();
-        } else {
-            // Seed incremental: tablas nuevas que pueden estar vacías en BD existente
-            await this.seedReportes();
         }
-    }
-
-    private async seedReportes() {
-        const count = await this.reporteRepo.count();
-        if (count > 0) return;
-        this.logger.log('🌱 Sembrando reportes recientes...');
-        await this.reporteRepo.save([
-            { tipo: 'Calificaciones', descripcion: 'Reporte general de calificaciones',     fecha: '2025-05-20', generadoPor: 'Admin', formato: 'PDF' },
-            { tipo: 'Estudiantes',   descripcion: 'Listado de estudiantes activos',         fecha: '2025-05-18', generadoPor: 'Admin', formato: 'Excel' },
-            { tipo: 'Docentes',      descripcion: 'Historial de docentes por departamento', fecha: '2025-05-15', generadoPor: 'Admin', formato: 'PDF' },
-            { tipo: 'Asistencia',    descripcion: 'Reporte de asistencia Grupo 3A',         fecha: '2025-05-10', generadoPor: 'Admin', formato: 'PDF' },
-        ]);
-        this.logger.log('✅ Reportes sembrados.');
+        // Siempre corre el seed incremental: rellena tablas vacías sin tocar las que ya tienen datos
+        for (const { repo, name, data } of this.incrementalSeeds) {
+            if ((await repo.count()) === 0) {
+                this.logger.log(`🌱 Sembrando ${name}...`);
+                await repo.save(data);
+                this.logger.log(`✅ ${name} sembrado.`);
+            }
+        }
     }
 
     async seed() {

@@ -4,8 +4,8 @@ import authService from '../services/authService';
 import { canAccess } from '../utils/permissions';
 import { useTheme } from '../hooks/useTheme';
 import {
-  IconGrid, IconGradCap, IconUsers, IconCalendar,
-  IconBook, IconCheckSquare, IconBarChart, IconSettings,
+  IconGrid, IconGradCap, IconUsers,
+  IconCheckSquare, IconBarChart, IconSettings, IconCalendar,
   IconMenu, IconSun, IconMoon, IconBell, IconLogOut, IconUser,
 } from '../components/Icons';
 
@@ -20,15 +20,16 @@ const pageTitles = {
   '/configuraciones': 'Configuraciones',
 };
 
+// Los primeros 5 aparecen en el bottom nav (prioridad: accesos rápidos del dashboard)
 const allNavItems = [
-  { to: '/dashboard',       route: 'dashboard',       label: 'Inicio',         icon: <IconGrid /> },
-  { to: '/estudiantes',     route: 'estudiantes',     label: 'Alumnos',        icon: <IconGradCap /> },
-  { to: '/docentes',        route: 'docentes',        label: 'Docentes',       icon: <IconUsers /> },
-  { to: '/grupos',          route: 'grupos',          label: 'Grupos',         icon: <IconCalendar /> },
-  { to: '/materias',        route: 'materias',        label: 'Materias',       icon: <IconBook /> },
-  { to: '/calificaciones',  route: 'calificaciones',  label: 'Notas',          icon: <IconCheckSquare /> },
-  { to: '/reportes',        route: 'reportes',        label: 'Reportes',       icon: <IconBarChart /> },
-  { to: '/configuraciones', route: 'configuraciones', label: 'Config',         icon: <IconSettings /> },
+  { to: '/dashboard',       route: 'dashboard',       label: 'Inicio',   icon: <IconGrid /> },
+  { to: '/estudiantes',     route: 'estudiantes',     label: 'Alumnos',  icon: <IconGradCap /> },
+  { to: '/docentes',        route: 'docentes',        label: 'Docentes', icon: <IconUsers /> },
+  { to: '/calificaciones',  route: 'calificaciones',  label: 'Notas',    icon: <IconCheckSquare /> },
+  { to: '/reportes',        route: 'reportes',        label: 'Reportes', icon: <IconBarChart /> },
+  // Solo en drawer:
+  { to: '/grupos',          route: 'grupos',          label: 'Grupos',   icon: <IconCalendar /> },
+  { to: '/configuraciones', route: 'configuraciones', label: 'Config',   icon: <IconSettings /> },
 ];
 
 /**
