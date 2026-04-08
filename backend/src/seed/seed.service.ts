@@ -131,14 +131,14 @@ export class SeedService implements OnModuleInit {
 
         /* ── Alumnos (idénticos al mockEstudiantes) ── */
         await this.alumnoRepo.save([
-            { nombre: 'Ana', apellido: 'García Rodríguez', fecha_nacimiento: '2009-03-15', id_grupo: g3A.id_grupo, email: 'ana.garcia@estudiante.edu', telefono: '+52 555-1001', direccion: 'Calle Principal 123, Col. Centro', tutor: 'María Rodríguez', tutor_telefono: '+52 555-1002', promedio: 9.8, estado: 'Activo' },
-            { nombre: 'Carlos', apellido: 'López Martínez', fecha_nacimiento: '2010-05-10', id_grupo: g2B.id_grupo, email: 'carlos.lopez@estudiante.edu', telefono: '+52 555-1003', direccion: 'Av. Reforma 456, Col. Juárez', tutor: 'José López', tutor_telefono: '+52 555-1004', promedio: 9.6, estado: 'Activo' },
-            { nombre: 'María', apellido: 'Rodríguez Silva', fecha_nacimiento: '2009-07-22', id_grupo: g3A.id_grupo, email: 'maria.rodriguez@estudiante.edu', telefono: '+52 555-1005', direccion: 'Calle Juárez 789, Col. Roma', tutor: 'Carmen Silva', tutor_telefono: '+52 555-1006', promedio: 9.5, estado: 'Activo' },
-            { nombre: 'Juan', apellido: 'Pérez González', fecha_nacimiento: '2011-01-18', id_grupo: g1C.id_grupo, email: 'juan.perez@estudiante.edu', telefono: '+52 555-1007', direccion: 'Calle Morelos 321, Col. Polanco', tutor: 'Ana González', tutor_telefono: '+52 555-1008', promedio: 9.3, estado: 'Activo' },
-            { nombre: 'Laura', apellido: 'Martínez Torres', fecha_nacimiento: '2010-09-30', id_grupo: g2A.id_grupo, email: 'laura.martinez@estudiante.edu', telefono: '+52 555-1009', direccion: 'Av. Hidalgo 654, Col. Narvarte', tutor: 'Roberto Torres', tutor_telefono: '+52 555-1010', promedio: 9.2, estado: 'Activo' },
-            { nombre: 'Pedro', apellido: 'Sánchez Ruiz', fecha_nacimiento: '2011-04-12', id_grupo: g1A.id_grupo, email: 'pedro.sanchez@estudiante.edu', telefono: '+52 555-1011', direccion: 'Calle Allende 987, Col. Del Valle', tutor: 'Elena Ruiz', tutor_telefono: '+52 555-1012', promedio: 8.5, estado: 'Activo' },
-            { nombre: 'Sofía', apellido: 'Torres Mendoza', fecha_nacimiento: '2010-11-05', id_grupo: g2B.id_grupo, email: 'sofia.torres@estudiante.edu', telefono: '+52 555-1013', direccion: 'Av. Constitución 147, Col. Obrera', tutor: 'Miguel Mendoza', tutor_telefono: '+52 555-1014', promedio: 8.8, estado: 'Activo' },
-            { nombre: 'Diego', apellido: 'Morales Castro', fecha_nacimiento: '2009-06-25', id_grupo: g3A.id_grupo, email: 'diego.morales@estudiante.edu', telefono: '+52 555-1015', direccion: 'Calle Independencia 258, Col. Sur', tutor: 'Patricia Castro', tutor_telefono: '+52 555-1016', promedio: 8.2, estado: 'Suspendido' },
+            { nombre: 'Ana', apellido: 'García Rodríguez', fecha_nacimiento: '2009-03-15', id_grupo: g3A.id_grupo, email: 'ana.garcia@estudiante.edu', telefono: '+52 555-1001', direccion: 'Calle Principal 123, Col. Centro', tutor: 'Juan Rodríguez', tutor_telefono: '+52 555-0200', promedio: 9.8, estado: 'Activo' },
+            { nombre: 'Carlos', apellido: 'López Martínez', fecha_nacimiento: '2010-05-10', id_grupo: g2B.id_grupo, email: 'carlos.lopez@estudiante.edu', telefono: '+52 555-1003', direccion: 'Av. Reforma 456, Col. Juárez', tutor: 'Juan Rodríguez', tutor_telefono: '+52 555-0200', promedio: 9.6, estado: 'Activo' },
+            { nombre: 'María', apellido: 'Rodríguez Silva', fecha_nacimiento: '2009-07-22', id_grupo: g3A.id_grupo, email: 'maria.rodriguez@estudiante.edu', telefono: '+52 555-1005', direccion: 'Calle Juárez 789, Col. Roma', tutor: 'Juan Rodríguez', tutor_telefono: '+52 555-0200', promedio: 9.5, estado: 'Activo' },
+            { nombre: 'Juan', apellido: 'Pérez González', fecha_nacimiento: '2011-01-18', id_grupo: g1C.id_grupo, email: 'juan.perez@estudiante.edu', telefono: '+52 555-1007', direccion: 'Calle Morelos 321, Col. Polanco', tutor: 'Juan Rodríguez', tutor_telefono: '+52 555-0200', promedio: 9.3, estado: 'Activo' },
+            { nombre: 'Laura', apellido: 'Martínez Torres', fecha_nacimiento: '2010-09-30', id_grupo: g2A.id_grupo, email: 'laura.martinez@estudiante.edu', telefono: '+52 555-1009', direccion: 'Av. Hidalgo 654, Col. Narvarte', tutor: 'Juan Rodríguez', tutor_telefono: '+52 555-0200', promedio: 9.2, estado: 'Activo' },
+            { nombre: 'Pedro', apellido: 'Sánchez Ruiz', fecha_nacimiento: '2011-04-12', id_grupo: g1A.id_grupo, email: 'pedro.sanchez@estudiante.edu', telefono: '+52 555-1011', direccion: 'Calle Allende 987, Col. Del Valle', tutor: 'Juan Rodríguez', tutor_telefono: '+52 555-0200', promedio: 8.5, estado: 'Activo' },
+            { nombre: 'Sofía', apellido: 'Torres Mendoza', fecha_nacimiento: '2010-11-05', id_grupo: g2B.id_grupo, email: 'sofia.torres@estudiante.edu', telefono: '+52 555-1013', direccion: 'Av. Constitución 147, Col. Obrera', tutor: 'Juan Rodríguez', tutor_telefono: '+52 555-0200', promedio: 8.8, estado: 'Activo' },
+            { nombre: 'Diego', apellido: 'Morales Castro', fecha_nacimiento: '2009-06-25', id_grupo: g3A.id_grupo, email: 'diego.morales@estudiante.edu', telefono: '+52 555-1015', direccion: 'Calle Independencia 258, Col. Sur', tutor: 'Juan Rodríguez', tutor_telefono: '+52 555-0200', promedio: 8.2, estado: 'Suspendido' },
         ]);
 
         /* ── Materias (idénticas al mockMaterias) ── */
@@ -241,16 +241,15 @@ export class SeedService implements OnModuleInit {
         if ((await this.relacionPadresRepo.count()) > 0) return;
 
         const padre = await this.usuarioRepo.findOne({ where: { correo: 'juan.rodriguez@escuela.edu' } });
-        const ana = await this.alumnoRepo.findOne({ where: { email: 'ana.garcia@estudiante.edu' } });
-        const juan = await this.alumnoRepo.findOne({ where: { email: 'juan.perez@estudiante.edu' } });
+        if (!padre) return;
 
-        if (!padre || !ana || !juan) return;
+        const alumnos = await this.alumnoRepo.find();
+        if (alumnos.length === 0) return;
 
         this.logger.log('🌱 Sembrando relacion_padres...');
-        await this.relacionPadresRepo.save([
-            { id_padre: padre.id, id_alumno: ana.id_alumno, parentesco: 'padre' },
-            { id_padre: padre.id, id_alumno: juan.id_alumno, parentesco: 'padre' },
-        ]);
+        await this.relacionPadresRepo.save(
+            alumnos.map((a) => ({ id_padre: padre.id, id_alumno: a.id_alumno, parentesco: 'padre' }))
+        );
         this.logger.log('✅ relacion_padres sembrado.');
     }
 }
