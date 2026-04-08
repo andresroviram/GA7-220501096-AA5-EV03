@@ -12,14 +12,16 @@
       segmentCount = 1  →  /nombre-repo/
     -->
     <script>
+      // HashRouter: redirige /repo/ruta → /repo/#/ruta
       var segmentCount = 1;
       var l = window.location;
+      var base = l.pathname.split('/').slice(0, 1 + segmentCount).join('/');
+      var rest = l.pathname.slice(1).split('/').slice(segmentCount).join('/');
       l.replace(
         l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-        l.pathname.split('/').slice(0, 1 + segmentCount).join('/') + '/?/' +
-        l.pathname.slice(1).split('/').slice(segmentCount).join('/').replace(/&/g, '~and~') +
-        (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-        l.hash
+        base + '/#/' + rest +
+        (l.search ? l.search : '') +
+        (l.hash && l.hash !== '#/' + rest ? l.hash : '')
       );
     </script>
   </head>
