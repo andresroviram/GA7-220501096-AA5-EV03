@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getRoles } from '../../services/rolesService';
+import { getRoles, updateRolPermisos } from '../../services/rolesService';
 import { mockUsuariosPendientes } from '../../data/mockUsuariosPendientes';
 import api from '../../services/api';
 import {
@@ -18,6 +18,7 @@ export default function RolesDesktop() {
   const [pendientes, setPendientes]         = useState([]);
   const [loading, setLoading]               = useState(true);
   const [editRol, setEditRol]               = useState(null);   // rol en edición
+  const [savingPermisos, setSavingPermisos]  = useState(false);
   const [showNuevoRol, setShowNuevoRol]     = useState(false);
   const [nuevoRol, setNuevoRol]             = useState({ nombre: '', descripcion: '', permisos: MODULOS.reduce((a, m) => ({ ...a, [m]: false }), {}) });
   const [asignando, setAsignando]           = useState(null);    // { id, nombre, correo }
@@ -42,10 +43,18 @@ export default function RolesDesktop() {
   };
 
   /* ── Editar permisos de un rol ── */
-  const handleSaveEditRol = () => {
-    setRoles((prev) => prev.map((r) => r.id === editRol.id ? editRol : r));
-    setEditRol(null);
-    showToast('Permisos actualizados correctamente');
+  const handleSaveEditRol = async () => {
+    setSavingPermisos(true);
+    try {
+      const updated = await updateRolPermisos(editRol.id, editRol.permisos);
+      setRoles((prev) => prev.map((r) => r.id === editRol.id ? (updated ?? editRol) : r));
+      setEditRol(null);
+      showToast('Permisos actualizados correctamente');
+    } catch {
+      showToast('Error al guardar los permisos', 'error');
+    } finally {
+      setSavingPermisos(false);
+    }
   };
 
   /* ── Crear nuevo rol ── */
@@ -216,8 +225,8 @@ export default function RolesDesktop() {
               </div>
             </div>
             <div className="modal-footer">
-              <button className="btn btn--secondary" onClick={() => setEditRol(null)}>Cancelar</button>
-              <button className="btn btn--primary" onClick={handleSaveEditRol}>Guardar cambios</button>
+              <button className="btn btn--secondary" onClick={() => setEditRol(null)} disabled={savingPermisos}>Cancelar</button>
+              <button className="btn btn--primary" onClick={handleSaveEditRol} disabled={savingPermisos}>{savingPermisos ? 'Guardando…' : 'Guardar cambios'}</button>
             </div>
           </div>
         </div>
