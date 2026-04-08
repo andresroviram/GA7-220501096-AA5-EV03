@@ -6,6 +6,7 @@ import {
 } from '../../data/mockMaterias';
 import { docentes as DOCENTES_LIST_RAW } from '../../data/mockDocentes';
 import * as materiasService from '../../services/materiasService';
+import { downloadCSV } from '../../utils/exportUtils';
 import Button from '../../components/ui/Button';
 import InputText from '../../components/ui/InputText';
 
@@ -14,7 +15,7 @@ const GRUPOS   = ['1A', '1B', '1C', '2A', '2B', '2C', '3A', '3B'];
 
 import {
   IconEdit, IconCoffee as IconToggle, IconPlus, IconSearch, IconClose,
-  IconCheck, IconXMark, IconBook, IconBarChart,
+  IconCheck, IconXMark, IconBook, IconBarChart, IconDownload,
 } from '../../components/Icons';
 
 /* ─── Modal Materia ── */
@@ -193,6 +194,21 @@ function Materias() {
         <div className="table-header">
           <h3 className="table-title">Catálogo de Materias</h3>
           <div className="table-header-actions">
+            <Button variant="secondary" onClick={() => downloadCSV(
+              listaFiltrada,
+              [
+                { key: 'id',           label: 'ID'           },
+                { key: 'nombre',       label: 'Materia'      },
+                { key: 'departamento', label: 'Departamento' },
+                { key: 'creditos',     label: 'Créditos'     },
+                { key: 'docente',      label: 'Docente'      },
+                { key: 'grupos',       label: 'Grupos'       },
+                { key: 'estado',       label: 'Estado'       },
+              ],
+              `materias-${new Date().toISOString().slice(0, 10)}.csv`
+            )} leftIcon={<IconDownload />}>
+              Exportar
+            </Button>
             <Button variant="primary" onClick={() => setModalForm({ isCreate: true })} leftIcon={<IconPlus />}>
               Nueva Materia
             </Button>

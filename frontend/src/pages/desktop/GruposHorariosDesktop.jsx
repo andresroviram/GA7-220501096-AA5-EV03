@@ -11,11 +11,12 @@ import {
 import { materias as MATERIAS_LIST_RAW } from '../../data/mockMaterias';
 import { docentes as DOCENTES_LIST_RAW } from '../../data/mockDocentes';
 import * as gruposService from '../../services/gruposService';
+import { downloadCSV } from '../../utils/exportUtils';
 import Button from '../../components/ui/Button';
 import {
   IconEdit, IconTrash, IconPlus, IconSearch, IconClose,
   IconAlertTriangle as IconWarn, IconCheck,
-  IconBarChart, IconCalendar,
+  IconBarChart, IconCalendar, IconDownload,
 } from '../../components/Icons';
 
 const MATERIAS = MATERIAS_LIST_RAW.map((m) => m.nombre);
@@ -283,13 +284,30 @@ function GruposHorarios() {
       <div className="table-card">
         <div className="table-header">
           <h3 className="table-title">Horarios Registrados</h3>
-          {!esPadre && (
-            <div className="table-header-actions">
+          <div className="table-header-actions">
+            <Button variant="secondary" onClick={() => downloadCSV(
+              listaFiltrada,
+              [
+                { key: 'id',        label: 'ID'        },
+                { key: 'grupo',     label: 'Grupo'     },
+                { key: 'materia',   label: 'Materia'   },
+                { key: 'docente',   label: 'Docente'   },
+                { key: 'dia',       label: 'Día'       },
+                { key: 'horaInicio',label: 'Hora Inicio'},
+                { key: 'horaFin',   label: 'Hora Fin'  },
+                { key: 'aula',      label: 'Aula'      },
+                { key: 'estado',    label: 'Estado'    },
+              ],
+              `horarios-${new Date().toISOString().slice(0, 10)}.csv`
+            )} leftIcon={<IconDownload />}>
+              Exportar
+            </Button>
+            {!esPadre && (
               <Button variant="primary" onClick={() => setModalForm({ isCreate: true })} leftIcon={<IconPlus />}>
                 Registrar Horario
               </Button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
         <div className="table-wrapper">
           <table className="data-table">
