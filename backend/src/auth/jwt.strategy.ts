@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { ConfigService } from '@nestjs/config';
 import { UsersService } from '../users/users.service';
 
 /**
@@ -11,14 +12,17 @@ import { UsersService } from '../users/users.service';
  */
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-    constructor(private readonly usersService: UsersService) {
+    constructor(
+        private readonly usersService: UsersService,
+        private readonly configService: ConfigService,
+    ) {
         super({
             // Extrae el token del header Authorization como Bearer token
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             // Si el token ha expirado, Passport lo rechaza antes de llegar a validate()
             ignoreExpiration: false,
             // Secreto con el que se firmó el token (debe coincidir con AuthModule)
-            secretOrKey: process.env.JWT_SECRET ?? 'secreto_jwt_cambiar_en_produccion',
+            secretOrKey: configService.get<string>('JWT_SECRET') ?? 'secreto_jwt_cambiar_en_produccion',
         });
     }
 
