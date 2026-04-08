@@ -73,11 +73,15 @@ function Topbar({ title = 'Dashboard', onLogout, onToggleSidebar, darkMode = fal
 
           {menuOpen && (
             <div className="topbar-user-dropdown" role="menu">
-              <button className="topbar-dropdown-item" role="menuitem" onClick={() => { setMenuOpen(false); navigate('/configuraciones', { state: { tab: 'perfil' } }); }}>
-                <IconUser />
-                <span>Ver mi perfil</span>
-              </button>
-              <div className="topbar-dropdown-divider" />
+              {rol !== 'padre' && (
+                <>
+                  <button className="topbar-dropdown-item" role="menuitem" onClick={() => { setMenuOpen(false); navigate('/configuraciones', { state: { tab: 'perfil' } }); }}>
+                    <IconUser />
+                    <span>Ver mi perfil</span>
+                  </button>
+                  <div className="topbar-dropdown-divider" />
+                </>
+              )}
               <button
                 className="topbar-dropdown-item topbar-dropdown-item--danger"
                 role="menuitem"
