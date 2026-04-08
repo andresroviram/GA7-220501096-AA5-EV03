@@ -214,11 +214,15 @@ export default function RolesDesktop() {
             <div className="modal-body">
               <div className="roles-permiso-grid">
                 {editRol.permisos.map((p, i) => (
-                  <label key={p.modulo} className={'roles-permiso-toggle' + (p.acceso ? ' roles-permiso-toggle--on' : '')} onClick={() => {
-                    const copia = editRol.permisos.map((x, idx) => idx === i ? { ...x, acceso: !x.acceso } : x);
-                    setEditRol({ ...editRol, permisos: copia });
-                  }}>
-                    <input type="checkbox" checked={p.acceso} onChange={() => {}} />
+                  <label key={p.modulo} className={'roles-permiso-toggle' + (p.acceso ? ' roles-permiso-toggle--on' : '')}>
+                    <input
+                      type="checkbox"
+                      checked={p.acceso}
+                      onChange={() => {
+                        const copia = editRol.permisos.map((x, idx) => idx === i ? { ...x, acceso: !x.acceso } : x);
+                        setEditRol({ ...editRol, permisos: copia });
+                      }}
+                    />
                     <span>{p.modulo}</span>
                   </label>
                 ))}
