@@ -34,7 +34,7 @@ function LoginForm({ onLoginSuccess, onShowRegister, onShowForgot }) {
 
     setLoading(true);
     try {
-      await authService.login(correo, password);
+      await authService.login(correo, password, remember);
       onLoginSuccess();
     } catch (err) {
       if (err.response?.status === 401) {

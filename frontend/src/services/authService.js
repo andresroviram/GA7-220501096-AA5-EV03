@@ -20,8 +20,32 @@ const MOCK_USERS = [
 
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true';
 
+const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
+
+/** Guarda los datos de sesión en el storage correcto según "remember". */
+function saveSession(data, remember) {
+  const storage = remember ? localStorage : sessionStorage;
+  if (remember) {
+    localStorage.setItem('loginExpiry', String(Date.now() + THIRTY_DAYS_MS));
+  } else {
+    // Si antes tenía sesión persistente, la limpiamos
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('lastLogin');
+    localStorage.removeItem('loginExpiry');
+  }
+  storage.setItem('token', data.access_token);
+  storage.setItem('lastLogin', new Date().toISOString());
+  storage.setItem('user', JSON.stringify({
+    correo: data.correo,
+    nombre: data.nombre,
+    tipo_usuario: data.tipo_usuario,
+    telefono: data.telefono ?? null,
+  }));
+}
+
 const authService = {
-  async login(correo, password) {
+  async login(correo, password, remember = false) {
     if (USE_MOCK) {
       const user = MOCK_USERS.find(
         (u) => u.correo === correo && u.password === password,
@@ -44,14 +68,7 @@ const authService = {
         tipo_usuario: user.tipo_usuario,
         telefono: MOCK_PHONES[user.correo] || null,
       };
-      localStorage.setItem('token', data.access_token);
-      localStorage.setItem('lastLogin', new Date().toISOString());
-      localStorage.setItem('user', JSON.stringify({
-        correo: data.correo,
-        nombre: data.nombre,
-        tipo_usuario: data.tipo_usuario,
-        telefono: data.telefono,
-      }));
+      saveSession(data, remember);
       return data;
     }
 
@@ -59,14 +76,7 @@ const authService = {
       const response = await axios.post(`${AUTH_API_URL}/login`, { correo, password });
 
       if (response.data.access_token) {
-        localStorage.setItem('token', response.data.access_token);
-        localStorage.setItem('lastLogin', new Date().toISOString());
-        localStorage.setItem('user', JSON.stringify({
-          correo: response.data.correo,
-          nombre: response.data.nombre,
-          tipo_usuario: response.data.tipo_usuario,
-          telefono: response.data.telefono ?? null,
-        }));
+        saveSession(response.data, remember);
       }
 
       return response.data;
@@ -94,45 +104,51 @@ const authService = {
           tipo_usuario: user.tipo_usuario,
           telefono: MOCK_PHONES[user.correo] || null,
         };
-        localStorage.setItem('token', data.access_token);
-        localStorage.setItem('lastLogin', new Date().toISOString());
-        localStorage.setItem('user', JSON.stringify({
-          correo: data.correo,
-          nombre: data.nombre,
-          tipo_usuario: data.tipo_usuario,
-          telefono: data.telefono,
-        }));
+        saveSession(data, remember);
         return data;
       }
       throw err;
     }
   },
 
-  /** Cierra la sesión eliminando todos los datos del localStorage. */
+  /** Cierra la sesión eliminando datos de ambos storages. */
   logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('lastLogin');
-  },
-
-  /** @returns {boolean} true si existe un token guardado */
-  isAuthenticated() {
-    return !!localStorage.getItem('token');
+    ['token', 'user', 'lastLogin', 'loginExpiry'].forEach((k) => {
+      localStorage.removeItem(k);
+      sessionStorage.removeItem(k);
+    });
   },
 
   /**
-   * Devuelve el objeto de usuario almacenado en sesión.
+   * @returns {boolean} true si hay sesión válida (no expirada).
+   * Comprueba sessionStorage primero; luego localStorage con expiración.
+   */
+  isAuthenticated() {
+    if (sessionStorage.getItem('token')) return true;
+    const token = localStorage.getItem('token');
+    if (!token) return false;
+    const expiry = Number(localStorage.getItem('loginExpiry') ?? 0);
+    if (expiry && Date.now() > expiry) {
+      // Sesión expirada — limpiar
+      ['token', 'user', 'lastLogin', 'loginExpiry'].forEach((k) => localStorage.removeItem(k));
+      return false;
+    }
+    return true;
+  },
+
+  /**
+   * Devuelve el objeto de usuario almacenado en sesión (session o local).
    * @returns {{ correo: string, nombre: string, tipo_usuario: string } | null}
    */
   getCurrentUser() {
-    const raw = localStorage.getItem('user');
+    const raw = sessionStorage.getItem('user') ?? localStorage.getItem('user');
     if (!raw) return null;
     try { return JSON.parse(raw); } catch { return null; }
   },
 
   /** @returns {string|null} Token JWT o null */
   getToken() {
-    return localStorage.getItem('token');
+    return sessionStorage.getItem('token') ?? localStorage.getItem('token');
   },
 
   /**
