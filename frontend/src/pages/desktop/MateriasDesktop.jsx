@@ -194,6 +194,9 @@ function Materias() {
         <div className="table-header">
           <h3 className="table-title">Catálogo de Materias</h3>
           <div className="table-header-actions">
+            <Button variant="primary" onClick={() => setModalForm({ isCreate: true })} leftIcon={<IconPlus />}>
+              Nueva Materia
+            </Button>
             <Button variant="secondary" onClick={() => downloadCSV(
               listaFiltrada,
               [
@@ -208,9 +211,6 @@ function Materias() {
               `materias-${new Date().toISOString().slice(0, 10)}.csv`
             )} leftIcon={<IconDownload />}>
               Exportar
-            </Button>
-            <Button variant="primary" onClick={() => setModalForm({ isCreate: true })} leftIcon={<IconPlus />}>
-              Nueva Materia
             </Button>
           </div>
         </div>

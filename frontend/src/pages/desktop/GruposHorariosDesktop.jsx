@@ -285,6 +285,11 @@ function GruposHorarios() {
         <div className="table-header">
           <h3 className="table-title">Horarios Registrados</h3>
           <div className="table-header-actions">
+            {!esPadre && (
+              <Button variant="primary" onClick={() => setModalForm({ isCreate: true })} leftIcon={<IconPlus />}>
+                Registrar Horario
+              </Button>
+            )}
             <Button variant="secondary" onClick={() => downloadCSV(
               listaFiltrada,
               [
@@ -302,11 +307,6 @@ function GruposHorarios() {
             )} leftIcon={<IconDownload />}>
               Exportar
             </Button>
-            {!esPadre && (
-              <Button variant="primary" onClick={() => setModalForm({ isCreate: true })} leftIcon={<IconPlus />}>
-                Registrar Horario
-              </Button>
-            )}
           </div>
         </div>
         <div className="table-wrapper">
