@@ -80,7 +80,7 @@ y reportes, con soporte de modo claro/oscuro y sidebar colapsable.
 
 ```bash
 git clone <url-del-repositorio>
-cd "Diseño y Desarrollo de servicios web - caso GA7-220501096-AA5-EV01"
+cd "Diseño y Desarrollo de servicios web - caso GA7-220501096-AA5-EV03"
 ```
 
 ### 2. Backend (NestJS)
