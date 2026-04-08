@@ -41,13 +41,6 @@ import { Reporte } from './reportes/reporte.entity';
                     ? false
                     : { rejectUnauthorized: false },
                 synchronize: true,
-                extra: {
-                    // Evita el DeprecationWarning de pg@8 por queries concurrentes
-                    // durante la inicialización del pool de TypeORM
-                    max: 10,
-                    idleTimeoutMillis: 30000,
-                    connectionTimeoutMillis: 2000,
-                },
                 entities: [
                     User,
                     Alumno,
