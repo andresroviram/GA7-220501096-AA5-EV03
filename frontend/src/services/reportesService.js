@@ -1,5 +1,5 @@
 import api from './api';
-import { getPadreCorreo } from '../utils/sessionUser';
+import { getPadreCorreo, getPadreId } from '../utils/sessionUser';
 
 const isDev = import.meta.env.VITE_USE_MOCK === 'true';
 
@@ -54,8 +54,9 @@ export async function generarReporte(tipoId, formato, params = {}) {
     return;
   }
   const { grupo = '', periodo = '' } = params;
+  const idPadre = getPadreId();
   const res = await api.get(`/reportes/${tipoId}/generate`, {
-    params: { formato, grupo, periodo },
+    params: { formato, grupo, periodo, ...(idPadre !== null ? { id_padre: idPadre } : {}) },
     responseType: 'blob',
   });
   const ext = formato === 'excel' ? 'xlsx' : 'pdf';

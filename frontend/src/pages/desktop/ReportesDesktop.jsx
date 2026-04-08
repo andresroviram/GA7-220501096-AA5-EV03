@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import * as reportesService from '../../services/reportesService';
+import * as estudiantesService from '../../services/estudiantesService';
+import { getSessionUser, getPadreId } from '../../utils/sessionUser';
 import Button from '../../components/ui/Button';
 import Shimmer from '../../components/Shimmer';
 
@@ -20,10 +22,13 @@ const GRUPOS  = ['', '1A', '1B', '1C', '2A', '2B', '2C', '3A', '3B'];
 const PERIODO = ['', '2024-I', '2024-II', '2025-I'];
 
 /* ─── Tarjeta de tipo de reporte ── */
-function ReporteCard({ tipo }) {
+function ReporteCard({ tipo, gruposPadre }) {
   const [grupo,   setGrupo]   = useState('');
   const [periodo, setPeriodo] = useState('');
   const [loading, setLoading] = useState(null);
+
+  // Si hay grupos restringidos (padre), reiniciar selección si el valor ya no aplica
+  const gruposDisponibles = gruposPadre ?? GRUPOS;
 
   const handleGenerar = async (fmt) => {
     setLoading(fmt);
@@ -44,7 +49,7 @@ function ReporteCard({ tipo }) {
           {tipo.filtros.includes('grupo') && (
             <select className="filter-select" style={{ flex: 1, minWidth: '100px' }} value={grupo} onChange={(e) => setGrupo(e.target.value)}>
               <option value="">Todos los grupos</option>
-              {GRUPOS.filter(Boolean).map((g) => <option key={g} value={g}>{g}</option>)}
+              {gruposDisponibles.filter(Boolean).map((g) => <option key={g} value={g}>{g}</option>)}
             </select>
           )}
           {tipo.filtros.includes('periodo') && (
@@ -69,17 +74,21 @@ function ReporteCard({ tipo }) {
 
 /* ─── Componente principal ── */
 function Reportes() {
-  const [tipos,    setTipos]    = useState([]);
+  const esPadre = getSessionUser()?.tipo_usuario === 'padre';
+  const [tipos,     setTipos]     = useState([]);
   const [recientes, setRecientes] = useState([]);
-  const [loading,  setLoading]  = useState(true);
+  const [loading,   setLoading]   = useState(true);
+  const [gruposPadre, setGruposPadre] = useState(null);
 
   useEffect(() => {
-    Promise.all([
-      reportesService.getTiposReporte(),
-      reportesService.getReportesRecientes(),
-    ]).then(([t, r]) => {
+    const carga = [reportesService.getTiposReporte(), reportesService.getReportesRecientes()];
+    if (esPadre) carga.push(estudiantesService.getEstudiantes());
+    Promise.all(carga).then(([t, r, alumnos]) => {
       setTipos(t);
       setRecientes(r);
+      if (esPadre && alumnos) {
+        setGruposPadre([...new Set(alumnos.map((a) => a.grupo).filter(Boolean))]);
+      }
     }).finally(() => setLoading(false));
   }, []);
 
@@ -91,7 +100,7 @@ function Reportes() {
         <h3 className="section-heading">Generar Reportes</h3>
         <p className="section-sub">Selecciona el tipo de reporte, aplica los filtros y descarga en el formato requerido.</p>
         <div className="reporte-grid">
-          {tipos.map((t) => <ReporteCard key={t.id} tipo={t} />)}
+          {tipos.map((t) => <ReporteCard key={t.id} tipo={t} gruposPadre={gruposPadre} />)}
         </div>
       </div>
 
