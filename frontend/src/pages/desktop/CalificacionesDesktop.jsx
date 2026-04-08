@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import Shimmer from '../../components/Shimmer';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import {
   promediosPorGrupo,
@@ -180,6 +181,8 @@ function Calificaciones() {
     }
     setModalForm(null);
   };
+
+  if (loading) return <Shimmer variant="table" rows={6} />;
 
   return (
     <div className="module-page">

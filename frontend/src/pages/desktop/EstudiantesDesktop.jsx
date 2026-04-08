@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import Shimmer from '../../components/Shimmer';
 import {
   GRUPOS_LIST,
   ESTADOS_LIST,
@@ -273,6 +274,8 @@ function Estudiantes() {
   [lista]);
 
   const maxGrupo = Math.max(...estudiantesPorGrupo.map((g) => g.total), 1);
+
+  if (loading) return <Shimmer variant="table" rows={6} />;
 
   /* Stats generales (dinámicas) */
   const stats = useMemo(() => ({

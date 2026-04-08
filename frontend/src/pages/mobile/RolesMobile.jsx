@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Shimmer from '../../components/Shimmer';
 import { getRoles } from '../../services/rolesService';
 import { mockUsuariosPendientes } from '../../data/mockUsuariosPendientes';
 import api from '../../services/api';
@@ -39,7 +40,7 @@ export default function RolesMobile() {
     setRolSel('');
   };
 
-  if (loading) return <div className="m-loading">Cargando roles…</div>;
+  if (loading) return <Shimmer variant="cards" count={3} />;
 
   return (
     <div className="m-page">

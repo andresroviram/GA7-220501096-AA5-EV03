@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import Shimmer from '../../components/Shimmer';
 import * as materiasService from '../../services/materiasService';
 import { IconSearch, IconBook } from '../../components/Icons';
 
@@ -37,7 +38,7 @@ function MateriasMobile() {
       </div>
 
       {loading ? (
-        <p className="m-loading">Cargando…</p>
+        <Shimmer variant="mobile-list" rows={6} />
       ) : (
         <div className="m-card-list">
           {filtrados.map((m) => (

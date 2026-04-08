@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import Shimmer from '../../components/Shimmer';
 import {
   DEPARTAMENTOS_LIST,
   ESTADOS_LIST,
@@ -149,6 +150,8 @@ function Materias() {
   /* Stats dinámicos */
   const activas    = lista.filter((m) => m.estado === 'Activo').length;
   const sinDocente = lista.filter((m) => !m.docente).length;
+
+  if (loading) return <Shimmer variant="table" rows={6} />;
 
   return (
     <div className="module-page">

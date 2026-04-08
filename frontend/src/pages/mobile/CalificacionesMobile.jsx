@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import Shimmer from '../../components/Shimmer';
 import * as calificacionesService from '../../services/calificacionesService';
 import { downloadCSV } from '../../utils/exportUtils';
 import { IconSearch, IconDownload } from '../../components/Icons';
@@ -62,7 +63,7 @@ function CalificacionesMobile() {
       </div>
 
       {loading ? (
-        <p className="m-loading">Cargando…</p>
+        <Shimmer variant="mobile-list" rows={6} />
       ) : (
         <div className="m-card-list">
           {filtrados.map((c) => (

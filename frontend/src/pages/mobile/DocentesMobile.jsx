@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import Shimmer from '../../components/Shimmer';
 import * as docentesService from '../../services/docentesService';
 import { downloadCSV } from '../../utils/exportUtils';
 import { IconSearch, IconDownload } from '../../components/Icons';
@@ -54,7 +55,7 @@ function DocentesMobile() {
       </div>
 
       {loading ? (
-        <p className="m-loading">Cargando…</p>
+        <Shimmer variant="mobile-list" rows={6} />
       ) : (
         <div className="m-card-list">
           {filtrados.map((d) => (

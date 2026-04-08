@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import Shimmer from '../../components/Shimmer';
 import * as estudiantesService from '../../services/estudiantesService';
 import { downloadCSV } from '../../utils/exportUtils';
 import { IconSearch, IconDownload, IconUserMinus, IconUserPlus } from '../../components/Icons';
@@ -79,7 +80,7 @@ function EstudiantesMobile() {
 
       {/* Lista de tarjetas */}
       {loading ? (
-        <p className="m-loading">Cargando…</p>
+        <Shimmer variant="mobile-list" rows={6} />
       ) : (
         <div className="m-card-list">
           {filtrados.map((est) => (

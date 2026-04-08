@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import authService from '../../services/authService';
 import * as configService from '../../services/configService';
 import * as rolesService from '../../services/rolesService';
+import Shimmer from '../../components/Shimmer';
 
 /* ─── Datos de configuración ── */
 const PARAMS_INIT = {
@@ -64,7 +65,7 @@ function RolesPermisos() {
 
   if (loading) return (
     <div className="config-section">
-      <p style={{ color: '#6B7C74', padding: '1rem 0' }}>Cargando roles y permisos...</p>
+      <Shimmer variant="config-table" rows={8} />
     </div>
   );
 
@@ -183,7 +184,7 @@ function Parametros() {
         </div>
       </div>
       {loading ? (
-        <p style={{ color: '#6B7C74', padding: '1rem 0' }}>Cargando parámetros...</p>
+        <Shimmer variant="bar" rows={7} />
       ) : (
         <>
           <div className="params-grid">

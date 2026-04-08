@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getRoles, updateRolPermisos } from '../../services/rolesService';
 import { mockUsuariosPendientes } from '../../data/mockUsuariosPendientes';
 import api from '../../services/api';
+import Shimmer from '../../components/Shimmer';
 import {
   IconShield, IconUsers, IconEdit, IconCheckCircle, IconAlertTriangle, IconClose, IconPlus,
 } from '../../components/Icons';
@@ -88,7 +89,7 @@ export default function RolesDesktop() {
     setRolSeleccionado('');
   };
 
-  if (loading) return <div className="page-loading">Cargando datos de roles…</div>;
+  if (loading) return <Shimmer variant="cards" count={4} />;
 
   return (
     <div className="roles-page">

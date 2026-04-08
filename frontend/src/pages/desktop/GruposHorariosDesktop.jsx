@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import Shimmer from '../../components/Shimmer';
 import {
   estadisticasGrupos,
   GRUPOS_LIST,
@@ -203,6 +204,8 @@ function GruposHorarios() {
   /* Stats dinámicos */
   const grupos     = [...new Set(lista.map((h) => h.grupo))].length;
   const aulasEnUso = [...new Set(lista.map((h) => h.aula))].length;
+
+  if (loading) return <Shimmer variant="table" rows={6} />;
 
   return (
     <div className="module-page">
