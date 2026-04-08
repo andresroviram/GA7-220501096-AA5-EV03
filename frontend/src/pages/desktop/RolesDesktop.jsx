@@ -269,8 +269,12 @@ export default function RolesDesktop() {
                   <label className="field-label">Permisos de módulos</label>
                   <div className="roles-permiso-grid">
                     {MODULOS.map((m) => (
-                      <label key={m} className={'roles-permiso-toggle' + (nuevoRol.permisos[m] ? ' roles-permiso-toggle--on' : '')} onClick={() => setNuevoRol((p) => ({ ...p, permisos: { ...p.permisos, [m]: !p.permisos[m] } }))}>
-                        <input type="checkbox" checked={nuevoRol.permisos[m]} onChange={() => {}} />
+                      <label key={m} className={'roles-permiso-toggle' + (nuevoRol.permisos[m] ? ' roles-permiso-toggle--on' : '')}>
+                        <input
+                          type="checkbox"
+                          checked={nuevoRol.permisos[m]}
+                          onChange={() => setNuevoRol((p) => ({ ...p, permisos: { ...p.permisos, [m]: !p.permisos[m] } }))}
+                        />
                         <span>{m}</span>
                       </label>
                     ))}
