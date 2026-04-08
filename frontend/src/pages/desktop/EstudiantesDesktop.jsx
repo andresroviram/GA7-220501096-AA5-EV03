@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import Shimmer from '../../components/Shimmer';
 import {
   GRUPOS_LIST,
@@ -7,6 +7,7 @@ import {
   GRUPOS_WIDGET,
 } from '../../data/mockEstudiantes';
 import * as estudiantesService from '../../services/estudiantesService';
+import { getPadres } from '../../services/estudiantesService';
 import { downloadCSV } from '../../utils/exportUtils';
 import Button from '../../components/ui/Button';
 import InputText from '../../components/ui/InputText';
@@ -45,10 +46,91 @@ function ModalConfirm({ estudiante, onConfirm, onCancel }) {
     </div>
   );
 }
+/* ─── AcudienteCombobox ────────────────────────────────────────────────────────────────── */
+// tutor       = texto actualmente en el input (nombre visible)
+// tutorId     = id del padre vinculado (null si es texto libre)
+// onChange(nombre, id) = callback cuando cambia la selección
+function AcudienteCombobox({ padres, tutor, tutorId, onChange }) {
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef(null);
 
+  useEffect(() => {
+    const handler = (e) => {
+      if (containerRef.current && !containerRef.current.contains(e.target))
+        setOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  const filtered = tutor
+    ? padres.filter((p) =>
+        p.nombre.toLowerCase().includes(tutor.toLowerCase()) ||
+        (p.correo && p.correo.toLowerCase().includes(tutor.toLowerCase()))
+      )
+    : padres;
+
+  const handleInputChange = (e) => {
+    onChange(e.target.value, null); // escribir manualmente descarta el vínculo
+    setOpen(true);
+  };
+
+  const handleSelect = (padre) => {
+    onChange(padre.nombre, padre.id);
+    setOpen(false);
+  };
+
+  const handleClear = (e) => {
+    e.stopPropagation();
+    onChange('', null);
+    setOpen(false);
+  };
+
+  return (
+    <div className="combobox-container modal-field" ref={containerRef}>
+      <label className="modal-label">Nombre del Acudiente</label>
+      <div className="combobox-input-wrap">
+        <input
+          type="text"
+          className="modal-input combobox-input"
+          placeholder="Buscar acudiente por nombre…"
+          value={tutor}
+          onChange={handleInputChange}
+          onFocus={() => setOpen(true)}
+          onKeyDown={(e) => e.key === 'Escape' && setOpen(false)}
+          autoComplete="off"
+        />
+        {tutor && (
+          <button type="button" className="combobox-clear" onMouseDown={handleClear} title="Limpiar">
+            ×
+          </button>
+        )}
+      </div>
+      {open && (
+        <ul className="combobox-dropdown">
+          {filtered.length === 0 ? (
+            <li className="combobox-empty">Sin coincidencias</li>
+          ) : (
+            filtered.map((p) => (
+              <li
+                key={p.id}
+                className={`combobox-option${tutorId === p.id ? ' combobox-option--selected' : ''}`}
+                onMouseDown={() => handleSelect(p)}
+              >
+                <span className="combobox-option-name">{p.nombre}</span>
+                {p.correo && <span className="combobox-option-sub">{p.correo}</span>}
+              </li>
+            ))
+          )}
+        </ul>
+      )}
+    </div>
+  );
+}
 /* ─── ModalEstudiante ───────────────────────────────────────────────────────── */
 function ModalEstudiante({ estudiante, onSave, onCancel }) {
   const isEdit = !!estudiante;
+  const [padres, setPadres] = useState([]);
   const [form, setForm] = useState({
     nombre:        estudiante?.nombre        || '',
     email:         estudiante?.email         || '',
@@ -57,11 +139,16 @@ function ModalEstudiante({ estudiante, onSave, onCancel }) {
     telefono:      estudiante?.telefono      || '',
     direccion:     estudiante?.direccion     || '',
     tutor:         estudiante?.tutor         || '',
+    tutorId:       estudiante?.tutorId       || null,
     tutorTelefono: estudiante?.tutorTelefono || '',
     promedio:      estudiante?.promedio      ?? '',
   });
 
   const set = (f, v) => setForm((prev) => ({ ...prev, [f]: v }));
+
+  useEffect(() => {
+    getPadres().then(setPadres).catch(() => {});
+  }, []);
 
   return (
     <div className="modal-overlay" onClick={onCancel}>
@@ -141,12 +228,11 @@ function ModalEstudiante({ estudiante, onSave, onCancel }) {
               placeholder="Calle Principal 123, Col. Centro"
             />
 
-            <InputText
-              className="modal-field"
-              label="Nombre del Acudiente"
-              value={form.tutor}
-              onChange={(e) => set('tutor', e.target.value)}
-              placeholder="María Rodríguez"
+            <AcudienteCombobox
+              padres={padres}
+              tutor={form.tutor}
+              tutorId={form.tutorId}
+              onChange={(nombre, id) => setForm((prev) => ({ ...prev, tutor: nombre, tutorId: id }))}
             />
 
             <InputText
