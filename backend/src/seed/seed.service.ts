@@ -213,7 +213,7 @@ export class SeedService implements OnModuleInit {
                 permisos: { Dashboard: true, Docentes: false, Estudiantes: false, Calificaciones: true, 'Grupos/Horarios': true, Materias: false, Reportes: false, Configuraciones: false },
             },
             {
-                nombre: 'Padre/Tutor',
+                nombre: 'Padre/Acudiente',
                 descripcion: 'Seguimiento de acudidos',
                 permisos: { Dashboard: true, Docentes: false, Estudiantes: true, Calificaciones: true, 'Grupos/Horarios': true, Materias: false, Reportes: true, Configuraciones: false },
             },
