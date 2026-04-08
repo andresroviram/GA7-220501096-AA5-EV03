@@ -1,6 +1,7 @@
 import api from './api';
+import { getPadreCorreo } from '../utils/sessionUser';
 
-const isDev = import.meta.env.DEV || import.meta.env.VITE_USE_MOCK === 'true';
+const isDev = import.meta.env.VITE_USE_MOCK === 'true';
 
 /**
  * Devuelve la lista de calificaciones.
@@ -9,6 +10,12 @@ const isDev = import.meta.env.DEV || import.meta.env.VITE_USE_MOCK === 'true';
 export async function getCalificaciones() {
   if (isDev) {
     const { calificaciones } = await import('../data/mockCalificaciones.js');
+    const correo_padre = getPadreCorreo();
+    if (correo_padre) {
+      const { getEstudiantesByPadre } = await import('../data/mockEstudiantes.js');
+      const ids = getEstudiantesByPadre(correo_padre).map((e) => e.id);
+      return calificaciones.filter((c) => ids.includes(c.estudiante_id));
+    }
     return calificaciones;
   }
   const res = await api.get('/calificaciones');

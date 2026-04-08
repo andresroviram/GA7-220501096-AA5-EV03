@@ -1,6 +1,7 @@
 import api from './api';
+import { getPadreCorreo } from '../utils/sessionUser';
 
-const isDev = import.meta.env.DEV || import.meta.env.VITE_USE_MOCK === 'true';
+const isDev = import.meta.env.VITE_USE_MOCK === 'true';
 
 /**
  * Devuelve todos los bloques de horario enriquecidos con datos del grupo.
@@ -9,6 +10,12 @@ const isDev = import.meta.env.DEV || import.meta.env.VITE_USE_MOCK === 'true';
 export async function getHorarios() {
   if (isDev) {
     const { horarios } = await import('../data/mockGrupos.js');
+    const correo_padre = getPadreCorreo();
+    if (correo_padre) {
+      const { getEstudiantesByPadre } = await import('../data/mockEstudiantes.js');
+      const grupos = [...new Set(getEstudiantesByPadre(correo_padre).map((e) => e.grupo))];
+      return horarios.filter((h) => grupos.includes(h.grupo));
+    }
     return horarios;
   }
   const res = await api.get('/horarios/bloques/all');

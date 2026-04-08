@@ -3,8 +3,10 @@ import StatCard from '../../components/StatCard';
 import AcademicPerformanceChart from '../../components/AcademicPerformanceChart';
 import GradeDistributionChart from '../../components/GradeDistributionChart';
 import { stats } from '../../data/mockDashboard';
-import { IconGradCap, IconUsers, IconBook, IconCalendar } from '../../components/Icons';
+import { IconGradCap, IconUsers, IconBook, IconCalendar, IconBarChart } from '../../components/Icons';
 import authService from '../../services/authService';
+import { getEstudiantesByPadre } from '../../data/mockEstudiantes';
+import { calificaciones as allCalificaciones } from '../../data/mockCalificaciones';
 
 const STAT_ICONS = [<IconGradCap />, <IconUsers />, <IconBook />, <IconCalendar />];
 
@@ -22,8 +24,82 @@ function QuickStat({ label, value, icon, color = '#2A9D6F' }) {
   );
 }
 
+/* ─── Vista mobile para padre/acudiente ────────────────────────────── */
+function DashboardPadreMobile({ user }) {
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? 'Buenos días' : hour < 19 ? 'Buenas tardes' : 'Buenas noches';
+
+  const hijos  = getEstudiantesByPadre(user.correo);
+  const ids    = hijos.map((e) => e.id);
+  const califs = allCalificaciones.filter((c) => ids.includes(c.estudiante_id));
+  const promedio = hijos.length
+    ? (hijos.reduce((s, e) => s + e.promedio, 0) / hijos.length).toFixed(1)
+    : '—';
+
+  return (
+    <div className="m-page">
+      <div className="m-hero">
+        <p className="m-hero-greeting">{greeting},</p>
+        <p className="m-hero-name">{user.nombre}</p>
+      </div>
+
+      <div className="m-stats-grid">
+        <QuickStat label="A mi cargo"        value={hijos.length}   icon={<IconGradCap />} />
+        <QuickStat label="Promedio general"  value={promedio}       icon={<IconBarChart />} color="#1E6CB3" />
+        <QuickStat label="Calificaciones"    value={califs.length}  icon={<IconBook />}    color="#7B2D8B" />
+        <QuickStat label="Aprobadas"         value={califs.filter((c) => c.calificacion >= 6).length} icon={<IconCalendar />} color="#D97706" />
+      </div>
+
+      {/* Tarjetas de hijos */}
+      <h3 className="m-section-title">Mis Estudiantes</h3>
+      <div className="m-card-list">
+        {hijos.map((e) => (
+          <div key={e.id} className="m-entity-card">
+            <div className="m-entity-card-header">
+              <div>
+                <p className="m-entity-card-name">{e.nombre}</p>
+                <p className="m-entity-card-sub">{e.id} · Grupo {e.grupo}</p>
+              </div>
+              <span className={`badge ${e.estado === 'Activo' ? 'badge--active' : 'badge--suspended'}`}>
+                {e.estado}
+              </span>
+            </div>
+            <div className="m-entity-card-row">
+              <span>Promedio: <strong>{e.promedio}</strong></span>
+              <span>Edad: {e.edad} años</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Calificaciones recientes */}
+      <h3 className="m-section-title" style={{ marginTop: '1.5rem' }}>Calificaciones Recientes</h3>
+      <div className="m-card-list">
+        {califs.map((c) => (
+          <div key={c.id} className="m-entity-card">
+            <div className="m-entity-card-header">
+              <div>
+                <p className="m-entity-card-name">{c.materia}</p>
+                <p className="m-entity-card-sub">{c.estudiante} · {c.fecha}</p>
+              </div>
+              <span className={`cal-score${c.calificacion >= 9 ? ' cal-score--high' : c.calificacion < 6 ? ' cal-score--low' : ''}`}>
+                {c.calificacion}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function DashboardMobile() {
   const user = authService.getCurrentUser();
+
+  if (user?.tipo_usuario === 'padre') {
+    return <DashboardPadreMobile user={user} />;
+  }
+
   const hour = new Date().getHours();
   const greeting =
     hour < 12 ? 'Buenos días' :

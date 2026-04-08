@@ -1,6 +1,7 @@
 import api from './api';
+import { getPadreCorreo } from '../utils/sessionUser';
 
-const isDev = import.meta.env.DEV || import.meta.env.VITE_USE_MOCK === 'true';
+const isDev = import.meta.env.VITE_USE_MOCK === 'true';
 
 /** Devuelve la lista de reportes recientes. */
 export async function getReportesRecientes() {
@@ -28,7 +29,22 @@ export async function generarReporte(tipoId, formato, params = {}) {
   if (isDev) {
     const { getMockReporteData } = await import('../data/mockReportes.js');
     const { downloadCSV, downloadPDF } = await import('../utils/exportUtils.js');
-    const { rows, columns, titulo } = await getMockReporteData(tipoId);
+    let { rows, columns, titulo } = await getMockReporteData(tipoId);
+
+    // Si el usuario es padre, filtrar solo sus estudiantes
+    const correo_padre = getPadreCorreo();
+    if (correo_padre && (tipoId === 1 || tipoId === 2)) {
+      const { getEstudiantesByPadre } = await import('../data/mockEstudiantes.js');
+      const ids = getEstudiantesByPadre(correo_padre).map((e) => e.id);
+      if (tipoId === 1) {
+        // Calificaciones: filtrar por estudiante_id
+        rows = rows.filter((r) => ids.includes(r.estudiante_id));
+      } else if (tipoId === 2) {
+        // Estudiantes: filtrar por id
+        rows = rows.filter((r) => ids.includes(r.id));
+      }
+    }
+
     const ts = new Date().toISOString().slice(0, 10);
     if (formato === 'excel') {
       downloadCSV(rows, columns, `reporte-${tipoId}-${ts}.csv`);

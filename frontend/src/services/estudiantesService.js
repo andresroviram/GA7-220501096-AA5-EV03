@@ -1,6 +1,7 @@
 import api from './api';
+import { getPadreCorreo } from '../utils/sessionUser';
 
-const isDev = import.meta.env.DEV || import.meta.env.VITE_USE_MOCK === 'true';
+const isDev = import.meta.env.VITE_USE_MOCK === 'true';
 
 /**
  * Devuelve la lista de estudiantes/alumnos.
@@ -8,10 +9,13 @@ const isDev = import.meta.env.DEV || import.meta.env.VITE_USE_MOCK === 'true';
  */
 export async function getEstudiantes(idGrupo) {
   if (isDev) {
-    const { estudiantes } = await import('../data/mockEstudiantes.js');
-    return idGrupo
-      ? estudiantes.filter((e) => e.grupo === idGrupo)
+    const { estudiantes, getEstudiantesByPadre } = await import('../data/mockEstudiantes.js');
+    const correo_padre = getPadreCorreo();
+    let result = correo_padre
+      ? getEstudiantesByPadre(correo_padre)
       : estudiantes;
+    if (idGrupo) result = result.filter((e) => e.grupo === idGrupo);
+    return result;
   }
   const params = idGrupo ? { idGrupo } : {};
   const res = await api.get('/alumnos', { params });
