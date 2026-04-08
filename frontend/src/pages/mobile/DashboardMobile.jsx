@@ -1,8 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import StatCard from '../../components/StatCard';
+import AcademicPerformanceChart from '../../components/AcademicPerformanceChart';
+import GradeDistributionChart from '../../components/GradeDistributionChart';
 import { stats } from '../../data/mockDashboard';
-import { IconGradCap, IconUsers, IconBook, IconCalendar, IconCheckSquare, IconBarChart } from '../../components/Icons';
+import { IconGradCap, IconUsers, IconBook, IconCalendar } from '../../components/Icons';
 import authService from '../../services/authService';
 
 const STAT_ICONS = [<IconGradCap />, <IconUsers />, <IconBook />, <IconCalendar />];
@@ -49,23 +50,9 @@ function DashboardMobile() {
         ))}
       </div>
 
-      {/* Accesos rápidos */}
-      <h3 className="m-section-title">Accesos Rápidos</h3>
-      <div className="m-quick-links">
-        {[
-          { label: 'Calificaciones', icon: <IconCheckSquare />, to: '/calificaciones', color: '#2A9D6F' },
-          { label: 'Reportes',       icon: <IconBarChart />,    to: '/reportes',       color: '#3D7BBF' },
-          { label: 'Estudiantes',    icon: <IconGradCap />,     to: '/estudiantes',    color: '#BF6B3D' },
-          { label: 'Docentes',       icon: <IconUsers />,       to: '/docentes',       color: '#7B3DBF' },
-        ].map((link) => (
-          <Link key={link.to} to={link.to} className="m-quick-link" style={{ color: link.color }}>
-            <span className="m-quick-link-icon" style={{ background: `${link.color}18` }}>
-              {link.icon}
-            </span>
-            <span className="m-quick-link-label">{link.label}</span>
-          </Link>
-        ))}
-      </div>
+      {/* Gráficas */}
+      <AcademicPerformanceChart />
+      <GradeDistributionChart />
     </div>
   );
 }
