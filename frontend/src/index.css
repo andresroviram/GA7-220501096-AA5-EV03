@@ -3305,7 +3305,221 @@ body {
 
 
 /* ═══════════════════════════════════════════════════════════════
-   ROLES PAGE (desktop + shared)
+   SHIMMER / SKELETON LOADERS
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Animación base ───────────────────────────────────────── */
+@keyframes shimmer-sweep {
+  0%   { background-position: -600px 0; }
+  100% { background-position:  600px 0; }
+}
+
+.shimmer-box {
+  border-radius: 6px;
+  background: linear-gradient(90deg,
+    var(--shimmer-base, #E9ECF0) 25%,
+    var(--shimmer-highlight, #F4F6F8) 50%,
+    var(--shimmer-base, #E9ECF0) 75%
+  );
+  background-size: 600px 100%;
+  animation: shimmer-sweep 1.4s infinite linear;
+}
+
+[data-theme="dark"] {
+  --shimmer-base:      #1C2332;
+  --shimmer-highlight: #252E42;
+}
+
+/* ── Layout contenedor ────────────────────────────────────── */
+.shimmer-page {
+  padding: 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* ── Filtro card ──────────────────────────────────────────── */
+.shimmer-filter-card {
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--border-color, #E5E7EB);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.shimmer-filter-title  { height: 14px; width: 160px; }
+.shimmer-filter-fields { display: flex; gap: 1rem; flex-wrap: wrap; }
+.shimmer-filter-field  { display: flex; flex-direction: column; gap: .4rem; flex: 1; min-width: 140px; }
+.shimmer-label         { height: 11px; width: 80px; }
+.shimmer-input         { height: 38px; border-radius: 8px; }
+
+/* ── Tabla card ───────────────────────────────────────────── */
+.shimmer-table-card {
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--border-color, #E5E7EB);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: .25rem;
+}
+.shimmer-table-card--no-mt { margin-top: 0; }
+
+.shimmer-table-header {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr .7fr .55fr 2.5rem;
+  gap: .75rem;
+  padding: .75rem 1.25rem;
+  background: var(--hover-bg, #F9FAFB);
+  border-bottom: 1px solid var(--border-color, #E5E7EB);
+  align-items: center;
+}
+.shimmer-th { height: 11px; border-radius: 4px; }
+
+.shimmer-row {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr .7fr .55fr 2.5rem;
+  gap: .75rem;
+  padding: .85rem 1.25rem;
+  border-bottom: 1px solid var(--border-color, #E5E7EB);
+  align-items: center;
+}
+.shimmer-row:last-child { border-bottom: none; }
+.shimmer-row--config {
+  grid-template-columns: 1fr repeat(4, 3rem);
+}
+.shimmer-avatar         { height: 36px; width: 36px; border-radius: 50%; flex-shrink: 0; }
+.shimmer-cell           { height: 13px; border-radius: 4px; }
+.shimmer-cell--lg       { width: 90%; }
+.shimmer-cell--md       { width: 70%; }
+.shimmer-cell--sm       { width: 55%; }
+.shimmer-cell--action   { height: 28px; width: 28px; border-radius: 6px; }
+.shimmer-cell--check    { height: 20px; width: 20px; border-radius: 4px; justify-self: center; }
+
+/* ── Cards grid (Roles) ───────────────────────────────────── */
+.shimmer-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 .25rem;
+}
+.shimmer-page-title { height: 22px; width: 200px; }
+.shimmer-btn        { height: 36px; width: 110px; border-radius: 8px; }
+
+.shimmer-tabs { display: flex; gap: .5rem; margin-top: -.25rem; }
+.shimmer-tab  { height: 36px; width: 160px; border-radius: 8px; }
+
+.shimmer-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 1rem;
+}
+.shimmer-card {
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--border-color, #E5E7EB);
+  border-radius: 14px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.shimmer-card-header  { display: flex; gap: .75rem; align-items: flex-start; }
+.shimmer-card-icon    { height: 40px; width: 40px; border-radius: 10px; flex-shrink: 0; }
+.shimmer-card-titles  { display: flex; flex-direction: column; gap: .4rem; flex: 1; }
+.shimmer-card-name    { height: 14px; width: 70%; }
+.shimmer-card-desc    { height: 11px; width: 90%; }
+.shimmer-chips        { display: flex; flex-wrap: wrap; gap: .4rem; }
+.shimmer-chip         { height: 22px; width: 80px; border-radius: 20px; }
+
+/* ── Stat cards (Dashboard) ───────────────────────────────── */
+.shimmer-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+@media (max-width: 900px) {
+  .shimmer-stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+.shimmer-stat-card {
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--border-color, #E5E7EB);
+  border-radius: 14px;
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+.shimmer-stat-icon   { height: 44px; width: 44px; border-radius: 10px; flex-shrink: 0; }
+.shimmer-stat-texts  { display: flex; flex-direction: column; gap: .4rem; flex: 1; }
+.shimmer-stat-value  { height: 22px; width: 60%; }
+.shimmer-stat-label  { height: 11px; width: 80%; }
+
+.shimmer-widgets-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.shimmer-widget {
+  height: 240px;
+  border-radius: 14px;
+}
+.shimmer-widget--tall { height: 300px; }
+
+/* ── Mobile lista ─────────────────────────────────────────── */
+.shimmer-mobile-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0 .75rem;
+}
+.shimmer-mobile-item {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .9rem .25rem;
+  border-bottom: 1px solid var(--border-color, #E5E7EB);
+}
+.shimmer-mobile-item:last-child { border-bottom: none; }
+.shimmer-mobile-avatar { height: 42px; width: 42px; border-radius: 50%; flex-shrink: 0; }
+.shimmer-mobile-texts  { display: flex; flex-direction: column; gap: .35rem; flex: 1; }
+.shimmer-mobile-name   { height: 14px; width: 65%; }
+.shimmer-mobile-sub    { height: 11px; width: 45%; }
+.shimmer-mobile-badge  { height: 24px; width: 60px; border-radius: 20px; flex-shrink: 0; }
+
+/* ── Config tabla ─────────────────────────────────────────── */
+.shimmer-config {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.shimmer-config-header {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+.shimmer-config-icon  { height: 40px; width: 40px; border-radius: 10px; flex-shrink: 0; }
+.shimmer-config-title { height: 16px; width: 180px; margin-bottom: .35rem; }
+.shimmer-config-sub   { height: 12px; width: 260px; }
+
+/* ── Barra genérica ───────────────────────────────────────── */
+.shimmer-bar { height: 14px; margin-bottom: .5rem; border-radius: 6px; }
+
+/* ── Dark mode card backgrounds ──────────────────────────── */
+[data-theme="dark"] .shimmer-filter-card,
+[data-theme="dark"] .shimmer-table-card,
+[data-theme="dark"] .shimmer-card,
+[data-theme="dark"] .shimmer-stat-card {
+  background: var(--card-bg, #141B2D);
+  border-color: var(--border-color, #2A3552);
+}
+[data-theme="dark"] .shimmer-table-header {
+  background: var(--hover-bg, #1C2332);
+  border-color: var(--border-color, #2A3552);
+}
+[data-theme="dark"] .shimmer-row        { border-color: var(--border-color, #2A3552); }
+[data-theme="dark"] .shimmer-mobile-item{ border-color: var(--border-color, #2A3552); }
+
+
+
    ═══════════════════════════════════════════════════════════════ */
 .roles-page {
   padding: 1.5rem 2rem;
