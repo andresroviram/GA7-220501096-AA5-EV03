@@ -33,7 +33,7 @@ function Sidebar({ collapsed = false }) {
       .catch(() => {});
   }, []);
 
-  const lastLoginRaw = localStorage.getItem('lastLogin');
+  const lastLoginRaw = localStorage.getItem('lastLogin') ?? sessionStorage.getItem('lastLogin');
   const lastLoginLabel = lastLoginRaw
     ? new Intl.DateTimeFormat('es', {
         day: '2-digit', month: 'short', year: 'numeric',

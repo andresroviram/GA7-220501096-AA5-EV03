@@ -37,3 +37,13 @@ export async function deleteEstudiante(id) {
   if (isDev) return;
   await api.delete(`/alumnos/${id}`);
 }
+
+/** Lista usuarios con tipo 'padre/acudiente'. */
+export async function getPadres() {
+  if (isDev) {
+    const { padres } = await import('../data/mockEstudiantes.js');
+    return padres;
+  }
+  const res = await api.get('/usuarios', { params: { tipo: 'padre' } });
+  return res.data;
+}

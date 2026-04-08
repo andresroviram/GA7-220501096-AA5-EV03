@@ -11,6 +11,18 @@ export const estudiantes = [
   { id: 'EST008', nombre: 'Diego Morales Castro',    email: 'diego.morales@estudiante.edu', grupo: '3A', edad: 17, telefono: '+52 555-1015', direccion: 'Calle Independencia 258, Col. Sur',  tutor: 'Patricia Castro',   tutorTelefono: '+52 555-1016', promedio: 8.2, estado: 'Suspendido' },
 ];
 
+export const padres = [
+  { id: 1, nombre: 'Juan Rodríguez',  correo: 'juan.rodriguez@escuela.edu' },
+  { id: 2, nombre: 'María Rodríguez', correo: 'maria.rodriguez@padre.edu' },
+  { id: 3, nombre: 'José López',      correo: 'jose.lopez@padre.edu' },
+  { id: 4, nombre: 'Carmen Silva',    correo: 'carmen.silva@padre.edu' },
+  { id: 5, nombre: 'Ana González',    correo: 'ana.gonzalez@padre.edu' },
+  { id: 6, nombre: 'Roberto Torres',  correo: 'roberto.torres@padre.edu' },
+  { id: 7, nombre: 'Elena Ruiz',      correo: 'elena.ruiz@padre.edu' },
+  { id: 8, nombre: 'Miguel Mendoza',  correo: 'miguel.mendoza@padre.edu' },
+  { id: 9, nombre: 'Patricia Castro', correo: 'patricia.castro@padre.edu' },
+];
+
 export const GRUPOS_LIST = ['1A', '1B', '1C', '2A', '2B', '2C', '3A', '3B', '3C'];
 export const ESTADOS_LIST = ['Activo', 'Inactivo', 'Suspendido'];
 export const RANGOS_EDAD  = ['13-14 años', '15-16 años', '17-18 años'];

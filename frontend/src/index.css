@@ -1092,6 +1092,109 @@ body {
   align-self: center;
 }
 
+/* ─── Combobox de acudiente ──────────────────────────────────── */
+
+.combobox-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.combobox-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.combobox-input {
+  width: 100%;
+  padding-right: 2rem;
+}
+
+.combobox-clear {
+  position: absolute;
+  right: 0.6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 1;
+  color: #6B7C74;
+  padding: 0 0.2rem;
+  display: flex;
+  align-items: center;
+}
+.combobox-clear:hover { color: #1A2E25; }
+
+.combobox-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1.5px solid #D1E8DC;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  z-index: 200;
+  max-height: 200px;
+  overflow-y: auto;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.combobox-option {
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  transition: background 0.12s;
+  border-bottom: 1px solid #F0F7F4;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.combobox-option:last-child { border-bottom: none; }
+.combobox-option:hover { background: #F7FBF9; }
+.combobox-option--selected { background: #E8F5F0; }
+.combobox-option--selected:hover { background: #D5EDE4; }
+
+.combobox-option-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1A2E25;
+}
+.combobox-option--selected .combobox-option-name {
+  font-weight: 700;
+  color: #1A6B4A;
+}
+
+.combobox-option-sub {
+  font-size: 0.78rem;
+  color: #6B7C74;
+}
+
+.combobox-empty {
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: #6B7C74;
+  font-style: italic;
+}
+
+[data-theme="dark"] .combobox-dropdown {
+  background: #1E2D25;
+  border-color: #2E4A38;
+}
+[data-theme="dark"] .combobox-option:hover          { background: #253B2D; }
+[data-theme="dark"] .combobox-option--selected       { background: #1A3D2B; }
+[data-theme="dark"] .combobox-option--selected:hover { background: #213A2C; }
+[data-theme="dark"] .combobox-option-name  { color: #D4EDE0; }
+[data-theme="dark"] .combobox-option-sub   { color: #8CA89A; }
+[data-theme="dark"] .combobox-empty        { color: #8CA89A; }
+[data-theme="dark"] .combobox-clear        { color: #8CA89A; }
+[data-theme="dark"] .combobox-clear:hover  { color: #D4EDE0; }
+
 /* ═══════════════════════════════════════════════════════════════
    CALIFICACIONES — Clases específicas del módulo
    ═══════════════════════════════════════════════════════════════ */
