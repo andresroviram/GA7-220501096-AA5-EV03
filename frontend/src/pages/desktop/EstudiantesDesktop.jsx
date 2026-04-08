@@ -275,8 +275,6 @@ function Estudiantes() {
 
   const maxGrupo = Math.max(...estudiantesPorGrupo.map((g) => g.total), 1);
 
-  if (loading) return <Shimmer variant="table" rows={6} />;
-
   /* Stats generales (dinámicas) */
   const stats = useMemo(() => ({
     total:       lista.length,
@@ -287,6 +285,8 @@ function Estudiantes() {
       ? (lista.reduce((s, e) => s + e.promedio, 0) / lista.length).toFixed(1)
       : '—',
   }), [lista]);
+
+  if (loading) return <Shimmer variant="table" rows={6} />;
 
   return (
     <div className="module-page">
