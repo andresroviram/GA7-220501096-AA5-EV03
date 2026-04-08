@@ -1,9 +1,6 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import Shimmer from '../../components/Shimmer';
 import {
-  docentesPorDepartamento,
-  estadisticasDocentes,
-  departamentos,
   estados,
   materias as MATERIAS_LIST,
 } from '../../data/mockDocentes';
@@ -307,7 +304,9 @@ function Docentes() {
   };
 
   /* Máximo de docentes por dept para calcular el ancho de barra */
-  const maxDept = Math.max(...docentesPorDepartamento.map((d) => d.total));
+  const maxDept = docentesPorDepartamento.length
+    ? Math.max(...docentesPorDepartamento.map((d) => d.total))
+    : 1;
 
   if (loading) return <Shimmer variant="table" rows={6} />;
 
