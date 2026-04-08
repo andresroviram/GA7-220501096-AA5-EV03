@@ -170,9 +170,16 @@ const authService = {
 
   /**
    * Registra un nuevo usuario mediante POST /auth/register.
-   * @param {{ nombre: string, apellido: string, correo: string, password: string, tipo_usuario: string }} data
+   * En modo mock lanza un error claro para evitar la inconsistencia de
+   * registrar en el backend real pero no poder iniciar sesión (que usa mock).
+   * @param {{ fullName: string, username: string, identification: string, birthDate: string, password: string }} data
    */
   async register(data) {
+    if (USE_MOCK) {
+      const err = new Error('El registro no está disponible en modo demo. Usa una de las cuentas de ejemplo.');
+      err.response = { status: 503 };
+      throw err;
+    }
     const response = await axios.post(`${AUTH_API_URL}/register`, data);
     return response.data;
   },

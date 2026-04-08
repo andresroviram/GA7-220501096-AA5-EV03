@@ -53,6 +53,8 @@ function RegisterForm({ onBackToLogin, onRegisterSuccess }) {
     } catch (err) {
       if (err.response?.status === 409) {
         setError('El correo ya está registrado. Intenta iniciar sesión.');
+      } else if (err.response?.status === 503) {
+        setError(err.message);
       } else if (err.response?.status === 400) {
         setError('Datos inválidos. Revisa los campos.');
       } else {
