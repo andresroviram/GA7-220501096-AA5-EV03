@@ -53,10 +53,12 @@ export class UsersService {
                 nombre: `${u.nombre} ${u.apellido}`,
                 cedula: u.cedula ?? '',
                 departamento: u.departamento ?? '',
+                correo: u.correo,
                 email: u.correo,
                 telefono: u.telefono ?? '',
                 estado: u.isActive ? 'Activo' : 'Inactivo',
                 fechaIngreso: u.fecha_ingreso ?? '',
+                fechaRegistro: u.createdAt ? u.createdAt.toISOString().slice(0, 10) : '',
                 tipo_usuario: u.tipo_usuario,
                 materias: userMaterias,
             };

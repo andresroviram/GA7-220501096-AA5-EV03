@@ -185,7 +185,7 @@ export default function RolesDesktop() {
                 {pendientes.map((u) => (
                   <tr key={u.id}>
                     <td className="td-bold">{u.nombre}</td>
-                    <td>{u.correo}</td>
+                    <td>{u.correo ?? u.email}</td>
                     <td>{u.fechaRegistro}</td>
                     <td><span className="status-badge status-badge--warning">Sin rol</span></td>
                     <td>
