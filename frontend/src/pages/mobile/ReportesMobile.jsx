@@ -1,17 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import * as reportesService from '../../services/reportesService';
 import { IconDownload, IconFile } from '../../components/Icons';
+import Shimmer from '../../components/Shimmer';
 
 const ICON_MAP = { file: '📄', check: '✅', users: '👥', chart: '📊', calendar: '📅', grid: '🗂️' };
 
 function ReportesMobile() {
   const [tipos,    setTipos]    = useState([]);
   const [recientes, setRecientes] = useState([]);
+  const [loading,  setLoading]  = useState(true);
 
   useEffect(() => {
-    reportesService.getTiposReporte().then(setTipos);
-    reportesService.getReportesRecientes().then(setRecientes);
+    Promise.all([
+      reportesService.getTiposReporte(),
+      reportesService.getReportesRecientes(),
+    ]).then(([t, r]) => {
+      setTipos(t);
+      setRecientes(r);
+    }).finally(() => setLoading(false));
   }, []);
+
+  if (loading) return <Shimmer variant="mobile-list" rows={4} />;
 
   return (
     <div className="m-page">

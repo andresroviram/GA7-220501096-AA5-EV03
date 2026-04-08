@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import * as reportesService from '../../services/reportesService';
 import Button from '../../components/ui/Button';
+import Shimmer from '../../components/Shimmer';
 
 import {
   IconDownload, IconFile, IconCheckCircle, IconUsers, IconBarChart, IconCalendar, IconGrid,
@@ -70,11 +71,19 @@ function ReporteCard({ tipo }) {
 function Reportes() {
   const [tipos,    setTipos]    = useState([]);
   const [recientes, setRecientes] = useState([]);
+  const [loading,  setLoading]  = useState(true);
 
   useEffect(() => {
-    reportesService.getTiposReporte().then(setTipos);
-    reportesService.getReportesRecientes().then(setRecientes);
+    Promise.all([
+      reportesService.getTiposReporte(),
+      reportesService.getReportesRecientes(),
+    ]).then(([t, r]) => {
+      setTipos(t);
+      setRecientes(r);
+    }).finally(() => setLoading(false));
   }, []);
+
+  if (loading) return <Shimmer variant="table" rows={4} />;
 
   return (
     <div className="module-page">
