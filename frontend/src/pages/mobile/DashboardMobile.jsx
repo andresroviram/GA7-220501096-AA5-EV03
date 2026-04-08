@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import StatCard from '../../components/StatCard';
 import AcademicPerformanceChart from '../../components/AcademicPerformanceChart';
 import GradeDistributionChart from '../../components/GradeDistributionChart';
 import { stats } from '../../data/mockDashboard';
 import { IconGradCap, IconUsers, IconBook, IconCalendar, IconBarChart } from '../../components/Icons';
 import authService from '../../services/authService';
-import { getEstudiantesByPadre } from '../../data/mockEstudiantes';
-import { calificaciones as allCalificaciones } from '../../data/mockCalificaciones';
+import * as estudiantesService from '../../services/estudiantesService';
+import * as calificacionesService from '../../services/calificacionesService';
 
 const STAT_ICONS = [<IconGradCap />, <IconUsers />, <IconBook />, <IconCalendar />];
 
@@ -29,9 +29,14 @@ function DashboardPadreMobile({ user }) {
   const hour = new Date().getHours();
   const greeting = hour < 12 ? 'Buenos días' : hour < 19 ? 'Buenas tardes' : 'Buenas noches';
 
-  const hijos  = getEstudiantesByPadre(user.correo);
-  const ids    = hijos.map((e) => e.id);
-  const califs = allCalificaciones.filter((c) => ids.includes(c.estudiante_id));
+  const [hijos,  setHijos]  = useState([]);
+  const [califs, setCalifs] = useState([]);
+
+  useEffect(() => {
+    estudiantesService.getEstudiantes().then(setHijos).catch(() => {});
+    calificacionesService.getCalificaciones().then(setCalifs).catch(() => {});
+  }, []);
+
   const promedio = hijos.length
     ? (hijos.reduce((s, e) => s + e.promedio, 0) / hijos.length).toFixed(1)
     : '—';

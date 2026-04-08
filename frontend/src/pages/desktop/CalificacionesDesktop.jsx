@@ -2,7 +2,6 @@ import React, { useState, useMemo, useEffect } from 'react';
 import Shimmer from '../../components/Shimmer';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import {
-  promediosPorGrupo,
   materias as MATERIAS_LIST,
   gruposSelect as GRUPOS_FILTER,
 } from '../../data/mockCalificaciones';
@@ -123,6 +122,7 @@ let nextId = 1;
 function Calificaciones() {
   const [lista,         setLista]         = useState([]);
   const [loading,       setLoading]       = useState(true);
+  const [promediosPorGrupo, setPromediosPorGrupo] = useState([]);
   const [notaAprob,     setNotaAprob]     = useState(6);
   const [filtroMateria, setFiltroMateria] = useState('');
   const [filtroGrupo,   setFiltroGrupo]   = useState('');
@@ -134,6 +134,9 @@ function Calificaciones() {
     calificacionesService.getCalificaciones()
       .then((data) => { setLista(data); nextId = data.length + 1; })
       .finally(() => setLoading(false));
+    calificacionesService.getPromediosPorGrupo()
+      .then(setPromediosPorGrupo)
+      .catch(() => {});
     configService.getParams()
       .then((p) => setNotaAprob(Number(p.notaAprobatoria) || 6));
   }, []);

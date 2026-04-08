@@ -13,7 +13,7 @@ const MOCK_PARAMS_DEFAULT = {
 // Store mutable en memoria para dev — persiste durante la sesión
 let mockStore = { ...MOCK_PARAMS_DEFAULT };
 
-const isDev = import.meta.env.DEV || import.meta.env.VITE_USE_MOCK === 'true';
+const isDev = import.meta.env.VITE_USE_MOCK === 'true';
 
 /** Obtiene los parámetros globales del sistema. */
 export async function getParams() {

@@ -1,6 +1,6 @@
 import api from './api';
 
-const isDev = import.meta.env.DEV || import.meta.env.VITE_USE_MOCK === 'true';
+const isDev = import.meta.env.VITE_USE_MOCK === 'true';
 
 /**
  * Devuelve la lista de docentes.
