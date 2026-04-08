@@ -1203,7 +1203,7 @@ body {
   transition: background 0.15s, color 0.15s;
 }
 
-.sidebar-nav-item:hover {
+.sidebar-nav-item:not(.sidebar-nav-item--active):hover {
   background: #F0F7F4;
   color: #1A2E25;
 }
@@ -2198,7 +2198,7 @@ body {
 [data-theme="dark"] .sidebar-brand-sub   { color: #7A8599; }
 
 [data-theme="dark"] .sidebar-nav-item { color: #7A8599; }
-[data-theme="dark"] .sidebar-nav-item:hover {
+[data-theme="dark"] .sidebar-nav-item:not(.sidebar-nav-item--active):hover {
   background: #1F2535;
   color: #D4DAE8;
 }
