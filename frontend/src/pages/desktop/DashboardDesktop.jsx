@@ -8,6 +8,7 @@ import { stats } from '../../data/mockDashboard';
 import { IconGradCap, IconUsers, IconBook, IconCalendar, IconBarChart } from '../../components/Icons';
 import { getSessionUser } from '../../utils/sessionUser';
 import * as estudiantesService from '../../services/estudiantesService';
+import { getMisHijos } from '../../services/estudiantesService';
 import * as calificacionesService from '../../services/calificacionesService';
 
 const STAT_ICONS = [<IconGradCap />, <IconUsers />, <IconBook />, <IconCalendar />];
@@ -18,8 +19,14 @@ function DashboardPadre({ user }) {
   const [califs, setCalifs] = useState([]);
 
   useEffect(() => {
-    estudiantesService.getEstudiantes().then(setHijos).catch(() => {});
-    calificacionesService.getCalificaciones().then(setCalifs).catch(() => {});
+    getMisHijos()
+      .then(async (h) => {
+        setHijos(h);
+        const allCalifs = await calificacionesService.getCalificaciones();
+        const nombres = new Set(h.map((e) => e.nombre));
+        setCalifs(allCalifs.filter((c) => nombres.has(c.estudiante)));
+      })
+      .catch(() => {});
   }, []);
 
   const promedio = hijos.length

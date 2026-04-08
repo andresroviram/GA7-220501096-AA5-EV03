@@ -11,10 +11,11 @@ import { Calificacion } from '../calificaciones/calificacion.entity';
 import { Rol } from '../roles/rol.entity';
 import { Permiso } from '../roles/permiso.entity';
 import { Reporte } from '../reportes/reporte.entity';
+import { RelacionPadres } from '../relacion-padres/relacion-padres.entity';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([User, Alumno, Grupo, Horario, GrupoHorario, Materia, Calificacion, Rol, Permiso, Reporte]),
+        TypeOrmModule.forFeature([User, Alumno, Grupo, Horario, GrupoHorario, Materia, Calificacion, Rol, Permiso, Reporte, RelacionPadres]),
     ],
     providers: [SeedService],
 })

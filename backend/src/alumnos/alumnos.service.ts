@@ -107,4 +107,13 @@ export class AlumnosService {
         await this.relacionRepo.delete({ id_alumno: id });
         await this.repo.delete(id);
     }
+
+    /** Devuelve solo los alumnos vinculados al padre autenticado via relacion_padres */
+    async findMisHijos(padreId: number): Promise<any[]> {
+        const relaciones = await this.relacionRepo.find({ where: { id_padre: padreId } });
+        if (relaciones.length === 0) return [];
+        const alumnoIds = relaciones.map((r) => r.id_alumno);
+        const alumnos = await this.repo.findByIds(alumnoIds);
+        return this.toDisplay(alumnos);
+    }
 }

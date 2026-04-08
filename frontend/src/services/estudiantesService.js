@@ -42,6 +42,21 @@ export async function deleteEstudiante(id) {
   await api.delete(`/alumnos/${id}`);
 }
 
+/**
+ * Devuelve solo los estudiantes vinculados al padre autenticado.
+ * En dev filtra por correo_padre; en prod llama a GET /alumnos/mis-hijos.
+ */
+export async function getMisHijos() {
+  if (isDev) {
+    const { getEstudiantesByPadre } = await import('../data/mockEstudiantes.js');
+    const { getPadreCorreo } = await import('../utils/sessionUser.js');
+    const correo = getPadreCorreo();
+    return correo ? getEstudiantesByPadre(correo) : [];
+  }
+  const res = await api.get('/alumnos/mis-hijos');
+  return res.data;
+}
+
 /** Lista usuarios con tipo 'padre/acudiente'. */
 export async function getPadres() {
   if (isDev) {

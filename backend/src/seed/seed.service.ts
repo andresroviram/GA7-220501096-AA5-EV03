@@ -12,6 +12,7 @@ import { Calificacion } from '../calificaciones/calificacion.entity';
 import { Rol } from '../roles/rol.entity';
 import { Permiso } from '../roles/permiso.entity';
 import { Reporte } from '../reportes/reporte.entity';
+import { RelacionPadres } from '../relacion-padres/relacion-padres.entity';
 
 /**
  * Usuarios demo — estos son los que se muestran en la tarjeta de login.
@@ -52,6 +53,7 @@ export class SeedService implements OnModuleInit {
         @InjectRepository(Rol) private readonly rolRepo: Repository<Rol>,
         @InjectRepository(Permiso) private readonly permisoRepo: Repository<Permiso>,
         @InjectRepository(Reporte) private readonly reporteRepo: Repository<Reporte>,
+        @InjectRepository(RelacionPadres) private readonly relacionPadresRepo: Repository<RelacionPadres>,
     ) { }
 
     /**
@@ -92,6 +94,7 @@ export class SeedService implements OnModuleInit {
                 this.logger.log(`✅ ${name} sembrado.`);
             }
         }
+        await this.seedRelaciones();
     }
 
     async seed() {
@@ -228,5 +231,26 @@ export class SeedService implements OnModuleInit {
             );
             await this.permisoRepo.save(permisosSeed);
         }
+    }
+
+    /**
+     * Vincula al padre demo (juan.rodriguez@escuela.edu) con sus dos hijos en relacion_padres.
+     * Corre en cada arranque pero solo inserta si la tabla está vacía.
+     */
+    private async seedRelaciones() {
+        if ((await this.relacionPadresRepo.count()) > 0) return;
+
+        const padre = await this.usuarioRepo.findOne({ where: { correo: 'juan.rodriguez@escuela.edu' } });
+        const ana = await this.alumnoRepo.findOne({ where: { email: 'ana.garcia@estudiante.edu' } });
+        const juan = await this.alumnoRepo.findOne({ where: { email: 'juan.perez@estudiante.edu' } });
+
+        if (!padre || !ana || !juan) return;
+
+        this.logger.log('🌱 Sembrando relacion_padres...');
+        await this.relacionPadresRepo.save([
+            { id_padre: padre.id, id_alumno: ana.id_alumno, parentesco: 'padre' },
+            { id_padre: padre.id, id_alumno: juan.id_alumno, parentesco: 'padre' },
+        ]);
+        this.logger.log('✅ relacion_padres sembrado.');
     }
 }

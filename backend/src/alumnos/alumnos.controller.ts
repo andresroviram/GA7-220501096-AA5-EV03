@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Delete, Body, Param, Query, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, Query, ParseIntPipe, UseGuards, Request } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { AlumnosService } from './alumnos.service';
 import { CreateAlumnoDto, UpdateAlumnoDto } from './dto/alumno.dto';
@@ -10,6 +10,12 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 @Controller('alumnos')
 export class AlumnosController {
     constructor(private readonly service: AlumnosService) { }
+
+    /** Devuelve solo los alumnos vinculados al padre autenticado (via relacion_padres) */
+    @Get('mis-hijos')
+    findMisHijos(@Request() req: any) {
+        return this.service.findMisHijos(req.user.userId);
+    }
 
     @Get()
     findAll(@Query('idGrupo') idGrupo?: string) {
