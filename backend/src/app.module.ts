@@ -37,9 +37,9 @@ import { Reporte } from './reportes/reporte.entity';
             useFactory: (config: ConfigService) => ({
                 type: 'postgres',
                 url: config.get<string>('DATABASE_URL'),
-                ssl: config.get('NODE_ENV') === 'production'
-                    ? { rejectUnauthorized: false }
-                    : false,
+                ssl: config.get('NODE_ENV') === 'development'
+                    ? false
+                    : { rejectUnauthorized: false },
                 synchronize: true,
                 extra: {
                     // Evita el DeprecationWarning de pg@8 por queries concurrentes
