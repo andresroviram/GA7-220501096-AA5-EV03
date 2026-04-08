@@ -170,7 +170,8 @@ Sembradas automáticamente por el SeedService al arrancar el backend por primera
   "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
   "correo": "admin@escuela.edu",
   "nombre": "Carlos Admin",
-  "tipo_usuario": "administrativo"
+  "tipo_usuario": "administrativo",
+  "telefono": "+52 555-0100"
 }
 ```
 

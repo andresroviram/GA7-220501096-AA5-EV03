@@ -71,18 +71,18 @@ function AcudienteCombobox({ padres, tutor, tutorId, onChange }) {
     : padres;
 
   const handleInputChange = (e) => {
-    onChange(e.target.value, null); // escribir manualmente descarta el vínculo
+    onChange(e.target.value, null, null); // escribir manualmente descarta el vínculo
     setOpen(true);
   };
 
   const handleSelect = (padre) => {
-    onChange(padre.nombre, padre.id);
+    onChange(padre.nombre, padre.id, padre.correo);
     setOpen(false);
   };
 
   const handleClear = (e) => {
     e.stopPropagation();
-    onChange('', null);
+    onChange('', null, null);
     setOpen(false);
   };
 
@@ -140,6 +140,7 @@ function ModalEstudiante({ estudiante, onSave, onCancel }) {
     direccion:     estudiante?.direccion     || '',
     tutor:         estudiante?.tutor         || '',
     tutorId:       estudiante?.tutorId       || null,
+    tutorCorreo:   estudiante?.correo_padre?.[0] ?? '',
     tutorTelefono: estudiante?.tutorTelefono || '',
     promedio:      estudiante?.promedio      ?? '',
   });
@@ -232,7 +233,7 @@ function ModalEstudiante({ estudiante, onSave, onCancel }) {
               padres={padres}
               tutor={form.tutor}
               tutorId={form.tutorId}
-              onChange={(nombre, id) => setForm((prev) => ({ ...prev, tutor: nombre, tutorId: id }))}
+              onChange={(nombre, id, correo) => setForm((prev) => ({ ...prev, tutor: nombre, tutorId: id, tutorCorreo: correo ?? prev.tutorCorreo }))}
             />
 
             <InputText
@@ -338,12 +339,13 @@ function Estudiantes() {
   const handleSave = (form) => {
     if (modalForm?.isCreate) {
       const idStr = `EST${String(nextId++).padStart(3, '0')}`;
-      setLista((prev) => [...prev, { ...form, id: idStr, edad: Number(form.edad), promedio: parseFloat(form.promedio) || 0, estado: 'Activo' }]);
+      const correo_padre = form.tutorCorreo ? [form.tutorCorreo] : [];
+      setLista((prev) => [...prev, { ...form, id: idStr, edad: Number(form.edad), promedio: parseFloat(form.promedio) || 0, estado: 'Activo', correo_padre }]);
     } else {
       setLista((prev) =>
         prev.map((e) =>
           e.id === modalForm.estudiante.id
-            ? { ...e, ...form, edad: Number(form.edad), promedio: parseFloat(form.promedio) || e.promedio }
+            ? { ...e, ...form, edad: Number(form.edad), promedio: parseFloat(form.promedio) || e.promedio, correo_padre: form.tutorCorreo ? [form.tutorCorreo] : e.correo_padre }
             : e
         )
       );
