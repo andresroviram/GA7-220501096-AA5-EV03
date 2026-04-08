@@ -73,7 +73,7 @@ function Topbar({ title = 'Dashboard', onLogout, onToggleSidebar, darkMode = fal
 
           {menuOpen && (
             <div className="topbar-user-dropdown" role="menu">
-              {rol === 'administrativo' && (
+              {(
                 <>
                   <button className="topbar-dropdown-item" role="menuitem" onClick={() => { setMenuOpen(false); navigate('/configuraciones', { state: { tab: 'perfil' } }); }}>
                     <IconUser />

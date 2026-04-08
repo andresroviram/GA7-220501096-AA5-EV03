@@ -208,7 +208,7 @@ export class SeedService implements OnModuleInit {
             {
                 nombre: 'Docente',
                 descripcion: 'Gestión de calificaciones y grupos',
-                permisos: { Dashboard: true, Docentes: false, Estudiantes: true, Calificaciones: true, 'Grupos/Horarios': true, Materias: true, Reportes: true, Configuraciones: false },
+                permisos: { Dashboard: true, Docentes: false, Estudiantes: true, Calificaciones: true, 'Grupos/Horarios': true, Materias: true, Reportes: true, Configuraciones: true },
             },
             {
                 nombre: 'Estudiante',
@@ -218,7 +218,7 @@ export class SeedService implements OnModuleInit {
             {
                 nombre: 'Padre/Acudiente',
                 descripcion: 'Seguimiento de acudidos',
-                permisos: { Dashboard: true, Docentes: false, Estudiantes: true, Calificaciones: true, 'Grupos/Horarios': true, Materias: false, Reportes: true, Configuraciones: false },
+                permisos: { Dashboard: true, Docentes: false, Estudiantes: true, Calificaciones: true, 'Grupos/Horarios': true, Materias: false, Reportes: true, Configuraciones: true },
             },
         ];
 

@@ -271,7 +271,12 @@ function MiPerfil() {
 /* ─── Componente principal ── */
 function Configuraciones() {
   const location = useLocation();
-  const [activeTab, setActiveTab] = useState(location.state?.tab || 'roles');
+  const user = authService.getCurrentUser();
+  const rol  = user?.tipo_usuario ?? '';
+  const soloPerfilTab = rol === 'docente' || rol === 'padre';
+  const [activeTab, setActiveTab] = useState(
+    soloPerfilTab ? 'perfil' : (location.state?.tab || 'roles'),
+  );
 
   return (
     <div className="module-page">
@@ -282,18 +287,22 @@ function Configuraciones() {
         >
           <IconUser /> Mi Perfil
         </button>
-        <button
-          className={`config-submenu-item${activeTab === 'roles' ? ' config-submenu-item--active' : ''}`}
-          onClick={() => setActiveTab('roles')}
-        >
-          <IconShield /> Roles y Permisos
-        </button>
-        <button
-          className={`config-submenu-item${activeTab === 'params' ? ' config-submenu-item--active' : ''}`}
-          onClick={() => setActiveTab('params')}
-        >
-          <IconSettings /> Parámetros del Sistema
-        </button>
+        {!soloPerfilTab && (
+          <>
+            <button
+              className={`config-submenu-item${activeTab === 'roles' ? ' config-submenu-item--active' : ''}`}
+              onClick={() => setActiveTab('roles')}
+            >
+              <IconShield /> Roles y Permisos
+            </button>
+            <button
+              className={`config-submenu-item${activeTab === 'params' ? ' config-submenu-item--active' : ''}`}
+              onClick={() => setActiveTab('params')}
+            >
+              <IconSettings /> Parámetros del Sistema
+            </button>
+          </>
+        )}
       </div>
 
       {activeTab === 'roles'  && <RolesPermisos />}

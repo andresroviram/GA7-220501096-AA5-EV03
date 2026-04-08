@@ -10,10 +10,10 @@ export const ROLE_PERMISSIONS = {
   ],
   docente: [
     'dashboard', 'estudiantes', 'grupos',
-    'materias', 'calificaciones', 'reportes',
+    'materias', 'calificaciones', 'reportes', 'configuraciones',
   ],
   padre: [
-    'dashboard', 'calificaciones', 'grupos', 'reportes',
+    'dashboard', 'calificaciones', 'grupos', 'reportes', 'configuraciones',
   ],
 };
 
