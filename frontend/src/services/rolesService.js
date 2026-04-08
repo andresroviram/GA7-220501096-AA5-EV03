@@ -38,7 +38,7 @@ const MOCK_ROLES = [
   },
 ];
 
-const isDev = import.meta.env.DEV || import.meta.env.VITE_USE_MOCK === 'true';
+const isDev = import.meta.env.VITE_USE_MOCK === 'true';
 
 /** Obtiene todos los roles con sus permisos. */
 export async function getRoles() {
