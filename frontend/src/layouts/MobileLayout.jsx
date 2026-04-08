@@ -87,7 +87,7 @@ function MobileLayout({ onLogout, darkMode, onToggleTheme }) {
         <Outlet />
       </main>
 
-      {/* ── Bottom Navigation ────────────────────────────── */}
+      {/* ── Bottom Navigation (Material 3) ────────────────── */}
       <nav className="bottom-nav">
         {visibleItems.slice(0, 5).map((item) => (
           <NavLink
@@ -97,7 +97,9 @@ function MobileLayout({ onLogout, darkMode, onToggleTheme }) {
               'bottom-nav-item' + (isActive ? ' bottom-nav-item--active' : '')
             }
           >
-            <span className="bottom-nav-icon">{item.icon}</span>
+            <span className="bottom-nav-indicator">
+              <span className="bottom-nav-icon">{item.icon}</span>
+            </span>
             <span className="bottom-nav-label">{item.label}</span>
           </NavLink>
         ))}
@@ -117,6 +119,8 @@ function MobileLayout({ onLogout, darkMode, onToggleTheme }) {
                 <p className="mobile-drawer-role">{rolLabel}</p>
               </div>
             </div>
+
+            <div className="mobile-drawer-divider" />
 
             <nav className="mobile-drawer-nav">
               {visibleItems.map((item) => (
