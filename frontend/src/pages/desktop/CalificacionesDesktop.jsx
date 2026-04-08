@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { getSessionUser } from '../../utils/sessionUser';
 import Shimmer from '../../components/Shimmer';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import {
@@ -120,6 +121,7 @@ function ModalCalificacion({ item, onSave, onCancel }) {
 let nextId = 1;
 
 function Calificaciones() {
+  const esPadre = getSessionUser()?.tipo_usuario === 'padre';
   const [lista,         setLista]         = useState([]);
   const [loading,       setLoading]       = useState(true);
   const [promediosPorGrupo, setPromediosPorGrupo] = useState([]);
@@ -246,9 +248,11 @@ function Calificaciones() {
         <div className="table-header">
           <h3 className="table-title">Calificaciones Registradas</h3>
           <div className="table-header-actions">
-            <Button variant="primary" onClick={() => setModalForm({ isCreate: true })} leftIcon={<IconPlus />}>
-              Registrar
-            </Button>
+            {!esPadre && (
+              <Button variant="primary" onClick={() => setModalForm({ isCreate: true })} leftIcon={<IconPlus />}>
+                Registrar
+              </Button>
+            )}
             <Button variant="secondary" onClick={handleExport} leftIcon={<IconExport />}>Exportar</Button>
           </div>
         </div>
@@ -263,7 +267,7 @@ function Calificaciones() {
                 <th>Grupo</th>
                 <th>Calificación</th>
                 <th>Fecha</th>
-                <th>Acciones</th>
+                {!esPadre && <th>Acciones</th>}
               </tr>
             </thead>
             <tbody>
@@ -275,15 +279,17 @@ function Calificaciones() {
                   <td><span className="badge badge--grupo">{c.grupo}</span></td>
                   <td><span className={`cal-score${c.calificacion >= 9 ? ' cal-score--high' : c.calificacion < notaAprob ? ' cal-score--low' : ''}`}>{c.calificacion}</span></td>
                   <td>{c.fecha}</td>
-                  <td className="td-actions">
-                    <button
-                      className="action-btn action-btn--edit"
-                      title="Editar"
-                      onClick={() => setModalForm({ item: c })}
-                    >
-                      <IconEdit />
-                    </button>
-                  </td>
+                  {!esPadre && (
+                    <td className="td-actions">
+                      <button
+                        className="action-btn action-btn--edit"
+                        title="Editar"
+                        onClick={() => setModalForm({ item: c })}
+                      >
+                        <IconEdit />
+                      </button>
+                    </td>
+                  )}
                 </tr>
               ))}
               {listaFiltrada.length === 0 && (

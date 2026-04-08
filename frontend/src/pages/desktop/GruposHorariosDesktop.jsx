@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { getSessionUser } from '../../utils/sessionUser';
 import Shimmer from '../../components/Shimmer';
 import {
   estadisticasGrupos,
@@ -180,6 +181,7 @@ function ModalConfirmDelete({ item, onConfirm, onCancel }) {
 let nextId = 100;
 
 function GruposHorarios() {
+  const esPadre = getSessionUser()?.tipo_usuario === 'padre';
   const [lista,              setLista]              = useState([]);
   const [loading,            setLoading]            = useState(true);
   const [filtroGrupo,        setFiltroGrupo]        = useState('');
@@ -281,11 +283,13 @@ function GruposHorarios() {
       <div className="table-card">
         <div className="table-header">
           <h3 className="table-title">Horarios Registrados</h3>
-          <div className="table-header-actions">
-            <Button variant="primary" onClick={() => setModalForm({ isCreate: true })} leftIcon={<IconPlus />}>
-              Registrar Horario
-            </Button>
-          </div>
+          {!esPadre && (
+            <div className="table-header-actions">
+              <Button variant="primary" onClick={() => setModalForm({ isCreate: true })} leftIcon={<IconPlus />}>
+                Registrar Horario
+              </Button>
+            </div>
+          )}
         </div>
         <div className="table-wrapper">
           <table className="data-table">
@@ -299,7 +303,7 @@ function GruposHorarios() {
                 <th>Horario</th>
                 <th>Aula</th>
                 <th>Estado</th>
-                <th>Acciones</th>
+                {!esPadre && <th>Acciones</th>}
               </tr>
             </thead>
             <tbody>
@@ -320,17 +324,21 @@ function GruposHorarios() {
                       : <span className="badge badge--active"><IconCheck /> Activo</span>}
                   </td>
                   <td className="td-actions">
-                    <button className="action-btn action-btn--edit" title="Editar" onClick={() => setModalForm({ item: h })}>
-                      <IconEdit />
-                    </button>
-                    <button className="action-btn action-btn--remove" title="Eliminar" onClick={() => setModalConfirmDelete(h)}>
-                      <IconTrash />
-                    </button>
+                    {!esPadre && (
+                      <>
+                        <button className="action-btn action-btn--edit" title="Editar" onClick={() => setModalForm({ item: h })}>
+                          <IconEdit />
+                        </button>
+                        <button className="action-btn action-btn--remove" title="Eliminar" onClick={() => setModalConfirmDelete(h)}>
+                          <IconTrash />
+                        </button>
+                      </>
+                    )}
                   </td>
                 </tr>
               ))}
               {listaFiltrada.length === 0 && (
-                <tr><td colSpan={9} className="table-empty">No se encontraron horarios con los filtros seleccionados.</td></tr>
+                <tr><td colSpan={esPadre ? 8 : 9} className="table-empty">No se encontraron horarios con los filtros seleccionados.</td></tr>
               )}
             </tbody>
           </table>
