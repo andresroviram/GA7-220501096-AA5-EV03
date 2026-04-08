@@ -2492,6 +2492,7 @@ body {
   white-space: nowrap;
 }
 .ui-btn--full { width: 100%; }
+.ui-btn--full + .ui-btn--full { margin-top: 0.75rem; }
 .ui-btn__content { display: flex; align-items: center; gap: 0.4rem; }
 .ui-btn__icon { display: flex; align-items: center; }
 
