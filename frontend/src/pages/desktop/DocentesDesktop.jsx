@@ -96,7 +96,7 @@ function ModalConfirm({ docente, onConfirm, onCancel }) {
 }
 
 /* ─── ModalDocente ───────────────────────────────────────────────────────────── */
-function ModalDocente({ docente, onSave, onCancel }) {
+function ModalDocente({ docente, onSave, onCancel, departamentos = [] }) {
   const isEdit = !!docente;
   const [form, setForm] = useState({
     nombre:       docente?.nombre       || '',
@@ -303,9 +303,37 @@ function Docentes() {
     setModalForm(null);
   };
 
+  /* Estadísticas dinámicas derivadas de `lista` */
+  const departamentos = useMemo(
+    () => [...new Set(lista.map((d) => d.departamento).filter(Boolean))].sort(),
+    [lista],
+  );
+
+  const docentesPorDepartamento = useMemo(() => {
+    const counts = {};
+    lista.forEach((d) => {
+      if (d.departamento) counts[d.departamento] = (counts[d.departamento] || 0) + 1;
+    });
+    return Object.entries(counts)
+      .map(([departamento, total]) => ({ departamento, total }))
+      .sort((a, b) => b.total - a.total);
+  }, [lista]);
+
+  const estadisticasDocentes = useMemo(() => {
+    const activos   = lista.filter((d) => d.estado === 'Activo').length;
+    const inactivos = lista.filter((d) => d.estado !== 'Activo').length;
+    const materiasTotales = lista.reduce((sum, d) => sum + (d.materias ?? 0), 0);
+    return {
+      total: lista.length,
+      activos,
+      inactivos,
+      promedioMaterias: lista.length ? materiasTotales / lista.length : 0,
+    };
+  }, [lista]);
+
   /* Máximo de docentes por dept para calcular el ancho de barra */
   const maxDept = docentesPorDepartamento.length
-    ? Math.max(...docentesPorDepartamento.map((d) => d.total))
+    ? Math.max(...docentesPorDepartamento.map((d) => d.total), 1)
     : 1;
 
   if (loading) return <Shimmer variant="table" rows={6} />;
@@ -326,6 +354,7 @@ function Docentes() {
       {modalForm && (
         <ModalDocente
           docente={modalForm.isCreate ? null : modalForm.docente}
+          departamentos={departamentos}
           onSave={handleSave}
           onCancel={() => setModalForm(null)}
         />
