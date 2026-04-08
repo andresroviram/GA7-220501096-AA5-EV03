@@ -54,6 +54,8 @@ export async function getRoles() {
  */
 export async function updateRolPermisos(rolId, permisos) {
   if (isDev) return MOCK_ROLES.find((r) => r.id === rolId);
-  const res = await api.put(`/roles/${rolId}/permisos`, { permisos });
+  // Solo enviar los campos que espera el DTO (modulo + acceso)
+  const payload = permisos.map(({ modulo, acceso }) => ({ modulo, acceso }));
+  const res = await api.put(`/roles/${rolId}/permisos`, { permisos: payload });
   return res.data;
 }
