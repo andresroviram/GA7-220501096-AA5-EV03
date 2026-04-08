@@ -3228,7 +3228,9 @@ body {
 }
 
 .pending-contact {
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
   background: #F0FBF6;
   color: #2A9D6F;
   border: 1px solid #B8E8D4;
@@ -3237,6 +3239,21 @@ body {
   font-size: .85rem;
   font-weight: 500;
   margin-bottom: 1.5rem;
+  width: 100%;
+  text-align: center;
+}
+
+.pending-contact-label {
+  font-size: .75rem;
+  font-weight: 400;
+  color: #6B7280;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.pending-contact-value {
+  font-size: .9rem;
+  font-weight: 600;
 }
 
 .pending-btn {
@@ -3281,6 +3298,8 @@ body {
 [data-theme="dark"] .pending-title  { color: #E8EDF7; }
 [data-theme="dark"] .pending-body   { color: #8B96AD; }
 [data-theme="dark"] .pending-contact{ background: #0F2A1E; color: #4DD99C; border-color: #1B4535; }
+[data-theme="dark"] .pending-contact-label { color: #6B8A7A; }
+[data-theme="dark"] .pending-contact-value { color: #4DD99C; }
 [data-theme="dark"] .pending-btn    { border-color: #2A3552; color: #C4CEDE; }
 [data-theme="dark"] .pending-btn:hover { background: #1C2332; }
 
