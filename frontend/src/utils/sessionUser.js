@@ -18,3 +18,9 @@ export function getPadreCorreo() {
   const u = getSessionUser();
   return u?.tipo_usuario === 'padre' ? u.correo : null;
 }
+
+/** Devuelve el id numérico del padre autenticado, o null si no es padre. */
+export function getPadreId() {
+  const u = getSessionUser();
+  return u?.tipo_usuario === 'padre' ? (u.id ?? null) : null;
+}

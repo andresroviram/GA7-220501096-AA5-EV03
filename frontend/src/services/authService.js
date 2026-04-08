@@ -38,6 +38,7 @@ function saveSession(data, remember) {
   storage.setItem('token', data.access_token);
   storage.setItem('lastLogin', new Date().toISOString());
   storage.setItem('user', JSON.stringify({
+    id: data.id ?? null,
     correo: data.correo,
     nombre: data.nombre,
     tipo_usuario: data.tipo_usuario,

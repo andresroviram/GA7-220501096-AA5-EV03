@@ -1,5 +1,5 @@
 import api from './api';
-import { getPadreCorreo } from '../utils/sessionUser';
+import { getPadreCorreo, getPadreId } from '../utils/sessionUser';
 
 const isDev = import.meta.env.VITE_USE_MOCK === 'true';
 
@@ -19,7 +19,21 @@ export async function getHorarios() {
     return horarios;
   }
   const res = await api.get('/horarios/bloques/all');
-  return res.data;
+  const horarios = res.data;
+
+  const idPadre = getPadreId();
+  if (idPadre !== null) {
+    // Para un padre: mostrar solo los horarios de los grupos de sus hijos
+    const alumnosRes = await api.get('/alumnos');
+    const grupos = [...new Set(
+      alumnosRes.data
+        .filter((a) => a.tutorId === idPadre)
+        .map((a) => a.grupo)
+    )];
+    return horarios.filter((h) => grupos.includes(h.grupo));
+  }
+
+  return horarios;
 }
 
 /**
