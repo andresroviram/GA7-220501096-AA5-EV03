@@ -29,7 +29,7 @@ const MOCK_ROLES = [
   },
   {
     id: 4,
-    nombre: 'Padre/Tutor',
+    nombre: 'Padre/Acudiente',
     descripcion: 'Seguimiento de acudidos',
     permisos: MODULOS.map((m) => ({
       modulo: m,

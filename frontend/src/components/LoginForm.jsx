@@ -10,7 +10,7 @@ const DEMO_USERS = import.meta.env.VITE_USE_MOCK === 'true'
   ? [
       { label: 'Administrador', correo: 'admin@escuela.edu',             password: 'Admin123!',   color: '#2A9D6F' },
       { label: 'Docente',       correo: 'maria.garcia@escuela.edu',      password: 'Docente123!', color: '#1976D2' },
-      { label: 'Padre / Tutor', correo: 'juan.rodriguez@escuela.edu',   password: 'Padre123!',   color: '#7B1FA2' },
+      { label: 'Padre / Acudiente', correo: 'juan.rodriguez@escuela.edu',   password: 'Padre123!',   color: '#7B1FA2' },
     ]
   : [];
 

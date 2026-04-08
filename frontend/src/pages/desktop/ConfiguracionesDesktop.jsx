@@ -228,7 +228,7 @@ function MiPerfil() {
   const rolLabel = {
     administrativo: 'Administrador',
     docente: 'Docente',
-    padre: 'Padre / Tutor',
+    padre: 'Padre / Acudiente',
   }[form.rol] ?? form.rol;
 
   return (

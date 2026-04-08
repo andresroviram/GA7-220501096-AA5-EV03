@@ -17,7 +17,7 @@ function Topbar({ title = 'Dashboard', onLogout, onToggleSidebar, darkMode = fal
   const user     = authService.getCurrentUser();
   const nombre   = user?.nombre   || 'Usuario';
   const rol      = user?.tipo_usuario || 'administrador';
-  const rolLabel = { administrativo: 'Administrador', docente: 'Docente', padre: 'Padre / Tutor' }[rol] ?? 'Usuario';
+  const rolLabel = { administrativo: 'Administrador', docente: 'Docente', padre: 'Padre / Acudiente' }[rol] ?? 'Usuario';
   const ciclo    = getCicloActual();
 
   const [menuOpen, setMenuOpen] = useState(false);

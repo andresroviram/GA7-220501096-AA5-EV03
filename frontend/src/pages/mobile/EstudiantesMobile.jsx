@@ -96,7 +96,7 @@ function EstudiantesMobile() {
                 <span>Edad: {est.edad} años</span>
               </div>
               <div className="m-entity-card-row" style={{ fontSize: '0.8rem', color: '#6B7C74' }}>
-                Tutor: {est.tutor}
+                Acudiente: {est.tutor}
               </div>
               <div className="m-entity-card-actions">
                 <button

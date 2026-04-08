@@ -77,7 +77,7 @@ function ConfiguracionesMobile() {
             { rol: 'Administrador', desc: 'Acceso completo al sistema',              color: '#2A9D6F' },
             { rol: 'Profesor',      desc: 'Gestión de calificaciones y grupos',      color: '#3D7BBF' },
             { rol: 'Estudiante',    desc: 'Consulta de notas y horarios',            color: '#BF6B3D' },
-            { rol: 'Padre/Tutor',   desc: 'Seguimiento de acudidos',                color: '#7B3DBF' },
+            { rol: 'Padre/Acudiente', desc: 'Seguimiento de acudidos',              color: '#7B3DBF' },
           ].map((r) => (
             <div key={r.rol} className="m-entity-card">
               <div className="m-entity-card-header">

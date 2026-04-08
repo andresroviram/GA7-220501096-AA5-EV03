@@ -43,7 +43,7 @@ function MobileLayout({ onLogout, darkMode, onToggleTheme }) {
   const user     = authService.getCurrentUser();
   const role     = user?.tipo_usuario ?? '';
   const nombre   = user?.nombre ?? 'Usuario';
-  const rolLabel = { administrativo: 'Administrador', docente: 'Docente', padre: 'Padre / Tutor' }[role] ?? 'Usuario';
+  const rolLabel = { administrativo: 'Administrador', docente: 'Docente', padre: 'Padre / Acudiente' }[role] ?? 'Usuario';
 
   const visibleItems = allNavItems.filter((item) => canAccess(role, item.route));
   const [drawerOpen, setDrawerOpen] = useState(false);
