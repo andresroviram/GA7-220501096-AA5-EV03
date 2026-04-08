@@ -294,7 +294,7 @@ function Calificaciones() {
               ))}
               {listaFiltrada.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="table-empty">No hay calificaciones con los filtros seleccionados.</td>
+                  <td colSpan={esPadre ? 6 : 7} className="table-empty">No hay calificaciones con los filtros seleccionados.</td>
                 </tr>
               )}
             </tbody>
