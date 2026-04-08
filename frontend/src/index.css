@@ -886,9 +886,15 @@ body {
 /* ─── Modal de formulario ─────────────────────────────────────── */
 
 .modal-form {
+  background: #ffffff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 620px;
+  max-height: 88vh;
+  overflow-y: auto;
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.22);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
 }
 
 .modal-form-header {

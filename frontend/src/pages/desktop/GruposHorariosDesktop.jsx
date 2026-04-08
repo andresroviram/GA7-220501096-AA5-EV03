@@ -157,16 +157,36 @@ function detectarConflictos(lista) {
   });
 }
 
+/* ─── Modal confirmar eliminación ── */
+function ModalConfirmDelete({ item, onConfirm, onCancel }) {
+  return (
+    <div className="modal-overlay" onClick={onCancel}>
+      <div className="modal-confirm" onClick={(e) => e.stopPropagation()}>
+        <h3 className="modal-confirm-title">Eliminar Horario</h3>
+        <p className="modal-confirm-msg">
+          ¿Está seguro que desea eliminar el horario de <strong>{item.materia}</strong> para el
+          grupo <strong>{item.grupo}</strong>? Esta acción no se puede deshacer.
+        </p>
+        <div className="modal-confirm-actions">
+          <Button variant="secondary" onClick={onCancel}>Cancelar</Button>
+          <Button variant="danger" onClick={() => onConfirm(item.id)}>Eliminar</Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ─── Componente principal ── */
 let nextId = 100;
 
 function GruposHorarios() {
-  const [lista,       setLista]       = useState([]);
-  const [loading,     setLoading]     = useState(true);
-  const [filtroGrupo, setFiltroGrupo] = useState('');
-  const [filtroDia,   setFiltroDia]   = useState('');
-  const [busqueda,    setBusqueda]    = useState({ grupo: '', dia: '' });
-  const [modalForm,   setModalForm]   = useState(null);
+  const [lista,              setLista]              = useState([]);
+  const [loading,            setLoading]            = useState(true);
+  const [filtroGrupo,        setFiltroGrupo]        = useState('');
+  const [filtroDia,          setFiltroDia]          = useState('');
+  const [busqueda,           setBusqueda]           = useState({ grupo: '', dia: '' });
+  const [modalForm,          setModalForm]          = useState(null);
+  const [modalConfirmDelete, setModalConfirmDelete] = useState(null);
 
   useEffect(() => {
     gruposService.getHorarios()
@@ -209,6 +229,13 @@ function GruposHorarios() {
 
   return (
     <div className="module-page">
+      {modalConfirmDelete && (
+        <ModalConfirmDelete
+          item={modalConfirmDelete}
+          onConfirm={(id) => { handleDelete(id); setModalConfirmDelete(null); }}
+          onCancel={() => setModalConfirmDelete(null)}
+        />
+      )}
       {modalForm && (
         <ModalHorario
           item={modalForm.isCreate ? null : modalForm.item}
@@ -296,7 +323,7 @@ function GruposHorarios() {
                     <button className="action-btn action-btn--edit" title="Editar" onClick={() => setModalForm({ item: h })}>
                       <IconEdit />
                     </button>
-                    <button className="action-btn action-btn--remove" title="Eliminar" onClick={() => handleDelete(h.id)}>
+                    <button className="action-btn action-btn--remove" title="Eliminar" onClick={() => setModalConfirmDelete(h)}>
                       <IconTrash />
                     </button>
                   </td>
