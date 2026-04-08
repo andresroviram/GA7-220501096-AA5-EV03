@@ -11,6 +11,7 @@ import { CalificacionesModule } from './calificaciones/calificaciones.module';
 import { SeedModule } from './seed/seed.module';
 import { ConfigParamsModule } from './config-params/config-params.module';
 import { RolesModule } from './roles/roles.module';
+import { ReportesModule } from './reportes/reportes.module';
 // Entidades
 import { User } from './users/user.entity';
 import { Alumno } from './alumnos/alumno.entity';
@@ -25,6 +26,7 @@ import { DocenteBaja } from './docente-baja/docente-baja.entity';
 import { ConfigParams } from './config-params/config-params.entity';
 import { Rol } from './roles/rol.entity';
 import { Permiso } from './roles/permiso.entity';
+import { Reporte } from './reportes/reporte.entity';
 
 @Module({
     imports: [
@@ -53,6 +55,7 @@ import { Permiso } from './roles/permiso.entity';
                     ConfigParams,
                     Rol,
                     Permiso,
+                    Reporte,
                 ],
             }),
         }),
@@ -66,6 +69,7 @@ import { Permiso } from './roles/permiso.entity';
         SeedModule,
         ConfigParamsModule,
         RolesModule,
+        ReportesModule,
     ],
 })
 export class AppModule { }

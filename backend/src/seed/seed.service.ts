@@ -11,6 +11,7 @@ import { Materia } from '../materias/materia.entity';
 import { Calificacion } from '../calificaciones/calificacion.entity';
 import { Rol } from '../roles/rol.entity';
 import { Permiso } from '../roles/permiso.entity';
+import { Reporte } from '../reportes/reporte.entity';
 
 /**
  * Usuarios demo — estos son los que se muestran en la tarjeta de login.
@@ -48,6 +49,7 @@ export class SeedService implements OnModuleInit {
         @InjectRepository(Calificacion) private readonly califRepo: Repository<Calificacion>,
         @InjectRepository(Rol) private readonly rolRepo: Repository<Rol>,
         @InjectRepository(Permiso) private readonly permisoRepo: Repository<Permiso>,
+        @InjectRepository(Reporte) private readonly reporteRepo: Repository<Reporte>,
     ) { }
 
     async onModuleInit() {
@@ -194,5 +196,13 @@ export class SeedService implements OnModuleInit {
             );
             await this.permisoRepo.save(permisosSeed);
         }
+
+        /* ── Reportes recientes ── */
+        await this.reporteRepo.save([
+            { tipo: 'Calificaciones', descripcion: 'Reporte general de calificaciones',     fecha: '2025-05-20', generadoPor: 'Admin', formato: 'PDF' },
+            { tipo: 'Estudiantes',   descripcion: 'Listado de estudiantes activos',         fecha: '2025-05-18', generadoPor: 'Admin', formato: 'Excel' },
+            { tipo: 'Docentes',      descripcion: 'Historial de docentes por departamento', fecha: '2025-05-15', generadoPor: 'Admin', formato: 'PDF' },
+            { tipo: 'Asistencia',    descripcion: 'Reporte de asistencia Grupo 3A',         fecha: '2025-05-10', generadoPor: 'Admin', formato: 'PDF' },
+        ]);
     }
 }

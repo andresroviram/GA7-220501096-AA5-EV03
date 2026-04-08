@@ -10,10 +10,11 @@ import { Materia } from '../materias/materia.entity';
 import { Calificacion } from '../calificaciones/calificacion.entity';
 import { Rol } from '../roles/rol.entity';
 import { Permiso } from '../roles/permiso.entity';
+import { Reporte } from '../reportes/reporte.entity';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([User, Alumno, Grupo, Horario, GrupoHorario, Materia, Calificacion, Rol, Permiso]),
+        TypeOrmModule.forFeature([User, Alumno, Grupo, Horario, GrupoHorario, Materia, Calificacion, Rol, Permiso, Reporte]),
     ],
     providers: [SeedService],
 })
