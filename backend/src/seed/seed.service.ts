@@ -226,7 +226,5 @@ export class SeedService implements OnModuleInit {
             );
             await this.permisoRepo.save(permisosSeed);
         }
-
-        await this.seedReportes();
     }
 }
