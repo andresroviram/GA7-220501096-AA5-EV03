@@ -2834,7 +2834,8 @@ body {
 .mobile-drawer-logout:hover { background: #FFF0F0; }
 
 /* ── Página móvil genérica ───────────────────────────────────── */
-.m-page          { padding: 1rem; }
+.m-page          { padding: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+.m-page .widget-card { margin-top: 0; }
 .m-hero          { margin-bottom: 1.25rem; }
 .m-hero-greeting { font-size: 0.9rem; color: #6B7C74; }
 .m-hero-name     { font-size: 1.3rem; font-weight: 800; color: #1A2E25; }
