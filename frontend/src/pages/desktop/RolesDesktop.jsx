@@ -205,15 +205,11 @@ export default function RolesDesktop() {
             <div className="modal-body">
               <div className="roles-permiso-grid">
                 {editRol.permisos.map((p, i) => (
-                  <label key={p.modulo} className="roles-permiso-toggle">
-                    <input
-                      type="checkbox"
-                      checked={p.acceso}
-                      onChange={() => {
-                        const copia = editRol.permisos.map((x, idx) => idx === i ? { ...x, acceso: !x.acceso } : x);
-                        setEditRol({ ...editRol, permisos: copia });
-                      }}
-                    />
+                  <label key={p.modulo} className={'roles-permiso-toggle' + (p.acceso ? ' roles-permiso-toggle--on' : '')} onClick={() => {
+                    const copia = editRol.permisos.map((x, idx) => idx === i ? { ...x, acceso: !x.acceso } : x);
+                    setEditRol({ ...editRol, permisos: copia });
+                  }}>
+                    <input type="checkbox" checked={p.acceso} onChange={() => {}} />
                     <span>{p.modulo}</span>
                   </label>
                 ))}
@@ -259,12 +255,8 @@ export default function RolesDesktop() {
                   <label className="field-label">Permisos de módulos</label>
                   <div className="roles-permiso-grid">
                     {MODULOS.map((m) => (
-                      <label key={m} className="roles-permiso-toggle">
-                        <input
-                          type="checkbox"
-                          checked={nuevoRol.permisos[m]}
-                          onChange={() => setNuevoRol((p) => ({ ...p, permisos: { ...p.permisos, [m]: !p.permisos[m] } }))}
-                        />
+                      <label key={m} className={'roles-permiso-toggle' + (nuevoRol.permisos[m] ? ' roles-permiso-toggle--on' : '')} onClick={() => setNuevoRol((p) => ({ ...p, permisos: { ...p.permisos, [m]: !p.permisos[m] } }))}>
+                        <input type="checkbox" checked={nuevoRol.permisos[m]} onChange={() => {}} />
                         <span>{m}</span>
                       </label>
                     ))}
