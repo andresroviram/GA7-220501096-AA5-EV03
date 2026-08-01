@@ -58,8 +58,14 @@ export class AuthService {
             );
         }
 
-        if (!user || !passwordValid) {
+        if (!user || !passwordValid || !user.isActive) {
             throw new UnauthorizedException('Credenciales inválidas');
+        }
+        if (user.tipo_usuario === 'pendiente') {
+            throw new UnauthorizedException({
+                code: 'USER_PENDING',
+                message: 'Usuario pendiente de activación',
+            });
         }
 
         const payload = { sub: user.id, correo: user.correo, tipo: user.tipo_usuario };

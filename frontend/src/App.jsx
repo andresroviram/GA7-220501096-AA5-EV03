@@ -22,11 +22,12 @@ import GruposHorarios from './pages/GruposHorarios';
 import Materias from './pages/Materias';
 import Reportes from './pages/Reportes';
 import Configuraciones from './pages/Configuraciones';
-import PendingScreen from './components/PendingScreen';
+import PendingRoute from './components/PendingRoute';
 import Roles from './pages/Roles';
 import authService from './services/authService';
 import { canAccess } from './utils/permissions';
 import { ToastProvider } from './components/ui/Toast';
+import { leavePendingFlow, navigateToPending } from './utils/pendingFlow';
 
 /** Redirige a /login si el usuario no está autenticado. */
 function PrivateRoute() {
@@ -56,6 +57,14 @@ function AppRoutes() {
     authService.logout();
     forceUpdate((n) => n + 1);
     navigate('/login', { replace: true });
+  };
+
+  const handleRegistrationSuccess = () => {
+    navigateToPending(navigate);
+  };
+
+  const handleLeavePending = () => {
+    leavePendingFlow(navigate);
   };
 
   return (
@@ -89,7 +98,7 @@ function AppRoutes() {
             : (
               <RegisterForm
                 onBackToLogin={() => navigate('/login')}
-                onRegisterSuccess={() => navigate('/login')}
+                onRegisterSuccess={handleRegistrationSuccess}
               />
             )
         }
@@ -104,7 +113,7 @@ function AppRoutes() {
       />
       <Route
         path="/pendiente"
-        element={<PendingScreen onBackToLogin={() => navigate('/login')} />}
+        element={<PendingRoute onBackToLogin={handleLeavePending} />}
       />
 
       {/* ── Rutas protegidas (requieren sesión activa) ────────────────────── */}

@@ -34,7 +34,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
      */
     async validate(payload: { sub: number; correo: string; tipo: string }) {
         const user = await this.usersService.findById(payload.sub);
-        if (!user) throw new UnauthorizedException('Token inválido o usuario desactivado');
-        return { userId: payload.sub, correo: payload.correo, tipo: payload.tipo };
+        if (!user || !user.isActive || user.tipo_usuario === 'pendiente') {
+            throw new UnauthorizedException('Token inválido o usuario desactivado');
+        }
+        return { userId: user.id, correo: user.correo, tipo: user.tipo_usuario };
     }
 }

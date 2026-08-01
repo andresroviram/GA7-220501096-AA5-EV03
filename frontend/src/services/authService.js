@@ -94,8 +94,12 @@ const authService = {
 
       return response.data;
     } catch (err) {
-      // Re-lanzar errores propios (ej: usuario pendiente) sin pasar por el fallback mock
-      if (err.code === 'USER_PENDING') throw err;
+      // Normaliza el contrato de rechazo del backend para que la UI no dependa de Axios.
+      if (err.code === 'USER_PENDING' || err.response?.data?.code === 'USER_PENDING') {
+        const pendingErr = new Error('Usuario pendiente de activación');
+        pendingErr.code = 'USER_PENDING';
+        throw pendingErr;
+      }
       // Si el error es de red (sin backend disponible) intentar con mock local
       if (!err.response) {
         const user = MOCK_USERS.find(

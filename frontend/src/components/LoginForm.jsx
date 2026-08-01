@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import authService from '../services/authService';
 import { IconAlertTriangle } from './Icons';
@@ -6,6 +6,7 @@ import Button from './ui/Button';
 import InputText from './ui/InputText';
 import InputPassword from './ui/InputPassword';
 import Checkbox from './ui/Checkbox';
+import { clearPendingFlow, navigateToPending } from '../utils/pendingFlow';
 
 const DEMO_USERS = [
   { label: 'Administrador',     correo: 'admin@escuela.edu',          password: 'Admin123!',   color: '#2A9D6F' },
@@ -21,6 +22,10 @@ function LoginForm({ onLoginSuccess, onShowRegister, onShowForgot }) {
   const [fieldErrors, setFieldErrors]   = useState({});
   const [generalError, setGeneralError] = useState('');
   const [loading, setLoading]           = useState(false);
+
+  useEffect(() => {
+    clearPendingFlow();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,7 +43,7 @@ function LoginForm({ onLoginSuccess, onShowRegister, onShowForgot }) {
       onLoginSuccess();
     } catch (err) {
       if (err.code === 'USER_PENDING') {
-        navigate('/pendiente', { replace: true });
+        navigateToPending(navigate);
         return;
       }
       if (err.response?.status === 401) {

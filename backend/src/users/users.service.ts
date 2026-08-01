@@ -22,14 +22,14 @@ export class UsersService {
         private readonly materiaRepo: Repository<Materia>,
     ) { }
 
-    /** Busca usuario activo por correo (usado por AuthService y JwtStrategy) */
+    /** Busca el usuario actual por correo; AuthService decide si puede autenticarse. */
     async findByCorreo(correo: string): Promise<User | undefined> {
-        return this.repo.findOne({ where: { correo, isActive: true } }) as Promise<User | undefined>;
+        return this.repo.findOne({ where: { correo } }) as Promise<User | undefined>;
     }
 
-    /** Busca usuario activo por id (usado por JwtStrategy) */
+    /** Busca el usuario actual por id; JwtStrategy valida su estado antes de autorizar. */
     async findById(id: number): Promise<User | undefined> {
-        return this.repo.findOne({ where: { id, isActive: true } }) as Promise<User | undefined>;
+        return this.repo.findOne({ where: { id } }) as Promise<User | undefined>;
     }
 
     /** Lista usuarios — opcionalmente filtrada por tipo.

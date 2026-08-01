@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { join } from 'path';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
@@ -40,7 +41,9 @@ import { Reporte } from './reportes/reporte.entity';
                 ssl: config.get('NODE_ENV') === 'development'
                     ? false
                     : { rejectUnauthorized: false },
-                synchronize: true,
+                synchronize: config.get('NODE_ENV') !== 'production',
+                migrationsRun: config.get('NODE_ENV') === 'production',
+                migrations: [join(__dirname, 'migrations/*{.ts,.js}')],
                 entities: [
                     User,
                     Alumno,
